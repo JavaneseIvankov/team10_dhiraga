@@ -16,60 +16,95 @@ class LoginPage extends StatelessWidget {
           ),
         ),
         child: Center(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Login",
-                  style: TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  ),
-                ),
-                SizedBox(height: 20),
-                CustomTextField(label: "Username"),
-                SizedBox(height: 10),
-                CustomTextField(label: "Password", isPassword: true),
-                SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    "Lupa Password?",
-                    style: TextStyle(color: Colors.blue),
-                  ),
-                ),
-                SizedBox(height: 20),
-                CustomButton(text: "Login", onPressed: () {}),
-                SizedBox(height: 10),
-                Text("Atau Login dengan"),
-                SizedBox(height: 10),
-                IconButton(
-                  icon: Image.asset(
-                    "assets/google_icon.png",
-                  ), // Tambahkan ikon Google di folder assets
-                  iconSize: 40,
-                  onPressed: () {},
-                ),
-                SizedBox(height: 10),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => RegisterPage()),
-                    );
-                  },
-                  child: Text(
-                    "Belum punya akun? Register",
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Login",
                     style: TextStyle(
-                      color: Colors.blue,
+                      fontSize: 26,
                       fontWeight: FontWeight.bold,
+                      color: Color(0xFF1E40AF),
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(height: 20),
+                  CustomTextField(label: "Username"),
+                  SizedBox(height: 10),
+                  CustomTextField(label: "Password", isPassword: true),
+                  SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      "Lupa Password?",
+                      style: TextStyle(color: Color(0xFF1E40AF)),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  CustomButton(text: "Login", onPressed: () {}),
+                  SizedBox(height: 10),
+                  Text("Atau Login dengan"),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: IconButton(
+                          icon: Image.asset("assets/google_icon.png"),
+                          onPressed: () {},
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: IconButton(
+                          icon: Image.asset("assets/apple_icon.png"),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RegisterPage()),
+                      );
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Belum punya akun ",
+                            style: TextStyle(
+                              color:
+                                  Colors
+                                      .black, // Warna hitam sebelum tanda tanya
+                              fontSize: 14,
+                            ),
+                          ),
+                          TextSpan(
+                            text: "? Register",
+                            style: TextStyle(
+                              color: Color(
+                                0xFF1E40AF,
+                              ), // Warna biru yang sesuai
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
