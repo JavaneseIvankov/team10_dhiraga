@@ -92,7 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
           height: 46,
           text: "Mentor",
           intent: "secondary",
-          onPressed: () => setState(() => selectedRole = "Student"),
+          onPressed: () => setState(() => selectedRole = "Mentor"),
           fontWeight: FontWeight.bold,
         ),
         SizedBox(height: 10),
