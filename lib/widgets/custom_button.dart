@@ -30,7 +30,7 @@ class CustomButton extends StatelessWidget {
           isActive
               ? AppTheme.primaryButtonStyle
               : AppTheme.primaryButtonStyle.copyWith(
-                backgroundColor: MaterialStateProperty.all(AppColors.grey),
+                backgroundColor: MaterialStateProperty.all(Colors.white),
               );
       gradient = AppColors.gradient1;
     } else {
@@ -53,17 +53,15 @@ class CustomButton extends StatelessWidget {
                 gradient: gradient,
                 borderRadius: BorderRadius.circular(40),
               )
-              : null,
+              : BoxDecoration(
+                border: Border.all(color: AppColors.grey),
+                borderRadius: BorderRadius.circular(40),
+              ),
       child: TextButton(
         style: buttonStyle.copyWith(
-          fixedSize: WidgetStateProperty.all(Size(width ?? 0, height ?? 0)),
+          fixedSize: WidgetStateProperty.all(Size(width ?? 1, height ?? 0)),
           padding: MaterialStateProperty.all(
-            EdgeInsets.symmetric(
-              // vertical: (height ?? 0) / 4,
-              vertical: 0,
-              // horizontal: (width ?? 0) / 8,
-              horizontal: 0,
-            ),
+            EdgeInsets.symmetric(vertical: 0, horizontal: 0),
           ),
         ),
         onPressed: isActive ? onPressed : null,
@@ -72,7 +70,7 @@ class CustomButton extends StatelessWidget {
           child: Text(
             text,
             style: AppTheme.primaryTextStyle.copyWith(
-              color: AppColors.background,
+              color: isActive ? Colors.white : AppColors.grey,
               fontWeight: FontWeight.w700,
               overflow: TextOverflow.visible,
             ),

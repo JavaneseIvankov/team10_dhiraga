@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:team10_dhiraga/core/theme/app_color.dart';
+import 'package:team10_dhiraga/features/presentation/providers/auth_provider.dart';
+import 'package:team10_dhiraga/widgets/large_text.dart';
 import 'register_page.dart';
 import 'home_page.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/custom_button.dart';
+import 'package:team10_dhiraga/core/theme/app_theme.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,11 +17,14 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
+// TODO: Improve auth, use
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
   bool isLoading = false;
+  bool isActive = true;
   String errorMessage = '';
 
   void _login() async {
@@ -46,6 +54,41 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  late final ValueNotifier<bool> _legibleSubmission;
+
+  @override
+  void initState() {
+    super.initState();
+    _legibleSubmission = ValueNotifier(false);
+
+    // Combine the text fields initially and update when either of them changes
+    emailController.addListener(_updateCombinedText);
+    passwordController.addListener(_updateCombinedText);
+  }
+
+  void _updateCombinedText() {
+    bool status =
+        (emailController.text.isNotEmpty && passwordController.text.isNotEmpty);
+    _legibleSubmission.value = status;
+  }
+
+  Widget _buildLoginButton(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: _legibleSubmission,
+      builder:
+          (context, value, child) => CustomButton(
+            isActive: value,
+            intent: 'primary',
+            text: 'Login',
+            width: 240,
+            height: 50,
+            onPressed: () {
+              isLoading ? () {} : _login();
+            },
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,30 +107,25 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Login",
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1E40AF),
-                    ),
+                  LargeText(text: 'Login'),
+                  SizedBox(height: 20),
+                  CustomTextField(
+                    label: "Username",
+                    controller: emailController,
                   ),
-                  const SizedBox(height: 20),
-                  CustomTextField(label: "Email", controller: emailController),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   CustomTextField(
                     label: "Password",
                     isPassword: true,
                     controller: passwordController,
                   ),
-                  const SizedBox(height: 10),
-                  const Align(
+                  SizedBox(height: 10),
+                  Align(
                     alignment: Alignment.centerRight,
-                    child: Text(
-                      "Lupa Password?",
-                      style: TextStyle(color: Color(0xFF1E40AF)),
-                    ),
+                    child: Text("Lupa Password?"),
                   ),
+                  SizedBox(height: 20),
+                  _buildLoginButton(context),
                   const SizedBox(height: 20),
 
                   if (errorMessage.isNotEmpty)
@@ -99,15 +137,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
 
-                  CustomButton(
-                    text: isLoading ? "Loading..." : "Login",
-                    onPressed:
-                        isLoading
-                            ? () {}
-                            : _login, // Gunakan fungsi kosong () {} daripada null
-                    isActive: !isLoading,
-                    intent: 'login',
-                  ),
                   const SizedBox(height: 10),
                   const Text("Atau Login dengan"),
                   const SizedBox(height: 10),
@@ -118,23 +147,14 @@ class _LoginPageState extends State<LoginPage> {
                       GestureDetector(
                         onTap: () {},
                         child: SizedBox(
-                          width: 40,
-                          height: 40,
+                          width: 30,
+                          height: 30,
                           child: Image.asset("assets/google_icon.png"),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      GestureDetector(
-                        onTap: () {},
-                        child: SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: Image.asset("assets/apple_icon.png"),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 40),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -146,22 +166,30 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     child: RichText(
                       text: TextSpan(
+                        text: "Belum punya akun? ",
+                        style: AppTheme.secondaryTextStyle.copyWith(
+                          color: Colors.black,
+                        ),
                         children: [
                           TextSpan(
-                            text: "Belum punya akun ",
-                            style: TextStyle(color: Colors.black, fontSize: 14),
-                          ),
-                          TextSpan(
-                            text: "? Register",
-                            style: TextStyle(
-                              color: Color(0xFF1E40AF),
+                            text: "Register",
+                            style: AppTheme.secondaryTextStyle.copyWith(
                               fontWeight: FontWeight.bold,
-                              fontSize: 14,
+                              color: AppColors.primary,
                             ),
                           ),
                         ],
                       ),
                     ),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        isActive = !isActive; // Toggle active state
+                      });
+                    },
+                    child: Text("Toggle Active State"),
                   ),
                 ],
               ),

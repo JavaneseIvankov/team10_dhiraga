@@ -10,7 +10,7 @@ class AppTheme {
     textTheme: TextTheme(
       bodyLarge: TextStyle(
         fontFamily: 'Geist',
-        color: AppColors.black,
+        color: Colors.black,
         fontSize: 16,
       ),
       bodyMedium: TextStyle(
@@ -53,7 +53,7 @@ class AppTheme {
       fillColor: AppColors.background,
       hintStyle: TextStyle(color: AppColors.grey),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(25),
         borderSide: BorderSide.none,
       ),
     ),
@@ -81,13 +81,13 @@ class AppTheme {
 
   static final TextStyle primaryTextStyle = TextStyle(
     fontFamily: 'Geist',
-    color: AppColors.primary,
+    color: AppColors.black,
     fontSize: 16,
   );
 
   static final TextStyle secondaryTextStyle = TextStyle(
     fontFamily: 'Geist',
-    color: AppColors.secondary,
+    color: AppColors.black,
     fontSize: 16,
   );
 }

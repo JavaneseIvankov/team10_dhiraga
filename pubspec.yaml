@@ -35,6 +35,7 @@ dependencies:
    flutter:
       sdk: flutter
    get_it: ^8.0.3
+   go_router: ^14.8.1
    provider: ^6.1.2
 
 dev_dependencies:
@@ -67,6 +68,10 @@ flutter:
       - family: Geist
         fonts:
            - asset: assets/fonts/Geist-VariableFont_wght.ttf
-   #
+           - asset: assets/fonts/static/Geist-Bold.ttf
+           - asset: assets/fonts/static/Geist-Black.ttf
+           - asset: assets/fonts/static/Geist-SemiBold.ttf
+           - asset: assets/fonts/static/Geist-Medium.ttf
+           - asset: assets/fonts/static/Geist-Regular.ttf
    # For details regarding fonts from package dependencies,
    # see https://flutter.dev/to/font-from-package

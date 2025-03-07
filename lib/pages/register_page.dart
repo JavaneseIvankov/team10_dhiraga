@@ -141,7 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
           text: "Register",
           onPressed: registerUser,
           isActive: true,
-          intent: 'register',
+          intent: 'primary',
         ),
         SizedBox(height: 10),
         GestureDetector(
