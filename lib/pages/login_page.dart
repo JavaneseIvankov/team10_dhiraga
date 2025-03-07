@@ -110,16 +110,18 @@ class _LoginPageState extends State<LoginPage> {
                   LargeText(text: 'Login'),
                   SizedBox(height: 20),
                   CustomTextField(
-                    label: "Username",
+                    label: "E-mail",
+                    placeholder: "johndoe@gmail.com",
                     controller: emailController,
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 20),
                   CustomTextField(
                     label: "Password",
+                    placeholder: "Keep it secret!",
                     isPassword: true,
                     controller: passwordController,
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 20),
                   Align(
                     alignment: Alignment.centerRight,
                     child: Text("Lupa Password?"),

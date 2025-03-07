@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:team10_dhiraga/core/theme/app_color.dart';
 import 'package:team10_dhiraga/widgets/large_text.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/custom_button.dart';
@@ -103,31 +104,45 @@ class _RegisterPageState extends State<RegisterPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          "Register as a $selectedRole",
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF1E40AF),
-          ),
+        // Text(
+        //   "Register as a $selectedRole",
+        //   style: TextStyle(
+        //     fontSize: 22,
+        //     fontWeight: FontWeight.bold,
+        //     color: Color(0xFF1E40AF),
+        //   ),
+        // ),
+        LargeText(text: "Register"),
+        // SizedBox(height: 0),
+        LargeText(
+          text: "as a Student",
+          textStyle: TextStyle(color: AppColors.black, fontSize: 24),
         ),
         SizedBox(height: 20),
-        CustomTextField(label: "E-mail", controller: emailController),
+        CustomTextField(
+          label: "E-mail",
+          placeholder: "johndoe@gmail.com",
+          controller: emailController,
+        ),
         SizedBox(height: 10),
         CustomTextField(
           label: "Password",
+          placeholder: "Keep it secret!",
           isPassword: true,
           controller: passwordController,
         ),
         SizedBox(height: 10),
         CustomTextField(
+          placeholder: "Make sure it matchesj",
           label: "Confirm Password",
           isPassword: true,
           controller: confirmPasswordController,
         ),
         SizedBox(height: 20),
         CustomButton(
-          text: "Register as",
+          height: 50,
+          width: 240,
+          text: "Register",
           onPressed: registerUser,
           intent: 'primary',
         ),
