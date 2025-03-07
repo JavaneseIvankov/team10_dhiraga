@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:team10_dhiraga/core/theme/app_color.dart';
 import 'package:team10_dhiraga/core/theme/app_theme.dart';
+import 'package:team10_dhiraga/widgets/gradient_border.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -29,6 +30,7 @@ class CustomButton extends StatelessWidget {
       gradient: gradient,
       borderRadius: BorderRadius.circular(40),
     );
+    var hasGradientBorder = false;
 
     if (intent == 'primary') {
       buttonStyle = AppTheme.primaryButtonStyle;
@@ -47,14 +49,17 @@ class CustomButton extends StatelessWidget {
       );
     } else if (intent == "secondary") {
       buttonStyle = AppTheme.secondaryButtonStyle;
-      textStyle = AppTheme.secondaryTextStyle;
+      textStyle = AppTheme.secondaryTextStyle.copyWith(
+        backgroundColor: Colors.transparent,
+      );
+      hasGradientBorder = true;
       containerDecoration = BoxDecoration(
         gradient: AppColors.gradient1,
         borderRadius: BorderRadius.circular(40),
       );
     }
 
-    return Container(
+    Widget coreSection = Container(
       height: height,
       width: width,
       decoration: containerDecoration,
@@ -77,5 +82,10 @@ class CustomButton extends StatelessWidget {
         ),
       ),
     );
+
+    if (hasGradientBorder) {
+      return GradientBorder(child: coreSection);
+    }
+    return coreSection;
   }
 }
