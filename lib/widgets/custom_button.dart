@@ -84,7 +84,7 @@ class CustomButton extends StatelessWidget {
     );
 
     if (hasGradientBorder) {
-      return GradientBorder(child: coreSection);
+      return GradientBorder(borderRadius: 40, child: coreSection);
     }
     return coreSection;
   }

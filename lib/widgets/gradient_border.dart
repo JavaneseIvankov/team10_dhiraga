@@ -20,14 +20,14 @@ class GradientBorder extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         gradient: gradient,
-        borderRadius: BorderRadius.circular(27),
+        borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: Padding(
         padding: EdgeInsets.all(borderWidth),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.transparent,
-            borderRadius: BorderRadius.circular(27),
+            borderRadius: BorderRadius.circular(borderRadius),
           ),
           child: child,
         ),
