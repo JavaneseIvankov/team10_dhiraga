@@ -43,7 +43,12 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 20),
-                  CustomButton(text: "Login", onPressed: () {}, isActive: true),
+                  CustomButton(
+                    text: "Login",
+                    onPressed: () {},
+                    isActive: true,
+                    intent: 'login',
+                  ),
                   SizedBox(height: 10),
                   Text("Atau Login dengan"),
                   SizedBox(height: 10),

@@ -115,7 +115,12 @@ class _RegisterPageState extends State<RegisterPage> {
         SizedBox(height: 10),
         CustomTextField(label: "Confirm Password", isPassword: true),
         SizedBox(height: 20),
-        CustomButton(text: "Register", onPressed: () {}, isActive: true),
+        CustomButton(
+          text: "Register",
+          onPressed: () {},
+          isActive: true,
+          intent: 'register',
+        ),
         SizedBox(height: 10),
         GestureDetector(
           onTap: () => Navigator.pop(context),
