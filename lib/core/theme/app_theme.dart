@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:team10_dhiraga/core/theme/app_color.dart';
 
 class AppTheme {
-  static ThemeData darkTheme = ThemeData(
-    // brightness: Brightness.dark,
+  static ThemeData lightTheme = ThemeData(
+    brightness: Brightness.light,
     scaffoldBackgroundColor: AppColors.background,
     primaryColor: AppColors.primary,
     hintColor: AppColors.grey,
