@@ -43,9 +43,9 @@ class _LoginPageState extends State<LoginPage> {
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
       );
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (_) {
       setState(() {
-        errorMessage = e.message ?? "Login gagal, coba lagi.";
+        errorMessage = "Login gagal, coba lagi.";
       });
     } finally {
       setState(() {
@@ -77,14 +77,14 @@ class _LoginPageState extends State<LoginPage> {
       valueListenable: _legibleSubmission,
       builder:
           (context, value, child) => CustomButton(
-            isActive: value,
-            intent: 'primary',
+            intent: value ? 'primary' : 'disabled',
             text: 'Login',
             width: 240,
             height: 50,
             onPressed: () {
               isLoading ? () {} : _login();
             },
+            fontWeight: FontWeight.w700,
           ),
     );
   }
@@ -128,14 +128,19 @@ class _LoginPageState extends State<LoginPage> {
                   _buildLoginButton(context),
                   const SizedBox(height: 20),
 
-                  if (errorMessage.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: Text(
-                        errorMessage,
-                        style: const TextStyle(color: Colors.red, fontSize: 14),
-                      ),
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child:
+                        (errorMessage.isNotEmpty)
+                            ? Text(
+                              errorMessage,
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 14,
+                              ),
+                            )
+                            : null,
+                  ),
 
                   const SizedBox(height: 10),
                   const Text("Atau Login dengan"),
@@ -183,14 +188,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        isActive = !isActive; // Toggle active state
-                      });
-                    },
-                    child: Text("Toggle Active State"),
-                  ),
                 ],
               ),
             ),
