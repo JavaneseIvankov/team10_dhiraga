@@ -1,14 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/custom_button.dart';
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   String? selectedRole;
+
+  void registerUser() async {
+    if (passwordController.text != confirmPasswordController.text) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Password tidak cocok!")));
+      return;
+    }
+
+    try {
+      await _auth.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Registrasi Berhasil!")));
+      Navigator.pop(
+        context,
+      ); // Kembali ke halaman login setelah registrasi sukses
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Registrasi Gagal: ${e.toString()}")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +70,6 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  /// Tampilan awal untuk memilih role Student atau Mentor
   Widget buildRoleSelection() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -52,13 +85,6 @@ class _RegisterPageState extends State<RegisterPage> {
         SizedBox(height: 20),
         ElevatedButton(
           onPressed: () => setState(() => selectedRole = "Student"),
-          style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 50),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25),
-            ),
-            backgroundColor: Color(0xFF1E40AF),
-          ),
           child: Text(
             "Student",
             style: TextStyle(
@@ -71,13 +97,6 @@ class _RegisterPageState extends State<RegisterPage> {
         SizedBox(height: 10),
         OutlinedButton(
           onPressed: () => setState(() => selectedRole = "Mentor"),
-          style: OutlinedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 50),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25),
-            ),
-            side: BorderSide(color: Color(0xFF1E40AF)),
-          ),
           child: Text(
             "Mentor",
             style: TextStyle(
@@ -91,7 +110,6 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  /// Formulir pendaftaran Student atau Mentor
   Widget buildRegisterForm() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -105,19 +123,23 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ),
         SizedBox(height: 20),
-        CustomTextField(label: "Full Name"),
+        CustomTextField(label: "E-mail", controller: emailController),
         SizedBox(height: 10),
-        CustomTextField(label: "E-mail"),
+        CustomTextField(
+          label: "Password",
+          isPassword: true,
+          controller: passwordController,
+        ),
         SizedBox(height: 10),
-        CustomTextField(label: "Username"),
-        SizedBox(height: 10),
-        CustomTextField(label: "Password", isPassword: true),
-        SizedBox(height: 10),
-        CustomTextField(label: "Confirm Password", isPassword: true),
+        CustomTextField(
+          label: "Confirm Password",
+          isPassword: true,
+          controller: confirmPasswordController,
+        ),
         SizedBox(height: 20),
         CustomButton(
           text: "Register",
-          onPressed: () {},
+          onPressed: registerUser,
           isActive: true,
           intent: 'register',
         ),
@@ -128,11 +150,11 @@ class _RegisterPageState extends State<RegisterPage> {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: "Sudah punya akun",
+                  text: "Sudah punya akun?",
                   style: TextStyle(color: Colors.black, fontSize: 14),
                 ),
                 TextSpan(
-                  text: "? Login",
+                  text: " Login",
                   style: TextStyle(
                     color: Color(0xFF1E40AF),
                     fontWeight: FontWeight.bold,
