@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:team10_dhiraga/widgets/large_text.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/custom_button.dart';
 
@@ -74,38 +75,26 @@ class _RegisterPageState extends State<RegisterPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          "Register",
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF1E40AF),
-          ),
+        LargeText(text: "Register as"),
+        SizedBox(height: 20),
+        CustomButton(
+          width: 350,
+          height: 46,
+          text: "Student",
+          intent: "primary",
+          onPressed: () => setState(() => selectedRole = "Student"),
+          fontWeight: FontWeight.bold,
         ),
         SizedBox(height: 20),
-        ElevatedButton(
+        CustomButton(
+          width: 350,
+          height: 46,
+          text: "Mentor",
+          intent: "secondary",
           onPressed: () => setState(() => selectedRole = "Student"),
-          child: Text(
-            "Student",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          fontWeight: FontWeight.bold,
         ),
         SizedBox(height: 10),
-        OutlinedButton(
-          onPressed: () => setState(() => selectedRole = "Mentor"),
-          child: Text(
-            "Mentor",
-            style: TextStyle(
-              color: Color(0xFF1E40AF),
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -138,9 +127,8 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         SizedBox(height: 20),
         CustomButton(
-          text: "Register",
+          text: "Register as",
           onPressed: registerUser,
-          isActive: true,
           intent: 'primary',
         ),
         SizedBox(height: 10),
