@@ -72,22 +72,36 @@ class AppTheme {
   static final ButtonStyle primaryButtonStyle = TextButton.styleFrom(
     backgroundColor: Colors.transparent,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+    textStyle: primaryTextStyle,
   );
 
   static final ButtonStyle secondaryButtonStyle = TextButton.styleFrom(
-    backgroundColor: AppColors.secondary,
+    backgroundColor: AppColors.background,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+    textStyle: secondaryTextStyle,
+  );
+
+  static final ButtonStyle disabledButtonStyle = TextButton.styleFrom(
+    backgroundColor: AppColors.background,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+    textStyle: disabledTextStyle,
   );
 
   static final TextStyle primaryTextStyle = TextStyle(
     fontFamily: 'Geist',
-    color: AppColors.black,
+    color: AppColors.background,
     fontSize: 16,
   );
 
   static final TextStyle secondaryTextStyle = TextStyle(
     fontFamily: 'Geist',
-    color: AppColors.black,
+    color: AppColors.primary,
+    fontSize: 16,
+  );
+
+  static final TextStyle disabledTextStyle = TextStyle(
+    fontFamily: 'Geist',
+    color: AppColors.grey,
     fontSize: 16,
   );
 }
