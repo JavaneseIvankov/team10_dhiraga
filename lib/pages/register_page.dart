@@ -104,18 +104,10 @@ class _RegisterPageState extends State<RegisterPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Text(
-        //   "Register as a $selectedRole",
-        //   style: TextStyle(
-        //     fontSize: 22,
-        //     fontWeight: FontWeight.bold,
-        //     color: Color(0xFF1E40AF),
-        //   ),
-        // ),
         LargeText(text: "Register"),
         // SizedBox(height: 0),
         LargeText(
-          text: "as a Student",
+          text: "as a $selectedRole",
           textStyle: TextStyle(color: AppColors.black, fontSize: 24),
         ),
         SizedBox(height: 20),
