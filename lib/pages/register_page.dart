@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:team10_dhiraga/core/theme/app_color.dart';
+import 'package:team10_dhiraga/widgets/mesh_gradient_background.dart';
 import 'package:team10_dhiraga/widgets/large_text.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/custom_button.dart';
@@ -49,14 +50,14 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFFE3EAFD), Color(0xFFFFF1D7)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
+      body: GradientBackground(
+        // decoration: BoxDecoration(
+        //   gradient: LinearGradient(
+        //     colors: [Color(0xFFE3EAFD), Color(0xFFFFF1D7)],
+        //     begin: Alignment.topLeft,
+        //     end: Alignment.bottomRight,
+        //   ),
+        // ),
         child: Center(
           child: SingleChildScrollView(
             child: Padding(

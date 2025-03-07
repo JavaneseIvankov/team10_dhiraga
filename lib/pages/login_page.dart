@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:team10_dhiraga/core/theme/app_color.dart';
 import 'package:team10_dhiraga/features/presentation/providers/auth_provider.dart';
+import 'package:team10_dhiraga/widgets/gradient_scaffold.dart';
 import 'package:team10_dhiraga/widgets/large_text.dart';
 import 'register_page.dart';
 import 'home_page.dart';
@@ -92,105 +93,101 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFFE3EAFD), Color(0xFFFFF1D7)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  LargeText(text: 'Login'),
-                  SizedBox(height: 20),
-                  CustomTextField(
-                    label: "E-mail",
-                    placeholder: "johndoe@gmail.com",
-                    controller: emailController,
-                  ),
-                  SizedBox(height: 20),
-                  CustomTextField(
-                    label: "Password",
-                    placeholder: "Keep it secret!",
-                    isPassword: true,
-                    controller: passwordController,
-                  ),
-                  SizedBox(height: 20),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Text("Lupa Password?"),
-                  ),
-                  SizedBox(height: 20),
-                  _buildLoginButton(context),
-                  const SizedBox(height: 20),
+      body: GradientBackground(
+        child: Container(
+          decoration: const BoxDecoration(),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    LargeText(text: 'Login'),
+                    SizedBox(height: 20),
+                    CustomTextField(
+                      label: "E-mail",
+                      placeholder: "johndoe@gmail.com",
+                      controller: emailController,
+                    ),
+                    SizedBox(height: 20),
+                    CustomTextField(
+                      label: "Password",
+                      placeholder: "Keep it secret!",
+                      isPassword: true,
+                      controller: passwordController,
+                    ),
+                    SizedBox(height: 20),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text("Lupa Password?"),
+                    ),
+                    SizedBox(height: 20),
+                    _buildLoginButton(context),
+                    const SizedBox(height: 20),
 
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child:
-                        (errorMessage.isNotEmpty)
-                            ? Text(
-                              errorMessage,
-                              style: const TextStyle(
-                                color: Colors.red,
-                                fontSize: 14,
-                              ),
-                            )
-                            : null,
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child:
+                          (errorMessage.isNotEmpty)
+                              ? Text(
+                                errorMessage,
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 14,
+                                ),
+                              )
+                              : null,
+                    ),
 
-                  const SizedBox(height: 10),
-                  const Text("Atau Login dengan"),
-                  const SizedBox(height: 10),
+                    const SizedBox(height: 10),
+                    const Text("Atau Login dengan"),
+                    const SizedBox(height: 10),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: () {},
-                        child: SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: Image.asset("assets/google_icon.png"),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 40),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterPage(),
-                        ),
-                      );
-                    },
-                    child: RichText(
-                      text: TextSpan(
-                        text: "Belum punya akun? ",
-                        style: AppTheme.secondaryTextStyle.copyWith(
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: "Register",
-                            style: AppTheme.secondaryTextStyle.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primary,
-                            ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {},
+                          child: SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: Image.asset("assets/google_icon.png"),
                           ),
-                        ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 40),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const RegisterPage(),
+                          ),
+                        );
+                      },
+                      child: RichText(
+                        text: TextSpan(
+                          text: "Belum punya akun? ",
+                          style: AppTheme.secondaryTextStyle.copyWith(
+                            color: Colors.black,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: "Register",
+                              style: AppTheme.secondaryTextStyle.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                ],
+                    SizedBox(height: 20),
+                  ],
+                ),
               ),
             ),
           ),
