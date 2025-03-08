@@ -1,6 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:team10_dhiraga/main.dart'; // Import untuk navigasi ke AuthWrapper
+import 'package:team10_dhiraga/main.dart'; // Pastikan ini mengarah ke AuthWrapper
 
 class LandingPage extends StatefulWidget {
   @override
@@ -8,8 +9,9 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
   int _currentPage = 0;
+  Timer? _timer; // Menggunakan nullable Timer
 
   List<Map<String, String>> landingData = [
     {
@@ -19,25 +21,53 @@ class _LandingPageState extends State<LandingPage> {
     {
       "title": "Temukan Beasiswa Terbaik",
       "subtitle":
-          "Dhiraga hadir untuk mempermudah perjalananmu mendapatkan beasiswa, dengan bimbingan langsung dari mentor awardee beasiswa!",
+          "Dhiraga hadir untuk mempermudah perjalananmu mendapatkan beasiswa!",
     },
     {
       "title": "Tingkatkan Performa Akademik",
-      "subtitle":
-          "Kesulitan memahami materi sekolah maupun kuliah? Dapatkan bimbingan akademik dari mentor berpengalaman!",
+      "subtitle": "Dapatkan bimbingan akademik dari mentor berpengalaman!",
     },
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _startAutoSlide();
+  }
+
+  void _startAutoSlide() {
+    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+      if (_currentPage < landingData.length - 1) {
+        if (mounted) {
+          _pageController.nextPage(
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        }
+      } else {
+        _finishLandingPage();
+        timer.cancel();
+      }
+    });
+  }
 
   Future<void> _finishLandingPage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('hasSeenLanding', true);
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AuthWrapper(),
-      ), // Ke HomePage/Login
-    );
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => AuthWrapper()),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel(); // Cek null sebelum cancel
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,16 +80,16 @@ class _LandingPageState extends State<LandingPage> {
               controller: _pageController,
               itemCount: landingData.length,
               onPageChanged: (index) {
-                setState(() {
-                  _currentPage = index;
-                });
+                if (mounted) {
+                  setState(() {
+                    _currentPage = index;
+                  });
+                }
               },
               itemBuilder: (context, index) {
                 return LandingPageContent(
                   title: landingData[index]["title"]!,
                   subtitle: landingData[index]["subtitle"]!,
-                  isLastPage: index == landingData.length - 1,
-                  onFinish: _finishLandingPage,
                 );
               },
             ),
@@ -68,7 +98,7 @@ class _LandingPageState extends State<LandingPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
               landingData.length,
-              (index) => buildDot(index, context),
+              (index) => buildDot(index),
             ),
           ),
           SizedBox(height: 20),
@@ -77,7 +107,7 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  Widget buildDot(int index, BuildContext context) {
+  Widget buildDot(int index) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 4),
       width: _currentPage == index ? 12 : 8,
@@ -93,15 +123,8 @@ class _LandingPageState extends State<LandingPage> {
 class LandingPageContent extends StatelessWidget {
   final String title;
   final String subtitle;
-  final bool isLastPage;
-  final VoidCallback? onFinish;
 
-  LandingPageContent({
-    required this.title,
-    required this.subtitle,
-    this.isLastPage = false,
-    this.onFinish,
-  });
+  const LandingPageContent({required this.title, required this.subtitle});
 
   @override
   Widget build(BuildContext context) {
@@ -134,20 +157,6 @@ class LandingPageContent extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 14, color: Colors.black54),
           ),
-          SizedBox(height: 40),
-          if (isLastPage)
-            ElevatedButton(
-              onPressed: onFinish,
-              child: Text("Mulai"),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                backgroundColor: Colors.blue.shade900,
-                foregroundColor: Colors.white,
-              ),
-            ),
         ],
       ),
     );
