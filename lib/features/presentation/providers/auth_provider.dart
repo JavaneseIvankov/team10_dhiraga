@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:team10_dhiraga/features/domain/usecases/login_user.dart';
 import 'package:team10_dhiraga/features/domain/usecases/register_user.dart';
@@ -21,16 +24,16 @@ class MyAuthProvider with ChangeNotifier {
     required email,
     required password,
     VoidCallback? onSuccess,
-    VoidCallback? onFailed,
+    ValueChanged<Exception>? onFailed,
   }) async {
     _setLoading(true);
     _clearError();
     try {
       await loginUser(LoginParams(email: email, password: password));
       onSuccess!();
-    } catch (e) {
+    } on Exception catch (e) {
       _setError("Login gagal, coba lagi!");
-      onFailed!();
+      onFailed!(e);
     } finally {
       _setLoading(false);
     }
@@ -40,16 +43,16 @@ class MyAuthProvider with ChangeNotifier {
     required email,
     required password,
     VoidCallback? onSuccess,
-    VoidCallback? onFailed,
+    ValueChanged<Exception>? onFailed,
   }) async {
     _setLoading(true);
     _clearError();
     try {
       await registerUser(RegisterParams(email: email, password: password));
       onSuccess!();
-    } catch (e) {
+    } on Exception catch (e) {
       _setError("Registrasi gagal, coba lagi!");
-      onFailed!();
+      onFailed!(e);
     } finally {
       _setLoading(false);
     }
