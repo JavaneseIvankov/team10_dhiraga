@@ -22,7 +22,7 @@ void setupDependencyInjection() {
   sl.registerLazySingleton<RegisterUser>(() => RegisterUser(sl()));
 
   // Providers
-  sl.registerLazySingleton<AuthProvider>(
-    () => AuthProvider(loginUser: sl(), registerUser: sl()),
+  sl.registerLazySingleton<MyAuthProvider>(
+    () => MyAuthProvider(loginUser: sl(), registerUser: sl()),
   );
 }

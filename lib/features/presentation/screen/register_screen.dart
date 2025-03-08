@@ -21,7 +21,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
+    final authProvider = Provider.of<MyAuthProvider>(context);
 
     return Scaffold(
       appBar: AppBar(title: const Text("Register")),
@@ -59,7 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Future<void> _register(AuthProvider authProvider) async {
+  Future<void> _register(MyAuthProvider authProvider) async {
     setState(() {
       _isLoading = true;
     });

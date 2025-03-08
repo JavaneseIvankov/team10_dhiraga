@@ -1,51 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:team10_dhiraga/features/domain/usecases/login_user.dart';
 import 'package:team10_dhiraga/features/domain/usecases/register_user.dart';
-// import 'package:team10_dhiraga/features/presentation/screens/notes_screen.dart'; ini contoh dari WIAP-1
+import 'package:team10_dhiraga/pages/Navbar_home_page.dart/home_page.dart';
 
-class AuthProvider with ChangeNotifier {
+class MyAuthProvider with ChangeNotifier {
   final LoginUser loginUser;
   final RegisterUser registerUser;
 
   String? _userId;
 
-  AuthProvider({required this.loginUser, required this.registerUser});
+  MyAuthProvider({required this.loginUser, required this.registerUser});
 
   bool _isLoading = false;
-  String? _errorMessage;
+  String _errorMessage = "";
 
   bool get isLoading => _isLoading;
-  String? get errorMessage => _errorMessage;
+  String get errorMessage => _errorMessage;
 
-  Future<void> login(
-    String email,
-    String password,
-    BuildContext context,
-  ) async {
+  Future<void> login({
+    required email,
+    required password,
+    VoidCallback? onSuccess,
+    VoidCallback? onFailed,
+  }) async {
     _setLoading(true);
     _clearError();
     try {
       await loginUser(LoginParams(email: email, password: password));
-
-      // Ini contoh navigation
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (_) => const NotesScreen()),
-      // );
+      onSuccess!();
     } catch (e) {
-      _setError(e.toString());
+      _setError("Login gagal, coba lagi!");
+      onFailed!();
     } finally {
       _setLoading(false);
     }
   }
 
-  Future<void> register(String email, String password) async {
+  Future<void> register({
+    required email,
+    required password,
+    VoidCallback? onSuccess,
+    VoidCallback? onFailed,
+  }) async {
     _setLoading(true);
     _clearError();
     try {
       await registerUser(RegisterParams(email: email, password: password));
+      onSuccess!();
     } catch (e) {
-      _setError(e.toString());
+      _setError("Registrasi gagal, coba lagi!");
+      onFailed!();
     } finally {
       _setLoading(false);
     }
@@ -62,6 +66,6 @@ class AuthProvider with ChangeNotifier {
   }
 
   void _clearError() {
-    _errorMessage = null;
+    _errorMessage = "";
   }
 }

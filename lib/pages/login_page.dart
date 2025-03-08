@@ -11,6 +11,7 @@ import 'Navbar_home_page.dart/home_page.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/custom_button.dart';
 import 'package:team10_dhiraga/core/theme/app_theme.dart';
+import 'package:team10_dhiraga/features/presentation/providers/auth_provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -23,38 +24,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  bool isLoading = false;
-  bool isActive = true;
-  String errorMessage = '';
-
-  void _login() async {
-    setState(() {
-      isLoading = true;
-      errorMessage = '';
-    });
-
-    try {
-      await _auth.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
-    } on FirebaseAuthException catch (_) {
-      setState(() {
-        errorMessage = "Login gagal, coba lagi.";
-      });
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
 
   late final ValueNotifier<bool> _legibleSubmission;
 
@@ -74,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
     _legibleSubmission.value = status;
   }
 
-  Widget _buildLoginButton(BuildContext context) {
+  Widget _buildLoginButton(BuildContext context, MyAuthProvider authProvider) {
     return ValueListenableBuilder<bool>(
       valueListenable: _legibleSubmission,
       builder:
@@ -84,7 +54,18 @@ class _LoginPageState extends State<LoginPage> {
             width: 240,
             height: 50,
             onPressed: () {
-              isLoading ? () {} : _login();
+              authProvider.isLoading
+                  ? () {}
+                  : authProvider.login(
+                    email: emailController.text,
+                    password: passwordController.text,
+                    onSuccess: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                      );
+                    },
+                  );
             },
             fontWeight: FontWeight.w700,
           ),
@@ -93,6 +74,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<MyAuthProvider>(context);
+
     return Scaffold(
       body: GradientBackground(
         child: Container(
@@ -124,15 +107,15 @@ class _LoginPageState extends State<LoginPage> {
                       child: Text("Lupa Password?"),
                     ),
                     SizedBox(height: 20),
-                    _buildLoginButton(context),
+                    _buildLoginButton(context, authProvider),
                     const SizedBox(height: 20),
 
                     Padding(
                       padding: const EdgeInsets.all(10),
                       child:
-                          (errorMessage.isNotEmpty)
+                          (authProvider.errorMessage.isNotEmpty)
                               ? Text(
-                                errorMessage,
+                                authProvider.errorMessage,
                                 style: const TextStyle(
                                   color: Colors.red,
                                   fontSize: 14,
