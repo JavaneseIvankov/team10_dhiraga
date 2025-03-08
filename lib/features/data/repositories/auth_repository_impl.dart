@@ -19,4 +19,10 @@ class AuthRepositoryImpl implements AuthRepository {
     final user = await firebaseAuthService.register(email, password);
     return UserEntity(id: user.id, email: user.email);
   }
+
+  @override
+  Future<UserEntity> getAuthStatus() {
+    // TODO: implement getAuthStatus
+    throw UnimplementedError();
+  }
 }

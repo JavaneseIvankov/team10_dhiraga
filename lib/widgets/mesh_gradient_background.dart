@@ -49,7 +49,7 @@ class GradientBackground extends StatelessWidget {
 
           // Use _buildGradient for the second circle
           _buildGradient(
-            color: AppColors.radialGradient1.colors.last.withAlpha(120),
+            color: AppColors.radialGradient2.colors.last.withAlpha(120),
             size: 300,
             left: -200,
             bottom: 300,
