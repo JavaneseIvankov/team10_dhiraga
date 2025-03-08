@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:team10_dhiraga/core/theme/app_color.dart';
+import 'package:team10_dhiraga/features/presentation/providers/auth_provider.dart';
 import 'package:team10_dhiraga/widgets/mesh_gradient_background.dart';
 import 'package:team10_dhiraga/widgets/large_text.dart';
 import '../widgets/custom_textfield.dart';
@@ -18,46 +19,41 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   String? selectedRole;
 
-  void registerUser() async {
-    if (passwordController.text != confirmPasswordController.text) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Password tidak cocok!")));
+  void _showSnackbar(String message) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  void _registerUser(BuildContext context, MyAuthProvider authProvider) async {
+    final email = emailController.text;
+    final password = passwordController.text;
+    final confirmPassword = confirmPasswordController.text;
+    if (password != confirmPassword) {
+      _showSnackbar("Password tidak cocok!");
       return;
     }
 
-    try {
-      await _auth.createUserWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Registrasi Berhasil!")));
-      Navigator.pop(
-        context,
-      ); // Kembali ke halaman login setelah registrasi sukses
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Registrasi Gagal: ${e.toString()}")),
-      );
-    }
+    authProvider.register(
+      email: email,
+      password: password,
+      onSuccess: () {
+        Navigator.pop(context);
+      },
+      onFailed: (_) {
+        _showSnackbar("Registrasi gagal, coba lagi!");
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<MyAuthProvider>(context);
+
     return Scaffold(
       body: GradientBackground(
-        // decoration: BoxDecoration(
-        //   gradient: LinearGradient(
-        //     colors: [Color(0xFFE3EAFD), Color(0xFFFFF1D7)],
-        //     begin: Alignment.topLeft,
-        //     end: Alignment.bottomRight,
-        //   ),
-        // ),
         child: Center(
           child: SingleChildScrollView(
             child: Padding(
@@ -65,7 +61,7 @@ class _RegisterPageState extends State<RegisterPage> {
               child:
                   selectedRole == null
                       ? buildRoleSelection()
-                      : buildRegisterForm(),
+                      : buildRegisterForm(authProvider),
             ),
           ),
         ),
@@ -101,7 +97,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget buildRegisterForm() {
+  Widget buildRegisterForm(MyAuthProvider authProvider) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -136,7 +132,7 @@ class _RegisterPageState extends State<RegisterPage> {
           height: 50,
           width: 240,
           text: "Register",
-          onPressed: registerUser,
+          onPressed: () => _registerUser(context, authProvider),
           intent: 'primary',
         ),
         SizedBox(height: 10),

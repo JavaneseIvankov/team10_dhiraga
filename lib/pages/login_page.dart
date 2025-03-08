@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team10_dhiraga/core/theme/app_color.dart';
 import 'package:team10_dhiraga/features/presentation/providers/auth_provider.dart';
-import 'package:team10_dhiraga/widgets/gradient_scaffold.dart';
 import 'package:team10_dhiraga/widgets/large_text.dart';
 import 'package:team10_dhiraga/widgets/mesh_gradient_background.dart';
 import 'register_page.dart';
@@ -11,7 +10,6 @@ import 'Navbar_home_page.dart/home_page.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/custom_button.dart';
 import 'package:team10_dhiraga/core/theme/app_theme.dart';
-import 'package:team10_dhiraga/features/presentation/providers/auth_provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,28 +18,43 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-// TODO: Improve auth, use
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  // final FirebaseAuth _auth = FirebaseAuth.instance;
-
   late final ValueNotifier<bool> _legibleSubmission;
+  var errorMessage = "";
 
   @override
   void initState() {
     super.initState();
     _legibleSubmission = ValueNotifier(false);
 
-    // Combine the text fields initially and update when either of them changes
-    emailController.addListener(_updateCombinedText);
-    passwordController.addListener(_updateCombinedText);
+    emailController.addListener(_setSubmissionLegibility);
+    passwordController.addListener(_setSubmissionLegibility);
   }
 
-  void _updateCombinedText() {
+  void _setSubmissionLegibility() {
     bool status =
         (emailController.text.isNotEmpty && passwordController.text.isNotEmpty);
     _legibleSubmission.value = status;
+  }
+
+  void _login(MyAuthProvider authProvider) {
+    if (authProvider.isLoading && !_legibleSubmission.value) return;
+    authProvider.login(
+      email: emailController.text,
+      password: passwordController.text,
+      onSuccess: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      },
+      onFailed:
+          (_) => setState(() {
+            errorMessage = "Login gagal, coba lagi!";
+          }),
+    );
   }
 
   Widget _buildLoginButton(BuildContext context, MyAuthProvider authProvider) {
@@ -53,20 +66,7 @@ class _LoginPageState extends State<LoginPage> {
             text: 'Login',
             width: 240,
             height: 50,
-            onPressed: () {
-              authProvider.isLoading
-                  ? () {}
-                  : authProvider.login(
-                    email: emailController.text,
-                    password: passwordController.text,
-                    onSuccess: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                      );
-                    },
-                  );
-            },
+            onPressed: () => _login(authProvider),
             fontWeight: FontWeight.w700,
           ),
     );
