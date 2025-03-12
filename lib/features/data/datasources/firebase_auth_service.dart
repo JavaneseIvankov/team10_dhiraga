@@ -7,7 +7,7 @@ class FirebaseAuthService {
   FirebaseAuthService({firebase_auth.FirebaseAuth? firebaseAuth})
     : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
 
-  Future<UserModel> register(String email, String password) async {
+  Future<AuthUserModel> register(String email, String password) async {
     try {
       final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
@@ -17,7 +17,10 @@ class FirebaseAuthService {
       final firebaseUser = userCredential.user;
 
       if (firebaseUser != null) {
-        return UserModel(id: firebaseUser.uid, email: firebaseUser.email ?? '');
+        return AuthUserModel(
+          id: firebaseUser.uid,
+          email: firebaseUser.email ?? '',
+        );
       } else {
         throw Exception('User registration failed');
       }
@@ -26,7 +29,7 @@ class FirebaseAuthService {
     }
   }
 
-  Future<UserModel> login(String email, String password) async {
+  Future<AuthUserModel> login(String email, String password) async {
     try {
       final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
@@ -37,7 +40,10 @@ class FirebaseAuthService {
 
       if (firebaseUser != null) {
         print("Firebase User: ${firebaseUser.uid}, ${firebaseUser.email}");
-        return UserModel(id: firebaseUser.uid, email: firebaseUser.email ?? '');
+        return AuthUserModel(
+          id: firebaseUser.uid,
+          email: firebaseUser.email ?? '',
+        );
       } else {
         throw Exception('User login failed');
       }

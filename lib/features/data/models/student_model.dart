@@ -1,7 +1,9 @@
-import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
+import 'package:team10_dhiraga/features/data/models/user_model.dart';
 
-class UserModel extends UserEntity {
-  UserModel({
+class StudentModel extends UserModel {
+  final List<String> bookmark;
+
+  StudentModel({
     required String username,
     required String email,
     required String profilePictureURL,
@@ -11,6 +13,7 @@ class UserModel extends UserEntity {
     required String domisili,
     required String alamatLengkap,
     required String deskripsi,
+    required this.bookmark,
   }) : super(
          username: username,
          email: email,
@@ -25,21 +28,13 @@ class UserModel extends UserEntity {
 
   @override
   Map<String, dynamic> toJson() {
-    return {
-      'username': username,
-      'email': email,
-      'profilePictureURL': profilePictureURL,
-      'fullName': fullName,
-      'pendidikan': pendidikan,
-      'programStudi': programStudi,
-      'domisili': domisili,
-      'alamatLengkap': alamatLengkap,
-      'deskripsi': deskripsi,
-    };
+    final map = super.toJson();
+    map['bookmark'] = bookmark;
+    return map;
   }
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
+  factory StudentModel.fromJson(Map<String, dynamic> json) {
+    return StudentModel(
       username: json['username'],
       email: json['email'],
       profilePictureURL: json['profilePictureURL'],
@@ -49,6 +44,7 @@ class UserModel extends UserEntity {
       domisili: json['domisili'],
       alamatLengkap: json['alamatLengkap'],
       deskripsi: json['deskripsi'],
+      bookmark: List<String>.from(json['bookmark']),
     );
   }
 }
