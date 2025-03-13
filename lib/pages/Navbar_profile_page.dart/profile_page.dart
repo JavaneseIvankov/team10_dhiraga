@@ -1,131 +1,152 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-
-import 'mentor_profile.dart';
+import 'package:team10_dhiraga/pages/login_page.dart';
 import 'student_profile.dart';
+import 'mentor_profile.dart';
+import 'settings_page.dart';
 
-class ProfilePage extends StatefulWidget {
-  final bool isMentor;
+class EditProfilePage extends StatelessWidget {
+  final String userType; // 'student' atau 'mentor'
 
-  ProfilePage({required this.isMentor});
-
-  @override
-  _ProfilePageState createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
-  String? education, studyProgram, domicile, fullAddress, description;
-  bool mentorBeasiswa = false;
-  bool mentorAkademik = false;
-  String? scholarship1, scholarship2;
-  List<String> skills = [];
-  bool mentoringOffline = false;
-  bool mentoringOnline = false;
-  List<String> uploadedFiles = [];
-  File? profilePicture;
-
-  Future<void> _pickProfilePicture() async {
-    final pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-    );
-
-    if (pickedFile != null) {
-      setState(() {
-        profilePicture = File(pickedFile.path);
-      });
-    }
-  }
-
-  void _saveProfile() {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text("Profil berhasil disimpan!")));
-  }
+  EditProfilePage({required this.userType});
 
   @override
   Widget build(BuildContext context) {
-    print("User adalah mentor: ${widget.isMentor}"); // Debugging tambahan
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Lengkapi Profilmu!"),
-        backgroundColor: Colors.deepPurple,
-      ),
-      body: SingleChildScrollView(
+      appBar: AppBar(title: Text("Edit Profile")),
+      body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            GestureDetector(
-              onTap: _pickProfilePicture,
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage:
-                    profilePicture != null ? FileImage(profilePicture!) : null,
-                child:
-                    profilePicture == null
-                        ? Icon(Icons.camera_alt, size: 50, color: Colors.white)
-                        : null,
-              ),
-            ),
-            SizedBox(height: 16),
+        child:
+            userType == 'student'
+                ? _buildStudentProfile()
+                : _buildMentorProfile(),
+      ),
+    );
+  }
 
-            if (widget.isMentor)
-              MentorProfile(
-                mentorBeasiswa: mentorBeasiswa,
-                mentorAkademik: mentorAkademik,
-                onMentorBeasiswaChanged: (val) {
-                  setState(() => mentorBeasiswa = val);
-                },
-                onMentorAkademikChanged: (val) {
-                  setState(() => mentorAkademik = val);
-                },
-                onScholarship1Changed: (val) {
-                  setState(() => scholarship1 = val);
-                },
-                onScholarship2Changed: (val) {
-                  setState(() => scholarship2 = val);
-                },
-                onSkillAdded: (val) {
-                  setState(() => skills.add(val));
-                },
-                onPickFiles: () {},
-                uploadedFiles: uploadedFiles,
-                mentoringOffline: mentoringOffline,
-                mentoringOnline: mentoringOnline,
-                onMentoringOfflineChanged: (val) {
-                  setState(() => mentoringOffline = val);
-                },
-                onMentoringOnlineChanged: (val) {
-                  setState(() => mentoringOnline = val);
-                },
-              )
-            else
-              StudentProfile(
-                onEducationChanged: (val) {
-                  setState(() => education = val);
-                },
-                onStudyProgramChanged: (val) {
-                  setState(() => studyProgram = val);
-                },
-                onDomicileChanged: (val) {
-                  setState(() => domicile = val);
-                },
-                onFullAddressChanged: (val) {
-                  setState(() => fullAddress = val);
-                },
-                onDescriptionChanged: (val) {
-                  setState(() => description = val);
-                },
-              ),
+  Widget _buildStudentProfile() {
+    return StudentProfile(
+      onEducationChanged: (value) {},
+      onStudyProgramChanged: (value) {},
+      onDomicileChanged: (value) {},
+      onFullAddressChanged: (value) {},
+      onDescriptionChanged: (value) {},
+    );
+  }
+
+  Widget _buildMentorProfile() {
+    return MentorProfile(
+      mentorBeasiswa: false,
+      mentorAkademik: false,
+      onMentorBeasiswaChanged: (value) {},
+      onMentorAkademikChanged: (value) {},
+      onScholarship1Changed: (value) {},
+      onScholarship2Changed: (value) {},
+      onSkillAdded: (value) {},
+      onPickFiles: () {},
+      uploadedFiles: [],
+      mentoringOffline: false,
+      mentoringOnline: false,
+      onMentoringOfflineChanged: (value) {},
+      onMentoringOnlineChanged: (value) {},
+    );
+  }
+}
+
+// Modifikasi SettingsPage untuk menghubungkan ke EditProfilePage
+class SettingsPage extends StatelessWidget {
+  final String userType; // 'student' atau 'mentor'
+
+  SettingsPage({required this.userType});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Settings")),
+      body: ListView(
+        children: [
+          ListTile(
+            leading: Icon(Icons.person),
+            title: Text("Edit Profile"),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditProfilePage(userType: userType),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.logout),
+            title: Text("Logout"),
+            onTap: () {
+              _showLogoutDialog(context);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.delete),
+            title: Text("Hapus Akun"),
+            onTap: () {
+              _showDeleteAccountDialog(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Logout"),
+          content: Text("Apakah Anda yakin ingin logout?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text("Batal"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+                  ), // Ganti dengan halaman login
+                );
+              },
+              child: Text("Logout"),
+            ),
           ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _saveProfile,
-        child: Icon(Icons.save),
-        backgroundColor: Colors.deepPurple,
-      ),
+        );
+      },
+    );
+  }
+
+  void _showDeleteAccountDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Hapus Akun"),
+          content: Text("Apakah Anda yakin ingin menghapus akun ini?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text("Batal"),
+            ),
+            TextButton(
+              onPressed: () {
+                // Tambahkan fungsi hapus akun di sini
+                Navigator.pop(context);
+              },
+              child: Text("Hapus"),
+            ),
+          ],
+        );
+      },
     );
   }
 }
