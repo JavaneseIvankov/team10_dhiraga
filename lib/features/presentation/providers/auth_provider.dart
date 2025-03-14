@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:team10_dhiraga/features/domain/usecases/login_user.dart';
 import 'package:team10_dhiraga/features/domain/usecases/register_user.dart';
-import 'package:team10_dhiraga/pages/navbar_home_page.dart/home_page.dart';
 
 class MyAuthProvider with ChangeNotifier {
   final LoginUser loginUser;

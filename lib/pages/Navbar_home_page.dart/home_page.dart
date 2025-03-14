@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:team10_dhiraga/pages/navbar_profile_page.dart/edit_profile_page.dart';
+import 'package:team10_dhiraga/pages/Navbar_profile_page.dart/edit_profile_page.dart';
 import '../pages/edit_profile_page.dart';
 import '../Navbar_event_page.dart/event_page.dart';
 import '../Navbar_mentoring_page.dart/mentoring_page.dart';
@@ -13,6 +13,8 @@ import 'mentor_page.dart';
 import 'template_page.dart' as tpl;
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -102,7 +104,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _pages = [
+    final List<Widget> pages = [
       HomeContent(
         username: username,
         toggleBookmark: _toggleBookmark,
@@ -125,7 +127,7 @@ class _HomePageState extends State<HomePage> {
           IconButton(icon: Icon(Icons.bookmark), onPressed: _showBookmarks),
         ],
       ),
-      body: _pages[_selectedIndex],
+      body: pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.blue,
@@ -151,6 +153,7 @@ class HomeContent extends StatelessWidget {
   final Function(String) onSearchChanged;
 
   const HomeContent({
+    super.key,
     required this.username,
     required this.toggleBookmark,
     required this.bookmarkedItems,

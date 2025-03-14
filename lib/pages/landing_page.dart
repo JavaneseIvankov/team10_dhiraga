@@ -8,6 +8,8 @@ void main() {
 }
 
 class LoadingPage extends StatelessWidget {
+  const LoadingPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     Future.delayed(Duration(seconds: 2), () {
@@ -25,6 +27,8 @@ class LoadingPage extends StatelessWidget {
 }
 
 class LandingPage extends StatefulWidget {
+  const LandingPage({super.key});
+
   @override
   _LandingPageState createState() => _LandingPageState();
 }
@@ -181,7 +185,11 @@ class LandingPageContent extends StatelessWidget {
   final String title;
   final String subtitle;
 
-  const LandingPageContent({required this.title, required this.subtitle});
+  const LandingPageContent({
+    super.key,
+    required this.title,
+    required this.subtitle,
+  });
 
   @override
   Widget build(BuildContext context) {

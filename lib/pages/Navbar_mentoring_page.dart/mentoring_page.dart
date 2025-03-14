@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'mentor_chat_page.dart'; // Import halaman chat
 
 class MentoringPage extends StatelessWidget {
+  const MentoringPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

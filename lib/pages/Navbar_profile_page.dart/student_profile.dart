@@ -7,7 +7,8 @@ class StudentProfile extends StatelessWidget {
   final Function(String) onFullAddressChanged;
   final Function(String) onDescriptionChanged;
 
-  StudentProfile({
+  const StudentProfile({
+    super.key,
     required this.onEducationChanged,
     required this.onStudyProgramChanged,
     required this.onDomicileChanged,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class MentorChatPage extends StatefulWidget {
   final String mentorName;
 
-  MentorChatPage({required this.mentorName});
+  const MentorChatPage({super.key, required this.mentorName});
 
   @override
   _MentorChatPageState createState() => _MentorChatPageState();

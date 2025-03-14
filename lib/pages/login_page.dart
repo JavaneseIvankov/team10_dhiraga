@@ -1,12 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team10_dhiraga/core/theme/app_color.dart';
 import 'package:team10_dhiraga/features/presentation/providers/auth_provider.dart';
+import 'package:team10_dhiraga/pages/Navbar_home_page.dart/home_page.dart';
 import 'package:team10_dhiraga/widgets/large_text.dart';
 import 'package:team10_dhiraga/widgets/mesh_gradient_background.dart';
 import 'register_page.dart';
-import 'navbar_home_page.dart/home_page.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/custom_button.dart';
 import 'package:team10_dhiraga/core/theme/app_theme.dart';

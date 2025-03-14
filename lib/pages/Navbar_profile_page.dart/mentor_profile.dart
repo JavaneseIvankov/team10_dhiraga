@@ -15,7 +15,8 @@ class MentorProfile extends StatelessWidget {
   final Function(bool) onMentoringOfflineChanged;
   final Function(bool) onMentoringOnlineChanged;
 
-  MentorProfile({
+  const MentorProfile({
+    super.key,
     required this.mentorBeasiswa,
     required this.mentorAkademik,
     required this.onMentorBeasiswaChanged,

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team10_dhiraga/di/injection_container.dart';
+import 'package:team10_dhiraga/pages/Navbar_home_page.dart/home_page.dart';
 import 'package:team10_dhiraga/pages/login_page.dart';
 import 'package:team10_dhiraga/features/presentation/providers/auth_provider.dart'
     as local;
 import 'package:team10_dhiraga/core/services/firebase_initializer.dart';
 import 'package:team10_dhiraga/core/theme/app_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:team10_dhiraga/pages/navbar_home_page.dart/home_page.dart';
 import 'package:team10_dhiraga/pages/landing_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,6 +19,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   Future<bool> _hasSeenLandingPage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool('hasSeenLanding') ?? false;
@@ -53,6 +55,8 @@ class MyApp extends StatelessWidget {
 }
 
 class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({super.key});
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(

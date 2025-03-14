@@ -4,7 +4,7 @@ import 'edit_profile_page.dart';
 class SettingsPage extends StatefulWidget {
   final VoidCallback onEditProfile;
 
-  SettingsPage({required this.onEditProfile});
+  const SettingsPage({super.key, required this.onEditProfile});
 
   @override
   _SettingsPageState createState() => _SettingsPageState();

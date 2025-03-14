@@ -19,8 +19,8 @@ class CustomButton extends StatelessWidget {
     this.height,
     this.width,
     this.fontWeight,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
     var buttonStyle = AppTheme.primaryButtonStyle;

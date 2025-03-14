@@ -8,7 +8,7 @@ import 'settings_page.dart';
 class EditProfilePage extends StatelessWidget {
   final String userType; // 'student' atau 'mentor'
 
-  EditProfilePage({required this.userType});
+  const EditProfilePage({super.key, required this.userType});
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class EditProfilePage extends StatelessWidget {
 class SettingsPage extends StatelessWidget {
   final String userType; // 'student' atau 'mentor'
 
-  SettingsPage({required this.userType});
+  const SettingsPage({super.key, required this.userType});
 
   @override
   Widget build(BuildContext context) {
