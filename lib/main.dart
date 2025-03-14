@@ -63,11 +63,7 @@ class AuthWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<UserEntity?>(context);
 
-    if (user == null) {
-      return Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-
-    if (user.id.isNotEmpty) {
+    if (user != null && user.id.isNotEmpty) {
       if (!user.isInitialized()) return FormStudent();
       return HomePage();
     }

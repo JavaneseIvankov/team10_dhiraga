@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:team10_dhiraga/di/injection_container.dart';
 import 'package:team10_dhiraga/features/data/models/student_update_params.dart';
 import 'package:team10_dhiraga/features/domain/entities/auth_user_entity.dart';
+import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
 import 'package:team10_dhiraga/features/domain/repositories/user_repository.dart';
+import 'package:team10_dhiraga/pages/Navbar_home_page.dart/home_page.dart';
 
 class FormStudent extends StatefulWidget {
   const FormStudent({super.key});
@@ -22,19 +24,28 @@ class _FormStudentState extends State<FormStudent> {
   final TextEditingController deskripsiController = TextEditingController();
 
   // TODO: Implement username
-  void _submitForm(String? userId) {
+  void _submitForm(String? userId) async {
     if (userId == null) return;
-    userRepository.updateStudent(
-      userId,
-      StudentUpdateParams(
-        username: "test_name",
-        pendidikan: pendidikanController.text,
-        programStudi: programStudiController.text,
-        domisili: domisiliController.text,
-        alamatLengkap: alamatLengkapController.text,
-        deskripsi: deskripsiController.text,
-      ),
-    );
+    userRepository
+        .updateStudent(
+          userId,
+          StudentUpdateParams(
+            username: "test_name",
+            pendidikan: pendidikanController.text,
+            programStudi: programStudiController.text,
+            domisili: domisiliController.text,
+            alamatLengkap: alamatLengkapController.text,
+            deskripsi: deskripsiController.text,
+          ),
+        )
+        .then((_) {
+          if (mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          }
+        });
   }
 
   @override
@@ -49,7 +60,7 @@ class _FormStudentState extends State<FormStudent> {
 
   @override
   Widget build(BuildContext context) {
-    final authUser = Provider.of<AuthUserEntity?>(context);
+    final currentUser = Provider.of<UserEntity?>(context);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Form Student')),
@@ -80,7 +91,7 @@ class _FormStudentState extends State<FormStudent> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => _submitForm(authUser?.id ?? ""),
+              onPressed: () => _submitForm(currentUser?.id ?? ""),
               child: const Text('Submit'),
             ),
           ],
