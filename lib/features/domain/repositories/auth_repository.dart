@@ -9,5 +9,5 @@ abstract class AuthRepository {
     String email,
     String password,
   ); // DO NOT CALL IN PAGE / VIEW LAYER, USE USECASE INSTEAD
-  Future<AuthUserEntity> getAuthStatus();
+  Stream<AuthUserEntity?> onAuthStateChanges();
 }

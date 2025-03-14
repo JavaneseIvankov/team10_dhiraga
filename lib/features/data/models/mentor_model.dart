@@ -8,6 +8,7 @@ class MentorModel extends UserModel {
   final List<String> dokumen;
 
   MentorModel({
+    required String id,
     required String username,
     required String email,
     required String profilePictureURL,
@@ -24,6 +25,7 @@ class MentorModel extends UserModel {
     required this.mediaMentoring,
     required this.dokumen,
   }) : super(
+         id: id,
          username: username,
          email: email,
          profilePictureURL: profilePictureURL,
@@ -49,6 +51,7 @@ class MentorModel extends UserModel {
 
   factory MentorModel.fromJson(Map<String, dynamic> json) {
     return MentorModel(
+      id: json['id'],
       username: json['username'],
       email: json['email'],
       profilePictureURL: json['profilePictureURL'],
@@ -67,9 +70,9 @@ class MentorModel extends UserModel {
     );
   }
 
-  // TODO: Define data structure for non primitive data field
-  factory MentorModel.empty() {
+  factory MentorModel.empty(String? id) {
     return MentorModel(
+      id: id ?? "",
       username: '',
       email: '',
       profilePictureURL: '',
@@ -117,6 +120,7 @@ class MentorModel extends UserModel {
     List<String>? dokumen,
   }) {
     return MentorModel(
+      id: id,
       username: username ?? this.username,
       email: email ?? this.email,
       profilePictureURL: profilePictureURL ?? this.profilePictureURL,

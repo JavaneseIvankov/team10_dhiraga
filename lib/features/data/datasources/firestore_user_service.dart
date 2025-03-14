@@ -13,7 +13,9 @@ class FirestoreUserService {
 
   Future<void> createUser(String userId, String role) async {
     try {
-      await _usersCollection.doc(userId).set(UserModel.empty(role).toJson());
+      await _usersCollection
+          .doc(userId)
+          .set(UserModel.empty(role, userId).toJson());
     } catch (e) {
       throw Exception('Error creating user: $e');
     }

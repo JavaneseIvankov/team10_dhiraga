@@ -55,4 +55,17 @@ class FirebaseAuthService {
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
   }
+
+  Stream<AuthUserModel?> onAuthStateChanges() {
+    return _firebaseAuth.authStateChanges().map((firebaseUser) {
+      if (firebaseUser != null) {
+        return AuthUserModel(
+          id: firebaseUser.uid,
+          email: firebaseUser.email ?? '',
+        );
+      } else {
+        return null;
+      }
+    });
+  }
 }

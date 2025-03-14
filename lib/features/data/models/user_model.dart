@@ -4,6 +4,7 @@ import 'package:team10_dhiraga/features/data/models/mentor_model.dart';
 
 class UserModel extends UserEntity {
   UserModel({
+    required String id,
     required String username,
     required String email,
     required String profilePictureURL,
@@ -15,6 +16,7 @@ class UserModel extends UserEntity {
     required String deskripsi,
     required String role,
   }) : super(
+         id: id,
          username: username,
          email: email,
          profilePictureURL: profilePictureURL,
@@ -30,6 +32,7 @@ class UserModel extends UserEntity {
   @override
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'username': username,
       'email': email,
       'profilePictureURL': profilePictureURL,
@@ -51,6 +54,7 @@ class UserModel extends UserEntity {
         return MentorModel.fromJson(json);
       default:
         return UserModel(
+          id: json['id'],
           username: json['username'],
           email: json['email'],
           profilePictureURL: json['profilePictureURL'],
@@ -67,7 +71,8 @@ class UserModel extends UserEntity {
 
   @override
   bool isInitialized() {
-    return username.isNotEmpty &&
+    return id.isNotEmpty &&
+        username.isNotEmpty &&
         email.isNotEmpty &&
         profilePictureURL.isNotEmpty &&
         fullName.isNotEmpty &&
@@ -76,14 +81,15 @@ class UserModel extends UserEntity {
         role.isNotEmpty;
   }
 
-  factory UserModel.empty(String role) {
+  factory UserModel.empty(String role, String id) {
     switch (role) {
       case 'student':
-        return StudentModel.empty();
+        return StudentModel.empty(id);
       case 'mentor':
-        return MentorModel.empty();
+        return MentorModel.empty(id);
       default:
         return UserModel(
+          id: '',
           username: '',
           email: '',
           profilePictureURL: '',
@@ -111,6 +117,7 @@ class UserModel extends UserEntity {
     String? role,
   }) {
     return UserModel(
+      id: id, // id is immutable
       username: username ?? this.username,
       email: email ?? this.email,
       profilePictureURL: profilePictureURL ?? this.profilePictureURL,

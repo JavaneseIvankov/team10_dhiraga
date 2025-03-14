@@ -4,6 +4,7 @@ class StudentModel extends UserModel {
   final List<String> bookmark;
 
   StudentModel({
+    required String id,
     required String username,
     required String email,
     required String profilePictureURL,
@@ -16,6 +17,7 @@ class StudentModel extends UserModel {
     required String role,
     required this.bookmark,
   }) : super(
+         id: id,
          username: username,
          email: email,
          profilePictureURL: profilePictureURL,
@@ -35,24 +37,9 @@ class StudentModel extends UserModel {
     return map;
   }
 
-  factory StudentModel.empty() {
-    return StudentModel(
-      username: '',
-      email: '',
-      profilePictureURL: '',
-      fullName: '',
-      pendidikan: '',
-      programStudi: '',
-      domisili: '',
-      alamatLengkap: '',
-      deskripsi: '',
-      role: 'student',
-      bookmark: [],
-    );
-  }
-
   factory StudentModel.fromJson(Map<String, dynamic> json) {
     return StudentModel(
+      id: json['id'],
       username: json['username'],
       email: json['email'],
       profilePictureURL: json['profilePictureURL'],
@@ -67,13 +54,31 @@ class StudentModel extends UserModel {
     );
   }
 
+  factory StudentModel.empty(String? id) {
+    return StudentModel(
+      id: id ?? "",
+      username: '',
+      email: '',
+      profilePictureURL: '',
+      fullName: '',
+      pendidikan: '',
+      programStudi: '',
+      domisili: '',
+      alamatLengkap: '',
+      deskripsi: '',
+      role: 'student',
+      bookmark: [],
+    );
+  }
+
   @override
   bool isInitialized() {
-    return super.isInitialized();
+    return super.isInitialized() && bookmark.isNotEmpty;
   }
 
   @override
   StudentModel copyWith({
+    String? id,
     String? username,
     String? email,
     String? profilePictureURL,
@@ -87,6 +92,7 @@ class StudentModel extends UserModel {
     List<String>? bookmark,
   }) {
     return StudentModel(
+      id: this.id,
       username: username ?? this.username,
       email: email ?? this.email,
       profilePictureURL: profilePictureURL ?? this.profilePictureURL,
