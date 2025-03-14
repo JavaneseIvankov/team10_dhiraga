@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:team10_dhiraga/features/data/models/user_model.dart';
+import 'package:team10_dhiraga/features/data/models/auth_user_model.dart';
 
 class FirebaseAuthService {
   final firebase_auth.FirebaseAuth _firebaseAuth;
@@ -7,7 +7,7 @@ class FirebaseAuthService {
   FirebaseAuthService({firebase_auth.FirebaseAuth? firebaseAuth})
     : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
 
-  Future<UserModel> register(String email, String password) async {
+  Future<AuthUserModel> register(String email, String password) async {
     try {
       final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
@@ -17,7 +17,10 @@ class FirebaseAuthService {
       final firebaseUser = userCredential.user;
 
       if (firebaseUser != null) {
-        return UserModel(id: firebaseUser.uid, email: firebaseUser.email ?? '');
+        return AuthUserModel(
+          id: firebaseUser.uid,
+          email: firebaseUser.email ?? '',
+        );
       } else {
         throw Exception('User registration failed');
       }
@@ -26,7 +29,7 @@ class FirebaseAuthService {
     }
   }
 
-  Future<UserModel> login(String email, String password) async {
+  Future<AuthUserModel> login(String email, String password) async {
     try {
       final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
@@ -36,8 +39,10 @@ class FirebaseAuthService {
       final firebaseUser = userCredential.user;
 
       if (firebaseUser != null) {
-        print("Firebase User: ${firebaseUser.uid}, ${firebaseUser.email}");
-        return UserModel(id: firebaseUser.uid, email: firebaseUser.email ?? '');
+        return AuthUserModel(
+          id: firebaseUser.uid,
+          email: firebaseUser.email ?? '',
+        );
       } else {
         throw Exception('User login failed');
       }
@@ -49,5 +54,18 @@ class FirebaseAuthService {
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
+  }
+
+  Stream<AuthUserModel?> onAuthStateChanges() {
+    return _firebaseAuth.authStateChanges().map((firebaseUser) {
+      if (firebaseUser != null) {
+        return AuthUserModel(
+          id: firebaseUser.uid,
+          email: firebaseUser.email ?? '',
+        );
+      } else {
+        return null;
+      }
+    });
   }
 }

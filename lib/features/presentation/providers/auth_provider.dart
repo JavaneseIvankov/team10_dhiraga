@@ -38,15 +38,18 @@ class MyAuthProvider with ChangeNotifier {
   }
 
   Future<void> register({
-    required email,
-    required password,
+    required String role,
+    required String email,
+    required String password,
     VoidCallback? onSuccess,
     ValueChanged<Exception>? onFailed,
   }) async {
     _setLoading(true);
     _clearError();
     try {
-      await registerUser(RegisterParams(email: email, password: password));
+      await registerUser(
+        RegisterParams(role: role, email: email, password: password),
+      );
       onSuccess!();
     } on Exception catch (e) {
       _setError("Registrasi gagal, coba lagi!");

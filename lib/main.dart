@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team10_dhiraga/di/injection_container.dart';
-import 'package:team10_dhiraga/pages/Navbar_home_page.dart/home_page.dart';
+import 'package:team10_dhiraga/pages/form_student.dart';
 import 'package:team10_dhiraga/pages/login_page.dart';
 import 'package:team10_dhiraga/features/presentation/providers/auth_provider.dart'
     as local;
 import 'package:team10_dhiraga/core/services/firebase_initializer.dart';
 import 'package:team10_dhiraga/core/theme/app_theme.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:team10_dhiraga/pages/Navbar_home_page.dart/home_page.dart';
 import 'package:team10_dhiraga/pages/landing_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
+import 'package:team10_dhiraga/features/domain/usecases/use_user_stream.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +34,10 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<local.MyAuthProvider>(
           create: (_) => sl<local.MyAuthProvider>(),
+        ),
+        StreamProvider<UserEntity?>(
+          create: (context) => sl<UserStream>().userStream,
+          initialData: null,
         ),
       ],
       child: MaterialApp(
@@ -59,17 +65,13 @@ class AuthWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(body: Center(child: CircularProgressIndicator()));
-        }
-        if (snapshot.hasData) {
-          return HomePage();
-        }
-        return LoginPage();
-      },
-    );
+    final user = Provider.of<UserEntity?>(context);
+
+    if (user != null && user.id.isNotEmpty) {
+      if (!user.isInitialized()) return FormStudent();
+      return HomePage();
+    }
+
+    return LoginPage();
   }
 }
