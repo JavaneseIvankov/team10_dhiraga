@@ -7,7 +7,7 @@ import 'package:team10_dhiraga/features/presentation/providers/auth_provider.dar
 import 'package:team10_dhiraga/core/services/firebase_initializer.dart';
 import 'package:team10_dhiraga/core/theme/app_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:team10_dhiraga/pages/Navbar_home_page.dart/home_page.dart';
+import 'package:team10_dhiraga/pages/navbar_home_page.dart/home_page.dart';
 import 'package:team10_dhiraga/pages/landing_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
