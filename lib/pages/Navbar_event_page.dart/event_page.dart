@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'event_detail_page.dart'; // Import halaman detail
 
 class EventPage extends StatelessWidget {
   @override
@@ -7,30 +8,46 @@ class EventPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "Event",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: const Color.fromARGB(255, 44, 74, 221),
+          ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildSectionTitle("Beasiswa Bulan Ini!"),
-            _buildGridView(beasiswaList, context),
-            SizedBox(height: 20),
-            _buildSectionTitle("Seminar dan Webinar"),
-            _buildGridView(seminarList, context),
-          ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color.fromRGBO(218, 216, 219, 1), // Ungu tua
+              Color.fromARGB(255, 203, 176, 207), // Ungu muda
+            ],
+          ),
+        ),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildSectionTitle("Beasiswa Bulan Ini!"),
+              _buildEventGrid(beasiswaList, context),
+              SizedBox(height: 20),
+              _buildSectionTitle("Seminar dan Webinar"),
+              _buildEventGrid(seminarList, context),
+            ],
+          ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavBar(),
     );
   }
 
+  // Widget untuk judul section
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.0),
@@ -39,32 +56,38 @@ class EventPage extends StatelessWidget {
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
-          color: Colors.black,
+          color: Colors.white,
         ),
       ),
     );
   }
 
-  Widget _buildGridView(List<Map<String, String>> items, BuildContext context) {
+  // Widget untuk menampilkan grid event
+  Widget _buildEventGrid(
+    List<Map<String, String>> events,
+    BuildContext context,
+  ) {
     return GridView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+        crossAxisCount: 2, // 2 kolom
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
-        childAspectRatio: 1.5,
+        childAspectRatio: 1, // Kotak persegi
       ),
-      itemCount: items.length,
+      itemCount: events.length,
       itemBuilder: (context, index) {
-        return _buildEventCard(items[index], context);
+        return _buildEventCard(events[index], context);
       },
     );
   }
 
+  // Widget untuk card event
   Widget _buildEventCard(Map<String, String> event, BuildContext context) {
     return GestureDetector(
       onTap: () {
+        // Navigasi ke halaman detail event
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -77,90 +100,52 @@ class EventPage extends StatelessWidget {
           borderRadius: BorderRadius.circular(12.0),
         ),
         elevation: 4,
-        child: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      event['title']!,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12.0),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF7E57C2), // Ungu muda
+                Color(0xFF512DA8), // Ungu tua
+              ],
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  event['title']!,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
-                  Icon(Icons.info_outline, color: Colors.grey),
-                ],
-              ),
-              Spacer(),
-              Text(
-                event['date']!,
-                style: TextStyle(fontSize: 12, color: Colors.grey[700]),
-              ),
-            ],
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  event['date']!,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white.withOpacity(0.8),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-
-  Widget _buildBottomNavBar() {
-    return BottomNavigationBar(
-      items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-        BottomNavigationBarItem(icon: Icon(Icons.event), label: "Event"),
-        BottomNavigationBarItem(icon: Icon(Icons.school), label: "Mentoring"),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-      ],
-      currentIndex: 1,
-      selectedItemColor: Colors.blue,
-      unselectedItemColor: Colors.grey,
-      showUnselectedLabels: true,
-    );
-  }
 }
 
-class EventDetailPage extends StatelessWidget {
-  final Map<String, String> event;
-
-  EventDetailPage({required this.event});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(event['title']!)),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              event['title']!,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text(
-              event['date']!,
-              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-            ),
-            SizedBox(height: 20),
-            Text(
-              "Detail event akan ditampilkan di sini.",
-              style: TextStyle(fontSize: 16),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
+// Data dummy untuk beasiswa
 List<Map<String, String>> beasiswaList = [
   {
     "title": "Beasiswa Penelitian Bank Indonesia",
@@ -170,11 +155,35 @@ List<Map<String, String>> beasiswaList = [
     "title": "Beasiswa Bintang Glow and Lovely",
     "date": "3 Feb 2025 - 8 Mei 2025",
   },
-  {"title": "Beasiswa ASTRA 2025", "date": "3 Feb 2025 - 30 Mar 2025"},
-  {"title": "Beasiswa Karya Salemba Empat", "date": "28 Feb 2025 - 4 Mar 2025"},
+  {"title": "Beasiswa ASTRA 2025", "date": "13 Feb 2025 - 30 Apr 2025"},
+  {"title": "Beasiswa Karya Salemba Empat", "date": "24 Feb 2025 - 4 Apr 2025"},
+  {"title": "Beasiswa Djarum Plus 2025", "date": "27 Mar 2025 - 30 Mei 2025"},
 ];
 
+// Data dummy untuk seminar dan webinar
 List<Map<String, String>> seminarList = [
-  {"title": "Seminar Pertamina Sobat Bumi", "date": "4 Feb 2025 - 4 Mar 2025"},
-  {"title": "Seminar Energi Berkelanjutan", "date": "5 Mar 2025 - 10 Apr 2025"},
+  {
+    "title": "Strategi Jitu Lolos Beasiswa Djarum",
+    "date": "1 Mei 2025 - 7 Mei 2025",
+  },
+  {
+    "title": "Beasiswa Bank Indonesia : Tips & Trik",
+    "date": "10 Mei 2025 - 20 Mei 2025",
+  },
+  {
+    "title": "Raih Beasiswa Astra, Persiapkan Masa Depan",
+    "date": "20 Mei 2025 - 3 Juni 2025",
+  },
+  {
+    "title": "Strategi Beasiswa Unggulan Kemendikbud",
+    "date": "1 Jun 2025 - 12 Jun 2025",
+  },
+  {
+    "title": "Beasiswa Gojek : Kuliah, Karir Cemerlang",
+    "date": "1 Sep 2025 - 10 Sep 2025",
+  },
+  {
+    "title": "Kuliah Gratis dengan Beasiswa Kominfo",
+    "date": "5 Sep 2025 - 18 Sep 2025",
+  },
 ];
