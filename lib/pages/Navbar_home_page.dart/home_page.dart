@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:team10_dhiraga/pages/navbar_profile_page.dart/edit_profile_page.dart';
+import '../pages/edit_profile_page.dart';
 import '../Navbar_event_page.dart/event_page.dart';
 import '../Navbar_mentoring_page.dart/mentoring_page.dart';
-import '../Navbar_profile_page.dart/profile_page.dart';
+import '../pages/profile_page.dart'; // Pastikan import ini ada
 import '../login_page.dart';
 import 'notification_page.dart';
 import 'beasiswa_page.dart';
@@ -19,6 +21,7 @@ class _HomePageState extends State<HomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User? user;
   String username = "";
+  String userRole = "student"; // Default "student" agar tidak null
   int _selectedIndex = 0;
 
   @override
@@ -30,18 +33,22 @@ class _HomePageState extends State<HomePage> {
   void _getUserData() async {
     user = _auth.currentUser;
     if (user == null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
+      });
     } else {
       DocumentSnapshot userData =
           await FirebaseFirestore.instance
               .collection('users')
               .doc(user!.uid)
               .get();
+
       setState(() {
         username = userData["username"] ?? "Pengguna";
+        userRole = userData["role"] ?? "student"; // Ambil peran dari database
       });
     }
   }
@@ -52,41 +59,33 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  final List<Widget> _pages = [
-    HomeContent(),
-    EventPage(),
-    MentoringPage(),
-    ProfilePage(isMentor: userRole == "mentor"),
-  ];
-
-  static var userRole;
-
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _pages = [
+      HomeContent(),
+      EventPage(),
+      MentoringPage(),
+      EditProfilePage(
+        userType: userRole == "mentor" ? "mentor" : "student",
+      ), // Ganti dengan EditProfilePage
+    ];
+
     return Scaffold(
-      body: Stack(
-        children: [
-          _pages[_selectedIndex],
-          if (_selectedIndex == 0)
-            Positioned(
-              top: 40,
-              right: 16,
-              child: IconButton(
-                icon: Icon(
-                  Icons.bookmark,
-                  color: Colors.blue.shade900,
-                  size: 35,
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => NotificationPage()),
-                  );
-                },
-              ),
-            ),
+      appBar: AppBar(
+        title: Text("Dashboard"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NotificationPage()),
+              );
+            },
+          ),
         ],
       ),
+      body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.blue,
@@ -104,6 +103,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+// Pindahkan HomeContent ke luar agar tidak error
 class HomeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
