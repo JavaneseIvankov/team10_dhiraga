@@ -1,7 +1,28 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:team10_dhiraga/main.dart'; // Pastikan ini mengarah ke AuthWrapper
+import 'login_page.dart'; // Import halaman login
+import 'register_page.dart'; // Import halaman register
+
+void main() {
+  runApp(MaterialApp(home: LoadingPage()));
+}
+
+class LoadingPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LandingPage()),
+      );
+    });
+
+    return Scaffold(
+      backgroundColor: Colors.blue.shade900,
+      body: Center(child: Image.asset('assets/logo.png', height: 120)),
+    );
+  }
+}
 
 class LandingPage extends StatefulWidget {
   @override
@@ -11,12 +32,11 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  Timer? _timer; // Menggunakan nullable Timer
 
   List<Map<String, String>> landingData = [
     {
       "title": "Selamat Datang di Dhiraga!",
-      "subtitle": "Platform Beasiswa & Mentoring Terbaik",
+      "subtitle": "Platform pencarian Beasiswa & Mentoring Terbaik",
     },
     {
       "title": "Temukan Beasiswa Terbaik",
@@ -25,47 +45,22 @@ class _LandingPageState extends State<LandingPage> {
     },
     {
       "title": "Tingkatkan Performa Akademik",
-      "subtitle": "Dapatkan bimbingan akademik dari mentor berpengalaman!",
+      "subtitle":
+          "Kesulitan memahami materi sekolah maupun kuliah? Dapatkan bimbingan terbaik dari mentor berpengalaman!",
     },
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    _startAutoSlide();
-  }
-
-  void _startAutoSlide() {
-    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
-      if (_currentPage < landingData.length - 1) {
-        if (mounted) {
-          _pageController.nextPage(
-            duration: Duration(milliseconds: 500),
-            curve: Curves.easeInOut,
-          );
-        }
-      } else {
-        _finishLandingPage();
-        timer.cancel();
-      }
-    });
-  }
-
-  Future<void> _finishLandingPage() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('hasSeenLanding', true);
-
-    if (mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => AuthWrapper()),
+  void _nextPage() {
+    if (_currentPage < landingData.length - 1) {
+      _pageController.nextPage(
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
       );
     }
   }
 
   @override
   void dispose() {
-    _timer?.cancel(); // Cek null sebelum cancel
     _pageController.dispose();
     super.dispose();
   }
@@ -100,6 +95,68 @@ class _LandingPageState extends State<LandingPage> {
               landingData.length,
               (index) => buildDot(index),
             ),
+          ),
+          SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child:
+                _currentPage == landingData.length - 1
+                    ? Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginPage(),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue.shade900,
+                            minimumSize: Size(double.infinity, 50),
+                          ),
+                          child: Text(
+                            'Login',
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RegisterPage(),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            side: BorderSide(color: Colors.purple),
+                            minimumSize: Size(double.infinity, 50),
+                          ),
+                          child: Text(
+                            'Register',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.purple,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                    : ElevatedButton(
+                      onPressed: _nextPage,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue.shade900,
+                        minimumSize: Size(double.infinity, 50),
+                      ),
+                      child: Text(
+                        'Selanjutnya',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                    ),
           ),
           SizedBox(height: 20),
         ],
@@ -140,7 +197,7 @@ class LandingPageContent extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('assets/apple_icon.png', height: 120),
+          Image.asset('assets/logo.png', height: 120),
           SizedBox(height: 20),
           Text(
             title,
