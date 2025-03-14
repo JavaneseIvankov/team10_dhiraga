@@ -8,6 +8,7 @@ abstract class UserEntity {
   final String domisili;
   final String alamatLengkap;
   final String deskripsi;
+  final String role;
 
   UserEntity({
     required this.username,
@@ -19,6 +20,7 @@ abstract class UserEntity {
     required this.domisili,
     required this.alamatLengkap,
     required this.deskripsi,
+    required this.role,
   });
 
   Map<String, dynamic> toJson();
@@ -26,4 +28,10 @@ abstract class UserEntity {
   factory UserEntity.fromJson(Map<String, dynamic> json) {
     throw UnimplementedError('fromJson() must be implemented in subclasses');
   }
+
+  factory UserEntity.empty() {
+    throw UnimplementedError('empty() must be implemented in subclasses');
+  }
+
+  bool isInitialized();
 }

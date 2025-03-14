@@ -13,6 +13,7 @@ class StudentModel extends UserModel {
     required String domisili,
     required String alamatLengkap,
     required String deskripsi,
+    required String role,
     required this.bookmark,
   }) : super(
          username: username,
@@ -24,6 +25,7 @@ class StudentModel extends UserModel {
          domisili: domisili,
          alamatLengkap: alamatLengkap,
          deskripsi: deskripsi,
+         role: role,
        );
 
   @override
@@ -31,6 +33,22 @@ class StudentModel extends UserModel {
     final map = super.toJson();
     map['bookmark'] = bookmark;
     return map;
+  }
+
+  factory StudentModel.empty() {
+    return StudentModel(
+      username: '',
+      email: '',
+      profilePictureURL: '',
+      fullName: '',
+      pendidikan: '',
+      programStudi: '',
+      domisili: '',
+      alamatLengkap: '',
+      deskripsi: '',
+      role: 'student',
+      bookmark: [],
+    );
   }
 
   factory StudentModel.fromJson(Map<String, dynamic> json) {
@@ -44,7 +62,42 @@ class StudentModel extends UserModel {
       domisili: json['domisili'],
       alamatLengkap: json['alamatLengkap'],
       deskripsi: json['deskripsi'],
+      role: json['role'],
       bookmark: List<String>.from(json['bookmark']),
+    );
+  }
+
+  @override
+  bool isInitialized() {
+    return super.isInitialized();
+  }
+
+  @override
+  StudentModel copyWith({
+    String? username,
+    String? email,
+    String? profilePictureURL,
+    String? fullName,
+    String? pendidikan,
+    String? programStudi,
+    String? domisili,
+    String? alamatLengkap,
+    String? deskripsi,
+    String? role,
+    List<String>? bookmark,
+  }) {
+    return StudentModel(
+      username: username ?? this.username,
+      email: email ?? this.email,
+      profilePictureURL: profilePictureURL ?? this.profilePictureURL,
+      fullName: fullName ?? this.fullName,
+      pendidikan: pendidikan ?? this.pendidikan,
+      programStudi: programStudi ?? this.programStudi,
+      domisili: domisili ?? this.domisili,
+      alamatLengkap: alamatLengkap ?? this.alamatLengkap,
+      deskripsi: deskripsi ?? this.deskripsi,
+      role: role ?? this.role,
+      bookmark: bookmark ?? this.bookmark,
     );
   }
 }

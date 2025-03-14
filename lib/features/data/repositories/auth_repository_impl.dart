@@ -1,4 +1,4 @@
-import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
+import 'package:team10_dhiraga/features/domain/entities/auth_user_entity.dart';
 import 'package:team10_dhiraga/features/domain/repositories/auth_repository.dart';
 
 import '../datasources/firebase_auth_service.dart';

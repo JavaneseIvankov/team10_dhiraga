@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:team10_dhiraga/features/data/models/user_model.dart';
+import 'package:team10_dhiraga/features/data/models/auth_user_model.dart';
 
 class FirebaseAuthService {
   final firebase_auth.FirebaseAuth _firebaseAuth;
@@ -39,7 +39,6 @@ class FirebaseAuthService {
       final firebaseUser = userCredential.user;
 
       if (firebaseUser != null) {
-        print("Firebase User: ${firebaseUser.uid}, ${firebaseUser.email}");
         return AuthUserModel(
           id: firebaseUser.uid,
           email: firebaseUser.email ?? '',
