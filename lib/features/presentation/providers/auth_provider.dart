@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:team10_dhiraga/features/domain/usecases/login_user.dart';
 import 'package:team10_dhiraga/features/domain/usecases/register_user.dart';
-import 'package:team10_dhiraga/pages/Navbar_home_page.dart/home_page.dart';
 
 class MyAuthProvider with ChangeNotifier {
   final LoginUser loginUser;
@@ -40,15 +39,18 @@ class MyAuthProvider with ChangeNotifier {
   }
 
   Future<void> register({
-    required email,
-    required password,
+    required String role,
+    required String email,
+    required String password,
     VoidCallback? onSuccess,
     ValueChanged<Exception>? onFailed,
   }) async {
     _setLoading(true);
     _clearError();
     try {
-      await registerUser(RegisterParams(email: email, password: password));
+      await registerUser(
+        RegisterParams(role: role, email: email, password: password),
+      );
       onSuccess!();
     } on Exception catch (e) {
       _setError("Registrasi gagal, coba lagi!");

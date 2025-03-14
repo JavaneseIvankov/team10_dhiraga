@@ -1,94 +1,109 @@
-import 'package:team10_dhiraga/features/data/models/auth_user_model.dart';
-import 'package:team10_dhiraga/features/domain/entities/student_entity.dart';
+import 'package:team10_dhiraga/features/data/models/user_model.dart';
 
-class StudentModel extends StudentEntity {
+class StudentModel extends UserModel {
+  final List<String> bookmark;
+
   StudentModel({
-    required super.role,
-    required super.pictureURL,
-    required super.username,
-    required super.fullname,
-    required super.pendidikan,
-    required super.programStudi,
-    required super.domisili,
-    required super.alamat,
-    required super.deskripsi,
-  });
+    required String id,
+    required String username,
+    required String email,
+    required String profilePictureURL,
+    required String fullName,
+    required String pendidikan,
+    required String programStudi,
+    required String domisili,
+    required String alamatLengkap,
+    required String deskripsi,
+    required String role,
+    required this.bookmark,
+  }) : super(
+         id: id,
+         username: username,
+         email: email,
+         profilePictureURL: profilePictureURL,
+         fullName: fullName,
+         pendidikan: pendidikan,
+         programStudi: programStudi,
+         domisili: domisili,
+         alamatLengkap: alamatLengkap,
+         deskripsi: deskripsi,
+         role: role,
+       );
+
+  @override
+  Map<String, dynamic> toJson() {
+    final map = super.toJson();
+    map['bookmark'] = bookmark;
+    return map;
+  }
 
   factory StudentModel.fromJson(Map<String, dynamic> json) {
     return StudentModel(
-      role: json['role'],
-      pictureURL: json['pictureURL'],
+      id: json['id'],
       username: json['username'],
-      fullname: json['fullname'],
+      email: json['email'],
+      profilePictureURL: json['profilePictureURL'],
+      fullName: json['fullName'],
       pendidikan: json['pendidikan'],
       programStudi: json['programStudi'],
       domisili: json['domisili'],
-      alamat: json['alamat'],
+      alamatLengkap: json['alamatLengkap'],
       deskripsi: json['deskripsi'],
+      role: json['role'],
+      bookmark: List<String>.from(json['bookmark']),
     );
   }
 
-  factory StudentModel.empty() {
+  factory StudentModel.empty(String? id) {
     return StudentModel(
-      role: "student",
-      pictureURL: "",
-      username: "",
-      fullname: "",
-      pendidikan: "",
-      programStudi: "",
-      domisili: "",
-      alamat: "",
-      deskripsi: "",
+      id: id ?? "",
+      username: '',
+      email: '',
+      profilePictureURL: '',
+      fullName: '',
+      pendidikan: '',
+      programStudi: '',
+      domisili: '',
+      alamatLengkap: '',
+      deskripsi: '',
+      role: 'student',
+      bookmark: [],
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'role': role,
-      'pictureURL': pictureURL,
-      'username': username,
-      'fullname': fullname,
-      'pendidikan': pendidikan,
-      'programStudi': programStudi,
-      'domisili': domisili,
-      'alamat': alamat,
-      'deskripsi': deskripsi,
-    };
-  }
-}
-
-class StudentUpdateParams extends UserUpdateParams {
-  final String? pictureURL;
-  final String? username;
-  final String? fullname;
-  final String? pendidikan;
-  final String? programStudi;
-  final String? domisili;
-  final String? alamat;
-  final String? deskripsi;
-
-  const StudentUpdateParams({
-    this.pictureURL,
-    this.username,
-    this.fullname,
-    this.pendidikan,
-    this.programStudi,
-    this.domisili,
-    this.alamat,
-    this.deskripsi,
-  });
 
   @override
-  Map<String, dynamic> toMap() {
-    final data = <String, dynamic>{};
-    if (pictureURL != null) data['pictureURL'] = pictureURL;
-    if (username != null) data['username'] = username;
-    if (fullname != null) data['fullname'] = fullname;
-    if (pendidikan != null) data['pendidikan'] = pendidikan;
-    if (programStudi != null) data['programStudi'] = programStudi;
-    if (domisili != null) data['domisili'] = domisili;
-    if (alamat != null) data['alamat'] = alamat;
-    if (deskripsi != null) data['deskripsi'] = deskripsi;
-    return data;
+  bool isInitialized() {
+    return super.isInitialized() && bookmark.isNotEmpty;
+  }
+
+  @override
+  StudentModel copyWith({
+    String? id,
+    String? username,
+    String? email,
+    String? profilePictureURL,
+    String? fullName,
+    String? pendidikan,
+    String? programStudi,
+    String? domisili,
+    String? alamatLengkap,
+    String? deskripsi,
+    String? role,
+    List<String>? bookmark,
+  }) {
+    return StudentModel(
+      id: this.id,
+      username: username ?? this.username,
+      email: email ?? this.email,
+      profilePictureURL: profilePictureURL ?? this.profilePictureURL,
+      fullName: fullName ?? this.fullName,
+      pendidikan: pendidikan ?? this.pendidikan,
+      programStudi: programStudi ?? this.programStudi,
+      domisili: domisili ?? this.domisili,
+      alamatLengkap: alamatLengkap ?? this.alamatLengkap,
+      deskripsi: deskripsi ?? this.deskripsi,
+      role: role ?? this.role,
+      bookmark: bookmark ?? this.bookmark,
+    );
   }
 }
