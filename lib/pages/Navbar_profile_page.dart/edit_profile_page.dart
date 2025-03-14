@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'edit_profile_page.dart';
 import 'package:team10_dhiraga/pages/login_page.dart';
 import 'student_profile.dart';
 import 'mentor_profile.dart';
