@@ -66,6 +66,7 @@ class AuthWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserEntity?>(context);
+    debugPrint("\n MAIN: USER CHANGE DETECTED ${user.toString()} \n");
 
     if (user != null && user.id.isNotEmpty) {
       if (!user.isInitialized()) return FormStudent();

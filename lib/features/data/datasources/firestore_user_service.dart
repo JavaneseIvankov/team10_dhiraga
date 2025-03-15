@@ -11,11 +11,11 @@ class FirestoreUserService {
   CollectionReference get _usersCollection =>
       _firestore.collection(_collectionPath);
 
-  Future<void> createUser(String userId, String role) async {
+  Future<UserModel?> createUser(String userId, String role) async {
     try {
-      await _usersCollection
-          .doc(userId)
-          .set(UserModel.empty(role, userId).toJson());
+      final user = UserModel.empty(role, userId);
+      await _usersCollection.doc(userId).set(user.toJson());
+      return user;
     } catch (e) {
       throw Exception('Error creating user: $e');
     }

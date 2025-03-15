@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-// TODO Implement this library.
-=======
 import 'package:team10_dhiraga/features/data/models/user_model.dart';
 
 class MentorModel extends UserModel {
@@ -142,4 +139,3 @@ class MentorModel extends UserModel {
     );
   }
 }
->>>>>>> fbc2938bacd696fc3a3d3fec73c6b5fd6b41328f

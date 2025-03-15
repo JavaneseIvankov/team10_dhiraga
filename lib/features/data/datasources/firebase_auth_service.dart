@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:flutter/material.dart';
 import 'package:team10_dhiraga/features/data/models/auth_user_model.dart';
 
 class FirebaseAuthService {
@@ -9,6 +10,7 @@ class FirebaseAuthService {
 
   Future<AuthUserModel> register(String email, String password) async {
     try {
+      // Create the user with email and password
       final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -17,6 +19,15 @@ class FirebaseAuthService {
       final firebaseUser = userCredential.user;
 
       if (firebaseUser != null) {
+        // Sign in the user after successful registration
+        await _firebaseAuth.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+
+        debugPrint("SERVICE: REGISTRASI BERHASIL");
+
+        // Return the AuthUserModel after sign-in
         return AuthUserModel(
           id: firebaseUser.uid,
           email: firebaseUser.email ?? '',
@@ -39,6 +50,7 @@ class FirebaseAuthService {
       final firebaseUser = userCredential.user;
 
       if (firebaseUser != null) {
+        debugPrint("SERVICE: LOGIN BERHASIL");
         return AuthUserModel(
           id: firebaseUser.uid,
           email: firebaseUser.email ?? '',
@@ -58,6 +70,9 @@ class FirebaseAuthService {
 
   Stream<AuthUserModel?> onAuthStateChanges() {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
+      debugPrint(
+        "SERVICE: USER AUTH STATUS CHANGED ${firebaseUser?.toString()}",
+      );
       if (firebaseUser != null) {
         return AuthUserModel(
           id: firebaseUser.uid,

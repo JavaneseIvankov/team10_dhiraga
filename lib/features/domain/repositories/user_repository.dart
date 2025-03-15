@@ -1,11 +1,9 @@
-import 'package:team10_dhiraga/features/data/models/user-related/mentor_update_params.dart';
-import 'package:team10_dhiraga/features/data/models/user-related/student_update_params.dart';
-import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
-import 'package:team10_dhiraga/features/data/models/student_update_params.dart';
 import 'package:team10_dhiraga/features/data/models/mentor_update_params.dart';
+import 'package:team10_dhiraga/features/data/models/student_update_params.dart';
+import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
 
 abstract class UserRepository {
-  Future<void> createUser(String userId, String role);
+  Future<UserEntity?> createUser(String userId, String role);
   Future<UserEntity?> getUser(String userId);
   Future<void> updateStudent(String userId, StudentUpdateParams params);
   Future<void> updateMentor(String userId, MentorUpdateParams params);
