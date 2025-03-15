@@ -7,7 +7,7 @@ import '../Navbar_event_page.dart/event_page.dart';
 import '../Navbar_mentoring_page.dart/mentoring_page.dart';
 import '../pages/profile_page.dart';
 import '../login_page.dart';
-import 'notification_page.dart';
+import 'bookmark_page.dart';
 import 'beasiswa_page.dart';
 import 'mentor_page.dart';
 import 'template_page.dart' as tpl;
