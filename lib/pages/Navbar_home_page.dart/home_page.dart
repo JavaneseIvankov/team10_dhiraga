@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
 import 'package:team10_dhiraga/pages/Navbar_profile_page.dart/edit_profile_page.dart';
 import '../pages/edit_profile_page.dart';
 import '../Navbar_event_page.dart/event_page.dart';
@@ -102,8 +104,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // TODO: arun perlu bikin semacam user.bookmarks nnti,
+  // nnti dlu itu perlu integrasi firestore utk nyimpen events
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserEntity?>(context);
+    final username = user?.username ?? "test_username";
+    final userRole = user?.role ?? "student";
+
     final List<Widget> pages = [
       HomeContent(
         username: username,
@@ -118,7 +126,7 @@ class _HomePageState extends State<HomePage> {
       ),
       EventPage(),
       MentoringPage(),
-      EditProfilePage(userType: userRole == "mentor" ? "mentor" : "student"),
+      EditProfilePage(userType: userRole),
     ];
 
     return Scaffold(
