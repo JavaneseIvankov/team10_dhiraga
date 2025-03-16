@@ -73,7 +73,7 @@ class StudentModel extends UserModel {
 
   @override
   bool isInitialized() {
-    return super.isInitialized() && bookmark.isNotEmpty;
+    return super.isInitialized();
   }
 
   @override

@@ -37,6 +37,28 @@ class _LandingPageState extends State<LandingPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
+  void _onLoginPress(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('hasSeenLandingPage', true);
+    if (mounted) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+    }
+  }
+
+  void _onRegisterPress(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('hasSeenLandingPage', true);
+    if (mounted) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+    }
+  }
+
   List<Map<String, String>> landingData = [
     {
       "title": "Selamat Datang di Dhiraga!",
@@ -109,12 +131,13 @@ class _LandingPageState extends State<LandingPage> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LoginPage(),
-                              ),
-                            );
+                            _onLoginPress(context);
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => LoginPage(),
+                            //   ),
+                            // );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue.shade900,
@@ -128,12 +151,13 @@ class _LandingPageState extends State<LandingPage> {
                         SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => RegisterPage(),
-                              ),
-                            );
+                            _onRegisterPress(context);
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => RegisterPage(),
+                            //   ),
+                            // );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
