@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team10_dhiraga/di/injection_container.dart';
 import 'package:team10_dhiraga/features/data/models/student_update_params.dart';
-import 'package:team10_dhiraga/features/data/models/user-related/student_update_params.dart';
+import 'package:team10_dhiraga/features/data/models/student_update_params.dart';
 import 'package:team10_dhiraga/features/domain/entities/auth_user_entity.dart';
 import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
 import 'package:team10_dhiraga/features/domain/repositories/user_repository.dart';

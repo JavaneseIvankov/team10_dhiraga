@@ -1,5 +1,5 @@
-import 'package:team10_dhiraga/features/data/models/user-related/mentor_update_params.dart';
-import 'package:team10_dhiraga/features/data/models/user-related/student_update_params.dart';
+import 'package:team10_dhiraga/features/data/models/mentor_update_params.dart';
+import 'package:team10_dhiraga/features/data/models/student_update_params.dart';
 import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
 import 'package:team10_dhiraga/features/data/models/student_update_params.dart';
 import 'package:team10_dhiraga/features/data/models/mentor_update_params.dart';
