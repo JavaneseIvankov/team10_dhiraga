@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:team10_dhiraga/features/data/models/user_model.dart';
 
+// A class for basic CRUD firestore-operation (role-agnostic)
 class FirestoreUserService {
   final FirebaseFirestore _firestore;
   final _collectionPath = 'users';

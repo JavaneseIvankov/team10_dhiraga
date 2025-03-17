@@ -4,31 +4,19 @@ class StudentModel extends UserModel {
   final List<String> bookmark;
 
   StudentModel({
-    required String id,
-    required String username,
-    required String email,
-    required String profilePictureURL,
-    required String fullName,
-    required String pendidikan,
-    required String programStudi,
-    required String domisili,
-    required String alamatLengkap,
-    required String deskripsi,
-    required String role,
+    required super.id,
+    required super.username,
+    required super.email,
+    required super.profilePictureURL,
+    required super.fullName,
+    required super.pendidikan,
+    required super.programStudi,
+    required super.domisili,
+    required super.alamatLengkap,
+    required super.deskripsi,
+    required super.role,
     required this.bookmark,
-  }) : super(
-         id: id,
-         username: username,
-         email: email,
-         profilePictureURL: profilePictureURL,
-         fullName: fullName,
-         pendidikan: pendidikan,
-         programStudi: programStudi,
-         domisili: domisili,
-         alamatLengkap: alamatLengkap,
-         deskripsi: deskripsi,
-         role: role,
-       );
+  });
 
   @override
   Map<String, dynamic> toJson() {
