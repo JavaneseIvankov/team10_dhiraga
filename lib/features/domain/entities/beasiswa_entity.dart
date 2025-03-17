@@ -10,6 +10,9 @@ abstract class BeasiswaEntity {
   final List<String> manfaat;
   final List<String> syarat;
   final List<String> lampiran;
+  final List<String> pembiayaan;
+  final double minimalIPK;
+  final List<int> semester;
   final int jumlahBookmark;
 
   BeasiswaEntity({
@@ -22,6 +25,9 @@ abstract class BeasiswaEntity {
     required this.manfaat,
     required this.syarat,
     required this.lampiran,
+    required this.pembiayaan,
+    required this.minimalIPK,
+    required this.semester,
     required this.jumlahBookmark,
   });
 
