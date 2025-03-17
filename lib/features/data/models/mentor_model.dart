@@ -1,45 +1,44 @@
-<<<<<<< HEAD
-// TODO Implement this library.
-=======
 import 'package:team10_dhiraga/features/data/models/user_model.dart';
 
 class MentorModel extends UserModel {
-  final Map<String, bool> tipeMentor;
+  final List<String> tipeMentor;
   final List<String> riwayatBeasiswa;
-  final Map<String, bool> keahlian;
-  final Map<String, bool> mediaMentoring;
+  final List<String> keahlian;
+  final List<String> mediaMentoring;
   final List<String> dokumen;
+  final List<String> ketersediaanHari;
+  final List<String> ketersediaanJam;
+  final double rating;
+  late List<String> tags;
 
   MentorModel({
-    required String id,
-    required String username,
-    required String email,
-    required String profilePictureURL,
-    required String fullName,
-    required String pendidikan,
-    required String programStudi,
-    required String domisili,
-    required String alamatLengkap,
-    required String deskripsi,
-    required String role,
+    required super.id,
+    required super.username,
+    required super.email,
+    required super.profilePictureURL,
+    required super.fullName,
+    required super.pendidikan,
+    required super.programStudi,
+    required super.domisili,
+    required super.alamatLengkap,
+    required super.deskripsi,
+    required super.role,
     required this.tipeMentor,
     required this.riwayatBeasiswa,
     required this.keahlian,
     required this.mediaMentoring,
+    required this.ketersediaanHari,
+    required this.ketersediaanJam,
     required this.dokumen,
-  }) : super(
-         id: id,
-         username: username,
-         email: email,
-         profilePictureURL: profilePictureURL,
-         fullName: fullName,
-         pendidikan: pendidikan,
-         programStudi: programStudi,
-         domisili: domisili,
-         alamatLengkap: alamatLengkap,
-         deskripsi: deskripsi,
-         role: role,
-       );
+    required this.rating,
+  }) : super() {
+    tags = _createTags(
+      mediaMentoring: mediaMentoring,
+      keahlian: keahlian,
+      ketersediaanHari: ketersediaanHari,
+      rating: rating,
+    );
+  }
 
   @override
   Map<String, dynamic> toJson() {
@@ -49,6 +48,10 @@ class MentorModel extends UserModel {
     map['keahlian'] = keahlian;
     map['mediaMentoring'] = mediaMentoring;
     map['dokumen'] = dokumen;
+    map['ketersediaanHari'] = ketersediaanHari;
+    map['ketersediaanJam'] = ketersediaanJam;
+    map['rating'] = rating;
+    map['tags'] = tags;
     return map;
   }
 
@@ -65,11 +68,14 @@ class MentorModel extends UserModel {
       alamatLengkap: json['alamatLengkap'],
       deskripsi: json['deskripsi'],
       role: json['role'],
-      tipeMentor: Map<String, bool>.from(json['tipeMentor']),
+      tipeMentor: List<String>.from(json['tipeMentor']),
       riwayatBeasiswa: List<String>.from(json['riwayatBeasiswa']),
-      keahlian: Map<String, bool>.from(json['keahlian']),
-      mediaMentoring: Map<String, bool>.from(json['mediaMentoring']),
+      keahlian: List<String>.from(json['keahlian']),
+      mediaMentoring: List<String>.from(json['mediaMentoring']),
       dokumen: List<String>.from(json['dokumen']),
+      ketersediaanHari: List<String>.from(json['ketersediaanHari']),
+      ketersediaanJam: List<String>.from(json['ketersediaanJam']),
+      rating: json['rating'],
     );
   }
 
@@ -86,11 +92,14 @@ class MentorModel extends UserModel {
       alamatLengkap: '',
       deskripsi: '',
       role: 'mentor',
-      tipeMentor: {},
+      tipeMentor: [],
       riwayatBeasiswa: [],
-      keahlian: {},
-      mediaMentoring: {},
+      keahlian: [],
+      mediaMentoring: [],
       dokumen: [],
+      ketersediaanHari: [],
+      ketersediaanJam: [],
+      rating: 0.0,
     );
   }
 
@@ -101,7 +110,9 @@ class MentorModel extends UserModel {
         riwayatBeasiswa.isNotEmpty &&
         keahlian.isNotEmpty &&
         mediaMentoring.isNotEmpty &&
-        dokumen.isNotEmpty;
+        dokumen.isNotEmpty &&
+        ketersediaanHari.isNotEmpty &&
+        ketersediaanJam.isNotEmpty;
   }
 
   @override
@@ -116,11 +127,14 @@ class MentorModel extends UserModel {
     String? alamatLengkap,
     String? deskripsi,
     String? role,
-    Map<String, bool>? tipeMentor,
+    List<String>? tipeMentor,
     List<String>? riwayatBeasiswa,
-    Map<String, bool>? keahlian,
-    Map<String, bool>? mediaMentoring,
+    List<String>? keahlian,
+    List<String>? mediaMentoring,
     List<String>? dokumen,
+    List<String>? ketersediaanHari,
+    List<String>? ketersediaanJam,
+    double? rating,
   }) {
     return MentorModel(
       id: id,
@@ -139,7 +153,23 @@ class MentorModel extends UserModel {
       keahlian: keahlian ?? this.keahlian,
       mediaMentoring: mediaMentoring ?? this.mediaMentoring,
       dokumen: dokumen ?? this.dokumen,
+      ketersediaanHari: ketersediaanHari ?? this.ketersediaanHari,
+      ketersediaanJam: ketersediaanJam ?? this.ketersediaanJam,
+      rating: rating ?? this.rating,
     );
   }
+
+  List<String> _createTags({
+    required List<String> mediaMentoring,
+    required List<String> keahlian,
+    required List<String> ketersediaanHari,
+    required double rating,
+  }) {
+    return [
+      ...mediaMentoring,
+      ...keahlian,
+      ...ketersediaanHari,
+      rating.toString(),
+    ];
+  }
 }
->>>>>>> fbc2938bacd696fc3a3d3fec73c6b5fd6b41328f

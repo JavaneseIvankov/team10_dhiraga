@@ -51,6 +51,7 @@ class MyAuthProvider with ChangeNotifier {
         RegisterParams(role: role, email: email, password: password),
       );
       onSuccess!();
+      debugPrint("\n REGISTRASI BERHASIL \n");
     } on Exception catch (e) {
       _setError("Registrasi gagal, coba lagi!");
       onFailed!(e);

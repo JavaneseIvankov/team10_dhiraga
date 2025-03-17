@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:team10_dhiraga/features/data/models/user_model.dart';
 
+// A class for basic CRUD firestore-operation (role-agnostic)
 class FirestoreUserService {
   final FirebaseFirestore _firestore;
   final _collectionPath = 'users';
@@ -11,11 +12,11 @@ class FirestoreUserService {
   CollectionReference get _usersCollection =>
       _firestore.collection(_collectionPath);
 
-  Future<void> createUser(String userId, String role) async {
+  Future<UserModel?> createUser(String userId, String role) async {
     try {
-      await _usersCollection
-          .doc(userId)
-          .set(UserModel.empty(role, userId).toJson());
+      final user = UserModel.empty(role, userId);
+      await _usersCollection.doc(userId).set(user.toJson());
+      return user;
     } catch (e) {
       throw Exception('Error creating user: $e');
     }

@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-// TODO Implement this library.
-=======
 import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
 import 'package:team10_dhiraga/features/data/models/student_model.dart';
 import 'package:team10_dhiraga/features/data/models/mentor_model.dart';
@@ -134,4 +131,3 @@ class UserModel extends UserEntity {
     );
   }
 }
->>>>>>> fbc2938bacd696fc3a3d3fec73c6b5fd6b41328f

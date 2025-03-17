@@ -13,8 +13,11 @@ class UserProvider with ChangeNotifier {
   Stream<UserEntity?> get userStream {
     return authRepository.onAuthStateChanges().asyncMap((authUser) async {
       if (authUser != null && authUser.id.isNotEmpty) {
-        return await userRepository.getUser(authUser.id);
+        final user = await userRepository.getUser(authUser.id);
+        debugPrint("\n USER CHANGED: ${user?.toJson() ?? "NULL"} \n");
+        return user;
       } else {
+        debugPrint("\n USER CHANGED TO NULL!!! \n");
         return null;
       }
     });

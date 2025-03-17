@@ -2,12 +2,14 @@ import 'package:team10_dhiraga/core/usecases/usecases.dart';
 import 'package:team10_dhiraga/features/domain/entities/auth_user_entity.dart';
 import 'package:team10_dhiraga/features/domain/repositories/auth_repository.dart';
 import 'package:team10_dhiraga/features/domain/repositories/user_repository.dart';
+import 'package:team10_dhiraga/features/domain/usecases/use_user_stream.dart';
 
 class RegisterUser implements UseCase<AuthUserEntity, RegisterParams> {
   final AuthRepository _authRepository;
   final UserRepository _userRepository;
+  final UserStream _userStream;
 
-  RegisterUser(this._authRepository, this._userRepository);
+  RegisterUser(this._authRepository, this._userRepository, this._userStream);
 
   @override
   Future<AuthUserEntity> call(RegisterParams params) async {
@@ -15,7 +17,8 @@ class RegisterUser implements UseCase<AuthUserEntity, RegisterParams> {
       params.email,
       params.password,
     );
-    await _userRepository.createUser(authUser.id, params.role);
+    final user = await _userRepository.createUser(authUser.id, params.role);
+    _userStream.addUser(user);
     return authUser;
   }
 }

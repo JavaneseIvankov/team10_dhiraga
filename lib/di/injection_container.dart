@@ -25,9 +25,9 @@ void setupDependencyInjection() {
   sl.registerLazySingleton<UserRepository>(() => UserRepositoryImpl(sl()));
 
   // Use Cases
-  sl.registerLazySingleton<LoginUser>(() => LoginUser(sl(), sl()));
-  sl.registerLazySingleton<RegisterUser>(() => RegisterUser(sl(), sl()));
   sl.registerLazySingleton<UserStream>(() => UserStream(sl(), sl()));
+  sl.registerLazySingleton<LoginUser>(() => LoginUser(sl(), sl()));
+  sl.registerLazySingleton<RegisterUser>(() => RegisterUser(sl(), sl(), sl()));
 
   // Providers
   sl.registerLazySingleton<MyAuthProvider>(

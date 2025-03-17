@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team10_dhiraga/di/injection_container.dart';
@@ -25,7 +27,8 @@ class MyApp extends StatelessWidget {
 
   Future<bool> _hasSeenLandingPage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('hasSeenLanding') ?? false;
+    // return prefs.getBool('hasSeenLanding') ?? false;
+    return true;
   }
 
   @override
@@ -60,18 +63,19 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// TODO: Add spinner state compatibility
 class AuthWrapper extends StatelessWidget {
   const AuthWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserEntity?>(context);
-
+    var user = Provider.of<UserEntity?>(context);
+    debugPrint("AuthWrapper is rebuilding");
+    debugPrint("\n MAIN: USER CHANGE DETECTED ${user.toString()} \n");
     if (user != null && user.id.isNotEmpty) {
       if (!user.isInitialized()) return FormStudent();
       return HomePage();
     }
-
     return LoginPage();
   }
 }

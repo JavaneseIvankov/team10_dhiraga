@@ -10,8 +10,8 @@ class UserRepositoryImpl implements UserRepository {
   UserRepositoryImpl(this.firestoreUserService);
 
   @override
-  Future<void> createUser(String userId, String role) async {
-    await firestoreUserService.createUser(userId, role);
+  Future<UserEntity?> createUser(String userId, String role) async {
+    return await firestoreUserService.createUser(userId, role);
   }
 
   @override

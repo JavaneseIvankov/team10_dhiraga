@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-// TODO Implement this library.
-=======
 class StudentUpdateParams {
   final String? username;
   final String? email;
@@ -43,4 +40,3 @@ class StudentUpdateParams {
     return data;
   }
 }
->>>>>>> fbc2938bacd696fc3a3d3fec73c6b5fd6b41328f
