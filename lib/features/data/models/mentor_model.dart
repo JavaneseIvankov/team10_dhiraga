@@ -9,6 +9,7 @@ class MentorModel extends UserModel {
   final List<String> ketersediaanHari;
   final List<String> ketersediaanJam;
   final double rating;
+  final Map<String, Map<int, double>> hargaMentoring;
   late List<String> tags;
 
   MentorModel({
@@ -22,7 +23,6 @@ class MentorModel extends UserModel {
     required super.domisili,
     required super.alamatLengkap,
     required super.deskripsi,
-    required super.role,
     required this.tipeMentor,
     required this.riwayatBeasiswa,
     required this.keahlian,
@@ -31,7 +31,8 @@ class MentorModel extends UserModel {
     required this.ketersediaanJam,
     required this.dokumen,
     required this.rating,
-  }) : super() {
+    required this.hargaMentoring,
+  }) : super(role: 'mentor') {
     tags = _createTags(
       mediaMentoring: mediaMentoring,
       keahlian: keahlian,
@@ -67,7 +68,6 @@ class MentorModel extends UserModel {
       domisili: json['domisili'],
       alamatLengkap: json['alamatLengkap'],
       deskripsi: json['deskripsi'],
-      role: json['role'],
       tipeMentor: List<String>.from(json['tipeMentor']),
       riwayatBeasiswa: List<String>.from(json['riwayatBeasiswa']),
       keahlian: List<String>.from(json['keahlian']),
@@ -75,6 +75,9 @@ class MentorModel extends UserModel {
       dokumen: List<String>.from(json['dokumen']),
       ketersediaanHari: List<String>.from(json['ketersediaanHari']),
       ketersediaanJam: List<String>.from(json['ketersediaanJam']),
+      hargaMentoring: Map<String, Map<int, double>>.from(
+        json['hargaMentoring'],
+      ),
       rating: json['rating'],
     );
   }
@@ -91,7 +94,6 @@ class MentorModel extends UserModel {
       domisili: '',
       alamatLengkap: '',
       deskripsi: '',
-      role: 'mentor',
       tipeMentor: [],
       riwayatBeasiswa: [],
       keahlian: [],
@@ -99,6 +101,7 @@ class MentorModel extends UserModel {
       dokumen: [],
       ketersediaanHari: [],
       ketersediaanJam: [],
+      hargaMentoring: {},
       rating: 0.0,
     );
   }
@@ -134,6 +137,7 @@ class MentorModel extends UserModel {
     List<String>? dokumen,
     List<String>? ketersediaanHari,
     List<String>? ketersediaanJam,
+    Map<String, Map<int, double>>? hargaMentoring,
     double? rating,
   }) {
     return MentorModel(
@@ -147,7 +151,6 @@ class MentorModel extends UserModel {
       domisili: domisili ?? this.domisili,
       alamatLengkap: alamatLengkap ?? this.alamatLengkap,
       deskripsi: deskripsi ?? this.deskripsi,
-      role: role ?? this.role,
       tipeMentor: tipeMentor ?? this.tipeMentor,
       riwayatBeasiswa: riwayatBeasiswa ?? this.riwayatBeasiswa,
       keahlian: keahlian ?? this.keahlian,
@@ -155,6 +158,7 @@ class MentorModel extends UserModel {
       dokumen: dokumen ?? this.dokumen,
       ketersediaanHari: ketersediaanHari ?? this.ketersediaanHari,
       ketersediaanJam: ketersediaanJam ?? this.ketersediaanJam,
+      hargaMentoring: hargaMentoring ?? this.hargaMentoring,
       rating: rating ?? this.rating,
     );
   }
