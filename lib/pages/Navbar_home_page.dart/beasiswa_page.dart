@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'link_page.dart';
 
 class BeasiswaPage extends StatefulWidget {
   @override
@@ -187,7 +188,7 @@ class _BeasiswaPageState extends State<BeasiswaPage> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    // Navigasi ke halaman pendaftaran atau tindakan lainnya
+                    // Navigasi ke halaman pendaftaran
                   },
                   child: Text("Daftar"),
                 ),
