@@ -77,7 +77,9 @@ class CustomButton extends StatelessWidget {
           child: Text(
             text,
             overflow: TextOverflow.visible,
-            style: textStyle.copyWith(fontWeight: fontWeight),
+            style: textStyle.copyWith(
+              fontWeight: fontWeight ?? FontWeight.w700,
+            ),
           ),
         ),
       ),
