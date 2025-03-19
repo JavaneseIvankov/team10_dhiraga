@@ -9,6 +9,7 @@ import 'package:team10_dhiraga/features/presentation/providers/user_provider.dar
 import 'package:team10_dhiraga/pages/Navbar_profile_page.dart/edit_profile_page.dart';
 import 'package:team10_dhiraga/widgets/beasiswa_card.dart';
 import 'package:team10_dhiraga/widgets/custom_bottom_navbar.dart';
+import 'package:team10_dhiraga/widgets/large_text.dart';
 import 'package:team10_dhiraga/widgets/mentor_card.dart';
 import 'package:team10_dhiraga/widgets/mesh_gradient_background.dart';
 import 'search_page.dart';
@@ -148,10 +149,11 @@ class HomeContent extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Selamat datang $username, ayo temukan peluang terbaik untukmu!",
-              style: TextStyle(
-                fontSize: 22,
+            LargeText(
+              text:
+                  "Selamat datang $username, ayo temukan peluang terbaik untukmu!",
+              textStyle: TextStyle(
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.blue.shade900,
               ),
@@ -238,10 +240,10 @@ class HomeContent extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 18,
+            LargeText(
+              text: title,
+              textStyle: TextStyle(
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.blue.shade900,
               ),
