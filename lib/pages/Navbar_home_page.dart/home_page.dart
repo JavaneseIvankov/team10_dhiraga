@@ -5,12 +5,14 @@ import 'package:team10_dhiraga/pages/navbar_profile_page.dart/edit_profile_page.
 import '../pages/edit_profile_page.dart';
 import '../Navbar_event_page.dart/event_page.dart';
 import '../Navbar_mentoring_page.dart/mentoring_page.dart';
+import 'package:team10_dhiraga/pages/navbar_home_page.dart/mentor_page.dart';
 import '../pages/profile_page.dart';
-import '../login_page.dart';
+import 'package:team10_dhiraga/pages/login_page.dart';
 import 'notification_page.dart';
 import 'beasiswa_page.dart';
 import 'mentor_page.dart';
 import 'template_page.dart' as tpl;
+import 'package:team10_dhiraga/pages/navbar_home_page.dart/link_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -121,6 +123,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
+        title: Text('Home'),
         actions: [
           IconButton(icon: Icon(Icons.bookmark), onPressed: _showBookmarks),
         ],
