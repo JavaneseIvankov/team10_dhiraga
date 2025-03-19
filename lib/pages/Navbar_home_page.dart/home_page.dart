@@ -7,6 +7,9 @@ import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
 import 'package:team10_dhiraga/features/domain/repositories/user_repository.dart';
 import 'package:team10_dhiraga/features/presentation/providers/user_provider.dart';
 import 'package:team10_dhiraga/pages/Navbar_profile_page.dart/edit_profile_page.dart';
+import 'package:team10_dhiraga/widgets/beasiswa_card.dart';
+import 'package:team10_dhiraga/widgets/custom_bottom_navbar.dart';
+import 'package:team10_dhiraga/widgets/mesh_gradient_background.dart';
 import 'search_page.dart';
 import '../Navbar_event_page.dart/event_page.dart';
 import '../Navbar_mentoring_page.dart/mentoring_page.dart';
@@ -109,22 +112,10 @@ class _HomePageState extends State<HomePage> {
             IconButton(icon: Icon(Icons.bookmark), onPressed: _showBookmarks),
           ],
         ),
-        body: pages[_selectedIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: Colors.blue,
-          unselectedItemColor: Colors.grey,
+        body: GradientBackground(child: pages[_selectedIndex]),
+        bottomNavigationBar: CustomBottomNavigationBar(
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Event'),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.school),
-              label: 'Mentoring',
-            ),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          ],
         ),
       ),
     );
@@ -270,19 +261,34 @@ class HomeContent extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children:
-                filteredItems
-                    .map(
-                      (item) => _buildItemCard(
-                        context,
-                        nextPage,
-                        toggleBookmark,
-                        bookmarkedItems,
-                        isMentor,
-                        isTemplate,
-                        item,
+                filteredItems.map((item) {
+                  if (!isMentor && !isTemplate) {
+                    return Container(
+                      margin: EdgeInsets.only(right: 10),
+                      child: BeasiswaCard(
+                        title: item,
+                        dateRange: "4 Feb 2025 - 4 Mar 2025",
+                        imageUrl:
+                            "https://mmc.tirto.id/image/share/tw/2023/08/18/pertamina-foundation--3_ratio-16x9.jpg",
+                        bookmarkIcon:
+                            bookmarkedItems.contains(item)
+                                ? Icons.bookmark
+                                : Icons.bookmark_border,
+                        dateBackgroundColor: Colors.blue,
                       ),
-                    )
-                    .toList(),
+                    );
+                  } else {
+                    return _buildItemCard(
+                      context,
+                      nextPage,
+                      toggleBookmark,
+                      bookmarkedItems,
+                      isMentor,
+                      isTemplate,
+                      item,
+                    );
+                  }
+                }).toList(),
           ),
         ),
         SizedBox(height: 16),
