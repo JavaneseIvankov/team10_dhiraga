@@ -9,6 +9,7 @@ import 'package:team10_dhiraga/features/presentation/providers/user_provider.dar
 import 'package:team10_dhiraga/pages/Navbar_profile_page.dart/edit_profile_page.dart';
 import 'package:team10_dhiraga/widgets/beasiswa_card.dart';
 import 'package:team10_dhiraga/widgets/custom_bottom_navbar.dart';
+import 'package:team10_dhiraga/widgets/mentor_card.dart';
 import 'package:team10_dhiraga/widgets/mesh_gradient_background.dart';
 import 'search_page.dart';
 import '../Navbar_event_page.dart/event_page.dart';
@@ -262,7 +263,29 @@ class HomeContent extends StatelessWidget {
           child: Row(
             children:
                 filteredItems.map((item) {
-                  if (!isMentor && !isTemplate) {
+                  if (isMentor) {
+                    return Container(
+                      margin: EdgeInsets.only(right: 10),
+                      child: MentorCard(
+                        imageUrl:
+                            "https://images5.fanpop.com/image/photos/25400000/Harry-Potter-Wallpaper-harry-james-potter-25493299-1024-768.jpg",
+                        name: "Harry Pottah dsafdafcv xcvcxvfsd",
+                        description: "Hogwart's super rookie",
+                        tags: ["Tag1", "Tag2"],
+                        rating: 4.8,
+                      ),
+                    );
+                  } else if (isTemplate) {
+                    return _buildItemCard(
+                      context,
+                      nextPage,
+                      toggleBookmark,
+                      bookmarkedItems,
+                      isMentor,
+                      isTemplate,
+                      item,
+                    );
+                  } else {
                     return Container(
                       margin: EdgeInsets.only(right: 10),
                       child: BeasiswaCard(
@@ -274,18 +297,7 @@ class HomeContent extends StatelessWidget {
                             bookmarkedItems.contains(item)
                                 ? Icons.bookmark
                                 : Icons.bookmark_border,
-                        dateBackgroundColor: Colors.blue,
                       ),
-                    );
-                  } else {
-                    return _buildItemCard(
-                      context,
-                      nextPage,
-                      toggleBookmark,
-                      bookmarkedItems,
-                      isMentor,
-                      isTemplate,
-                      item,
                     );
                   }
                 }).toList(),
