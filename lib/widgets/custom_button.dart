@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:team10_dhiraga/core/theme/app_color.dart';
 import 'package:team10_dhiraga/core/theme/app_theme.dart';
 import 'package:team10_dhiraga/widgets/gradient_border.dart';
+import 'package:team10_dhiraga/widgets/gradient_wraper.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -21,6 +21,7 @@ class CustomButton extends StatelessWidget {
     this.fontWeight,
     super.key,
   });
+
   @override
   Widget build(BuildContext context) {
     var buttonStyle = AppTheme.primaryButtonStyle;
@@ -59,6 +60,16 @@ class CustomButton extends StatelessWidget {
       );
     }
 
+    Widget textWidget = Text(
+      text,
+      overflow: TextOverflow.visible,
+      style: textStyle.copyWith(fontWeight: fontWeight ?? FontWeight.w700),
+    );
+
+    if (intent == "secondary") {
+      textWidget = GradientWrapper(child: textWidget);
+    }
+
     Widget coreSection = Container(
       height: height,
       width: width,
@@ -74,13 +85,7 @@ class CustomButton extends StatelessWidget {
         onPressed: onPressed,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
-          child: Text(
-            text,
-            overflow: TextOverflow.visible,
-            style: textStyle.copyWith(
-              fontWeight: fontWeight ?? FontWeight.w700,
-            ),
-          ),
+          child: textWidget,
         ),
       ),
     );
