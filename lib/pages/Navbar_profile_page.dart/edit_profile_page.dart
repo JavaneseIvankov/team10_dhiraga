@@ -1,30 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
 import 'edit_profile_page.dart';
 import 'package:team10_dhiraga/pages/login_page.dart';
 import 'student_profile.dart';
 import 'mentor_profile.dart';
 import 'settings_page.dart';
 
+// TODO: Benerin, jgn pake var, itu cmn buat sementara
 class EditProfilePage extends StatelessWidget {
   final String userType; // 'student' atau 'mentor'
 
-  EditProfilePage({required this.userType});
-
+  const EditProfilePage({super.key, required this.userType});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Edit Profile")),
+      appBar: AppBar(title: Text("Edit $userType Profile")),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child:
-            userType == 'student'
-                ? _buildStudentProfile()
-                : _buildMentorProfile(),
+        child: _buildProfile(userType),
+        // child:
+        //     userType == 'student'
+        //         ? _buildStudentProfile()
+        //         : _buildMentorProfile(),
       ),
     );
   }
 
+  Widget _buildProfile(String role) {
+    if (role == "student") {
+      return _buildStudentProfile();
+    } else {
+      return _buildMentorProfile();
+    }
+  }
+
   Widget _buildStudentProfile() {
+    debugPrint("EditProfilePage: Building Student Profile Page");
     return StudentProfile(
       onEducationChanged: (value) {},
       onStudyProgramChanged: (value) {},
@@ -35,6 +47,7 @@ class EditProfilePage extends StatelessWidget {
   }
 
   Widget _buildMentorProfile() {
+    debugPrint("EditProfilePage: Building Mentor Profile Page");
     return MentorProfile(
       mentorBeasiswa: false,
       mentorAkademik: false,
@@ -57,10 +70,11 @@ class EditProfilePage extends StatelessWidget {
 class SettingsPage extends StatelessWidget {
   final String userType; // 'student' atau 'mentor'
 
-  SettingsPage({required this.userType});
+  const SettingsPage({super.key, required this.userType});
 
   @override
   Widget build(BuildContext context) {
+    final userType = "adfjaasdfafs";
     return Scaffold(
       appBar: AppBar(title: Text("Settings")),
       body: ListView(

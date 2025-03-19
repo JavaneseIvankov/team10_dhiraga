@@ -1,7 +1,7 @@
-import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
+import 'package:flutter/widgets.dart';
+import 'package:team10_dhiraga/features/domain/entities/auth_user_entity.dart';
 import 'package:team10_dhiraga/features/domain/repositories/auth_repository.dart';
-
-import '../datasources/firebase_auth_service.dart';
+import 'package:team10_dhiraga/features/data/datasources/firebase_auth_service.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final FirebaseAuthService firebaseAuthService;
@@ -9,20 +9,32 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this.firebaseAuthService);
 
   @override
-  Future<UserEntity> login(String email, String password) async {
-    final user = await firebaseAuthService.login(email, password);
-    return UserEntity(id: user.id, email: user.email);
+  Future<AuthUserEntity> login(String email, String password) async {
+    return await firebaseAuthService.login(email, password);
   }
 
   @override
-  Future<UserEntity> register(String email, String password) async {
-    final user = await firebaseAuthService.register(email, password);
-    return UserEntity(id: user.id, email: user.email);
+  Future<AuthUserEntity> register(String email, String password) async {
+    return await firebaseAuthService.register(email, password);
   }
 
   @override
-  Future<UserEntity> getAuthStatus() {
-    // TODO: implement getAuthStatus
-    throw UnimplementedError();
+  AuthUserEntity get currentUser {
+    final currentUser = firebaseAuthService.currentUser;
+    if (currentUser == null) {
+      return AuthUserEntity(id: "", email: "");
+    }
+    return AuthUserEntity(id: currentUser.id, email: currentUser.email);
+  }
+
+  @override
+  Stream<AuthUserEntity?> onAuthStateChanges() {
+    return firebaseAuthService.onAuthStateChanges().map((user) {
+      if (user != null) {
+        return AuthUserEntity(id: user.id, email: user.email);
+      } else {
+        return null;
+      }
+    });
   }
 }

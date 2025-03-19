@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team10_dhiraga/core/theme/app_color.dart';
 import 'package:team10_dhiraga/features/presentation/providers/auth_provider.dart';
+import 'package:team10_dhiraga/main.dart';
+import 'package:team10_dhiraga/pages/form_student.dart';
 import 'package:team10_dhiraga/widgets/mesh_gradient_background.dart';
 import 'package:team10_dhiraga/widgets/large_text.dart';
 import '../widgets/custom_textfield.dart';
@@ -27,7 +29,11 @@ class _RegisterPageState extends State<RegisterPage> {
     ).showSnackBar(SnackBar(content: Text(message)));
   }
 
-  void _registerUser(BuildContext context, MyAuthProvider authProvider) async {
+  void _registerUser(
+    BuildContext context,
+    MyAuthProvider authProvider,
+    String role,
+  ) async {
     final email = emailController.text;
     final password = passwordController.text;
     final confirmPassword = confirmPasswordController.text;
@@ -37,13 +43,19 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     authProvider.register(
+      role: role.toLowerCase(),
       email: email,
       password: password,
       onSuccess: () {
         Navigator.pop(context);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => FormStudent()),
+        );
       },
-      onFailed: (_) {
+      onFailed: (e) {
         _showSnackbar("Registrasi gagal, coba lagi!");
+        // _showSnackbar(e.toString());
       },
     );
   }
@@ -132,7 +144,12 @@ class _RegisterPageState extends State<RegisterPage> {
           height: 50,
           width: 240,
           text: "Register",
-          onPressed: () => _registerUser(context, authProvider),
+          onPressed:
+              () => _registerUser(
+                context,
+                authProvider,
+                selectedRole ?? "student",
+              ),
           intent: 'primary',
         ),
         SizedBox(height: 10),

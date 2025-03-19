@@ -8,12 +8,12 @@ class GradientBorder extends StatelessWidget {
   final Gradient gradient;
 
   const GradientBorder({
-    Key? key,
+    super.key,
     required this.child,
     this.borderWidth = 2.0,
     this.borderRadius = 8.0,
     this.gradient = AppColors.gradient1,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

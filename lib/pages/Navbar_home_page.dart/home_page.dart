@@ -1,26 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:team10_dhiraga/pages/navbar_profile_page.dart/edit_profile_page.dart';
-import '../pages/edit_profile_page.dart';
+import 'package:provider/provider.dart';
+import 'package:team10_dhiraga/features/data/models/student_model.dart';
+import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
+import 'package:team10_dhiraga/features/domain/repositories/user_repository.dart';
+import 'package:team10_dhiraga/features/presentation/providers/user_provider.dart';
+import 'package:team10_dhiraga/pages/Navbar_profile_page.dart/edit_profile_page.dart';
+import 'package:team10_dhiraga/widgets/beasiswa_card.dart';
+import 'package:team10_dhiraga/widgets/custom_bottom_navbar.dart';
+import 'package:team10_dhiraga/widgets/large_text.dart';
+import 'package:team10_dhiraga/widgets/mentor_card.dart';
+import 'package:team10_dhiraga/widgets/mesh_gradient_background.dart';
+import 'search_page.dart';
 import '../Navbar_event_page.dart/event_page.dart';
 import '../Navbar_mentoring_page.dart/mentoring_page.dart';
+<<<<<<< HEAD
 import 'package:team10_dhiraga/pages/navbar_home_page.dart/mentor_page.dart';
 import '../pages/profile_page.dart';
 import 'package:team10_dhiraga/pages/login_page.dart';
 import 'notification_page.dart';
+=======
+import '../login_page.dart';
+import 'bookmark_page.dart';
+>>>>>>> dev
 import 'beasiswa_page.dart';
 import 'mentor_page.dart';
 import 'template_page.dart' as tpl;
 import 'package:team10_dhiraga/pages/navbar_home_page.dart/link_page.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   User? user;
   String username = "";
   String userRole = "student";
@@ -31,30 +47,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _getUserData();
-  }
-
-  void _getUserData() async {
-    user = _auth.currentUser;
-    if (user == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
-        );
-      });
-    } else {
-      DocumentSnapshot userData =
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(user!.uid)
-              .get();
-
-      setState(() {
-        username = userData["username"] ?? "Pengguna";
-        userRole = userData["role"] ?? "student";
-      });
-    }
   }
 
   void _onItemTapped(int index) {
@@ -104,11 +96,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _pages = [
+    final userProvider = Provider.of<UserProvider>(context);
+
+    final List<Widget> pages = [
       HomeContent(
-        username: username,
         toggleBookmark: _toggleBookmark,
-        bookmarkedItems: bookmarkedItems,
         searchQuery: searchQuery,
         onSearchChanged: (query) {
           setState(() {
@@ -118,9 +110,10 @@ class _HomePageState extends State<HomePage> {
       ),
       EventPage(),
       MentoringPage(),
-      EditProfilePage(userType: userRole == "mentor" ? "mentor" : "student"),
+      EditProfilePage(userType: userRole),
     ];
 
+<<<<<<< HEAD
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
@@ -141,38 +134,57 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.school), label: 'Mentoring'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
+=======
+    return FutureProvider<UserEntity?>(
+      create: (_) => userProvider.currentUser,
+      initialData: null,
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            IconButton(icon: Icon(Icons.bookmark), onPressed: _showBookmarks),
+          ],
+        ),
+        body: GradientBackground(child: pages[_selectedIndex]),
+        bottomNavigationBar: CustomBottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+        ),
+>>>>>>> dev
       ),
     );
   }
 }
 
 class HomeContent extends StatelessWidget {
-  final String username;
   final Function(String) toggleBookmark;
-  final List<String> bookmarkedItems;
   final String searchQuery;
   final Function(String) onSearchChanged;
 
   const HomeContent({
-    required this.username,
+    super.key,
     required this.toggleBookmark,
-    required this.bookmarkedItems,
     required this.searchQuery,
     required this.onSearchChanged,
   });
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserEntity?>(context);
+    final username = user?.username ?? "Pengguna";
+    List<String> bookmarkedItems = [];
+    if (user is StudentModel) bookmarkedItems = user.bookmark;
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Selamat datang $username, ayo temukan peluang terbaik untukmu!",
-              style: TextStyle(
-                fontSize: 22,
+            LargeText(
+              text:
+                  "Selamat datang $username, ayo temukan peluang terbaik untukmu!",
+              textStyle: TextStyle(
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.blue.shade900,
               ),
@@ -259,10 +271,10 @@ class HomeContent extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 18,
+            LargeText(
+              text: title,
+              textStyle: TextStyle(
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.blue.shade900,
               ),
@@ -283,19 +295,45 @@ class HomeContent extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children:
-                filteredItems
-                    .map(
-                      (item) => _buildItemCard(
-                        context,
-                        nextPage,
-                        toggleBookmark,
-                        bookmarkedItems,
-                        isMentor,
-                        isTemplate,
-                        item,
+                filteredItems.map((item) {
+                  if (isMentor) {
+                    return Container(
+                      margin: EdgeInsets.only(right: 10),
+                      child: MentorCard(
+                        imageUrl:
+                            "https://images5.fanpop.com/image/photos/25400000/Harry-Potter-Wallpaper-harry-james-potter-25493299-1024-768.jpg",
+                        name: "Harry Pottah dsafdafcv xcvcxvfsd",
+                        description: "Hogwart's super rookie",
+                        tags: ["Tag1", "Tag2"],
+                        rating: 4.8,
                       ),
-                    )
-                    .toList(),
+                    );
+                  } else if (isTemplate) {
+                    return _buildItemCard(
+                      context,
+                      nextPage,
+                      toggleBookmark,
+                      bookmarkedItems,
+                      isMentor,
+                      isTemplate,
+                      item,
+                    );
+                  } else {
+                    return Container(
+                      margin: EdgeInsets.only(right: 10),
+                      child: BeasiswaCard(
+                        title: item,
+                        dateRange: "4 Feb 2025 - 4 Mar 2025",
+                        imageUrl:
+                            "https://mmc.tirto.id/image/share/tw/2023/08/18/pertamina-foundation--3_ratio-16x9.jpg",
+                        bookmarkIcon:
+                            bookmarkedItems.contains(item)
+                                ? Icons.bookmark
+                                : Icons.bookmark_border,
+                      ),
+                    );
+                  }
+                }).toList(),
           ),
         ),
         SizedBox(height: 16),

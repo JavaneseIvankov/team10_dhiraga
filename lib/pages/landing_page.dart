@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:team10_dhiraga/widgets/mesh_gradient_background.dart';
 import 'login_page.dart'; // Import halaman login
 import 'register_page.dart'; // Import halaman register
+import 'package:team10_dhiraga/widgets/custom_button.dart';
 
 void main() {
   runApp(MaterialApp(home: LoadingPage()));
 }
 
 class LoadingPage extends StatelessWidget {
+  const LoadingPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     Future.delayed(Duration(seconds: 2), () {
@@ -25,6 +29,8 @@ class LoadingPage extends StatelessWidget {
 }
 
 class LandingPage extends StatefulWidget {
+  const LandingPage({super.key});
+
   @override
   _LandingPageState createState() => _LandingPageState();
 }
@@ -32,6 +38,28 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+
+  void _onLoginPress(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('hasSeenLanding', true);
+    if (mounted) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+    }
+  }
+
+  void _onRegisterPress(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('hasSeenLanding', true);
+    if (mounted) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => RegisterPage()),
+      );
+    }
+  }
 
   List<Map<String, String>> landingData = [
     {
@@ -68,98 +96,74 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: PageView.builder(
-              controller: _pageController,
-              itemCount: landingData.length,
-              onPageChanged: (index) {
-                if (mounted) {
-                  setState(() {
-                    _currentPage = index;
-                  });
-                }
-              },
-              itemBuilder: (context, index) {
-                return LandingPageContent(
-                  title: landingData[index]["title"]!,
-                  subtitle: landingData[index]["subtitle"]!,
-                );
-              },
+      body: GradientBackground(
+        child: Column(
+          children: [
+            Expanded(
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: landingData.length,
+                onPageChanged: (index) {
+                  if (mounted) {
+                    setState(() {
+                      _currentPage = index;
+                    });
+                  }
+                },
+                itemBuilder: (context, index) {
+                  return LandingPageContent(
+                    title: landingData[index]["title"]!,
+                    subtitle: landingData[index]["subtitle"]!,
+                  );
+                },
+              ),
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(
-              landingData.length,
-              (index) => buildDot(index),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                landingData.length,
+                (index) => buildDot(index),
+              ),
             ),
-          ),
-          SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child:
-                _currentPage == landingData.length - 1
-                    ? Column(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LoginPage(),
-                              ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue.shade900,
-                            minimumSize: Size(double.infinity, 50),
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child:
+                  _currentPage == landingData.length - 1
+                      ? Column(
+                        children: [
+                          CustomButton(
+                            text: 'Login',
+                            onPressed: () {
+                              _onLoginPress(context);
+                            },
+                            intent: 'primary',
+                            height: 50,
+                            width: double.infinity,
                           ),
-                          child: Text(
-                            'Login',
-                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          SizedBox(height: 10),
+                          CustomButton(
+                            text: 'Register',
+                            onPressed: () {
+                              _onRegisterPress(context);
+                            },
+                            intent: 'secondary',
+                            height: 50,
+                            width: double.infinity,
                           ),
-                        ),
-                        SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => RegisterPage(),
-                              ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            side: BorderSide(color: Colors.purple),
-                            minimumSize: Size(double.infinity, 50),
-                          ),
-                          child: Text(
-                            'Register',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.purple,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                    : ElevatedButton(
-                      onPressed: _nextPage,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue.shade900,
-                        minimumSize: Size(double.infinity, 50),
+                        ],
+                      )
+                      : CustomButton(
+                        text: 'Selanjutnya',
+                        onPressed: _nextPage,
+                        intent: 'primary',
+                        height: 50,
+                        width: double.infinity,
                       ),
-                      child: Text(
-                        'Selanjutnya',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ),
-          ),
-          SizedBox(height: 20),
-        ],
+            ),
+            SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
@@ -181,19 +185,16 @@ class LandingPageContent extends StatelessWidget {
   final String title;
   final String subtitle;
 
-  const LandingPageContent({required this.title, required this.subtitle});
+  const LandingPageContent({
+    super.key,
+    required this.title,
+    required this.subtitle,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.white, Colors.blue.shade50],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

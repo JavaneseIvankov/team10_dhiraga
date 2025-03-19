@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+<<<<<<< HEAD
 class MentorPage extends StatefulWidget {
   @override
   _MentorPageState createState() => _MentorPageState();
@@ -19,6 +20,10 @@ class _MentorPageState extends State<MentorPage> {
   String? selectedField;
   String? selectedPackage;
   TextEditingController locationController = TextEditingController();
+=======
+class MentorPage extends StatelessWidget {
+  const MentorPage({super.key});
+>>>>>>> dev
 
   @override
   Widget build(BuildContext context) {

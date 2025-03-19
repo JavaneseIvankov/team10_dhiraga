@@ -25,6 +25,12 @@ class _BeasiswaPageState extends State<BeasiswaPage> {
     );
   }
 
+<<<<<<< HEAD
+=======
+class BeasiswaPage extends StatelessWidget {
+  const BeasiswaPage({super.key});
+
+>>>>>>> dev
   @override
   Widget build(BuildContext context) {
     return Scaffold(

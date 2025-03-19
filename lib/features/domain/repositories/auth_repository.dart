@@ -1,7 +1,14 @@
-import '../entities/user_entity.dart';
+import '../entities/auth_user_entity.dart';
 
 abstract class AuthRepository {
-  Future<UserEntity> login(String email, String password);
-  Future<UserEntity> register(String email, String password);
-  Future<UserEntity> getAuthStatus();
+  Future<AuthUserEntity> login(
+    String email,
+    String password,
+  ); // DO NOT CALL IN PAGE / VIEW LAYER, USE USECASE INSTEAD
+  Future<AuthUserEntity> register(
+    String email,
+    String password,
+  ); // DO NOT CALL IN PAGE / VIEW LAYER, USE USECASE INSTEAD
+  Stream<AuthUserEntity?> onAuthStateChanges();
+  AuthUserEntity get currentUser;
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+<<<<<<< HEAD
 class TemplatePage extends StatefulWidget {
   @override
   _TemplatePageState createState() => _TemplatePageState();
@@ -19,6 +20,10 @@ class _TemplatePageState extends State<TemplatePage> {
       });
     });
   }
+=======
+class TemplatePage extends StatelessWidget {
+  const TemplatePage({super.key});
+>>>>>>> dev
 
   @override
   Widget build(BuildContext context) {
