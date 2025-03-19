@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LinkPage extends StatelessWidget {
   final String link; // Parameter untuk menyimpan link yang diklik
