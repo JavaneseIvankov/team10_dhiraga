@@ -15,7 +15,7 @@ class LoginUser implements UseCase<UserEntity?, LoginParams> {
       throw Exception('Email and Password cannot be empty');
     }
     var authUser = await _authRepository.login(params.email, params.password);
-    return _userRepository.getUser(authUser.id);
+    return _userRepository.getUserById(authUser.id);
   }
 }
 

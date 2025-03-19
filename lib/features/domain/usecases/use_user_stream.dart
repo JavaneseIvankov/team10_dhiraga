@@ -21,7 +21,7 @@ class UserStream {
     authRepository.onAuthStateChanges().listen((authUser) async {
       debugPrint("USER STREAM: Auth state changed: ${authUser?.toString()}");
       if (authUser != null && authUser.id.isNotEmpty) {
-        final user = await userRepository.getUser(authUser.id);
+        final user = await userRepository.getUserById(authUser.id);
         debugPrint(
           "USER STREAM: User fetched from Firestore: ${user?.toJson() ?? "NULL"}",
         );

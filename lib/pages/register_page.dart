@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team10_dhiraga/core/theme/app_color.dart';
 import 'package:team10_dhiraga/features/presentation/providers/auth_provider.dart';
+import 'package:team10_dhiraga/main.dart';
+import 'package:team10_dhiraga/pages/form_student.dart';
 import 'package:team10_dhiraga/widgets/mesh_gradient_background.dart';
 import 'package:team10_dhiraga/widgets/large_text.dart';
 import '../widgets/custom_textfield.dart';
@@ -45,7 +47,11 @@ class _RegisterPageState extends State<RegisterPage> {
       email: email,
       password: password,
       onSuccess: () {
-        Navigator.pop(context);
+        // Navigator.pop(context);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => AuthWrapper()),
+        );
       },
       onFailed: (e) {
         // _showSnackbar("Registrasi gagal, coba lagi!");

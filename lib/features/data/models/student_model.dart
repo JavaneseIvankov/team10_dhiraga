@@ -14,9 +14,8 @@ class StudentModel extends UserModel {
     required super.domisili,
     required super.alamatLengkap,
     required super.deskripsi,
-    required super.role,
     required this.bookmark,
-  });
+  }) : super(role: 'student');
 
   @override
   Map<String, dynamic> toJson() {
@@ -37,7 +36,6 @@ class StudentModel extends UserModel {
       domisili: json['domisili'],
       alamatLengkap: json['alamatLengkap'],
       deskripsi: json['deskripsi'],
-      role: json['role'],
       bookmark: List<String>.from(json['bookmark']),
     );
   }
@@ -54,7 +52,6 @@ class StudentModel extends UserModel {
       domisili: '',
       alamatLengkap: '',
       deskripsi: '',
-      role: 'student',
       bookmark: [],
     );
   }
@@ -90,7 +87,6 @@ class StudentModel extends UserModel {
       domisili: domisili ?? this.domisili,
       alamatLengkap: alamatLengkap ?? this.alamatLengkap,
       deskripsi: deskripsi ?? this.deskripsi,
-      role: role ?? this.role,
       bookmark: bookmark ?? this.bookmark,
     );
   }

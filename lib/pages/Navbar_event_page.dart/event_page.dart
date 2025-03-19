@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'event_detail_page.dart';
 import 'notification_page.dart'; // Halaman notifikasi event
 

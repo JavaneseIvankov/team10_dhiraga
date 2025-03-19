@@ -39,7 +39,7 @@ class _LandingPageState extends State<LandingPage> {
 
   void _onLoginPress(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setBool('hasSeenLandingPage', true);
+    prefs.setBool('hasSeenLanding', true);
     if (mounted) {
       Navigator.push(
         context,
@@ -50,7 +50,7 @@ class _LandingPageState extends State<LandingPage> {
 
   void _onRegisterPress(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setBool('hasSeenLandingPage', true);
+    prefs.setBool('hasSeenLanding', true);
     if (mounted) {
       Navigator.push(
         context,
