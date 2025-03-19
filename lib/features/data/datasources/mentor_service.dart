@@ -3,6 +3,7 @@
 // It uses compound (multi-values) queries based on tags field
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:team10_dhiraga/features/data/datasources/helpers.dart';
 import 'package:team10_dhiraga/features/data/models/mentor_model.dart';
 
 class MentorService {
@@ -14,6 +15,28 @@ class MentorService {
 
   CollectionReference get _usersCollection =>
       _firestore.collection(_collectionPath);
+
+  Future<List<MentorModel>> getMentorsByMultiTags({
+    required List<List<String>> multiTags,
+    int? limit,
+  }) async {
+    try {
+      List<Future<QuerySnapshot>> futures =
+          multiTags.map((tags) {
+            return _usersCollection
+                .where('role', isEqualTo: 'mentor')
+                .where('tags', arrayContainsAny: tags)
+                .limit(limit ?? 20)
+                .get();
+          }).toList();
+
+      List<QuerySnapshot> results = await Future.wait(futures);
+
+      return filterMentorAndCombineResults(results, multiTags);
+    } catch (e) {
+      throw Exception('Error getting mentors by multi-tags: $e');
+    }
+  }
 
   Future<List<MentorModel>> getMentorsByTags(List<String> tags) async {
     try {

@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:team10_dhiraga/di/injection_container.dart';
-import 'package:team10_dhiraga/pages/form_student.dart';
-import 'package:team10_dhiraga/pages/login_page.dart';
+import 'di/injection_container.dart';
+import 'pages/form_student.dart';
+import 'pages/login_page.dart';
 import 'package:team10_dhiraga/features/presentation/providers/auth_provider.dart'
     as local;
 import 'package:team10_dhiraga/core/services/firebase_initializer.dart';
@@ -14,11 +14,13 @@ import 'package:team10_dhiraga/pages/landing_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
 import 'package:team10_dhiraga/features/domain/usecases/use_user_stream.dart';
+import 'package:team10_dhiraga/temp.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FirebaseInitializer.initialize();
   setupDependencyInjection();
+  // await DangerousTestingCommand();
   runApp(MyApp());
 }
 
@@ -27,8 +29,7 @@ class MyApp extends StatelessWidget {
 
   Future<bool> _hasSeenLandingPage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // return prefs.getBool('hasSeenLanding') ?? false;
-    return true;
+    return prefs.getBool('hasSeenLanding') ?? false;
   }
 
   @override

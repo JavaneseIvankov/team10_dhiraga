@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class BeasiswaEntity {
   final String id;
+  final String photoURL;
   final Timestamp mulai;
   final Timestamp berakhir;
   final String penyelenggara;
@@ -14,9 +15,11 @@ abstract class BeasiswaEntity {
   final double minimalIPK;
   final List<int> semester;
   final int jumlahBookmark;
+  final String nama;
 
   BeasiswaEntity({
     required this.id,
+    required this.photoURL,
     required this.mulai,
     required this.berakhir,
     required this.penyelenggara,
@@ -29,6 +32,7 @@ abstract class BeasiswaEntity {
     required this.minimalIPK,
     required this.semester,
     required this.jumlahBookmark,
+    required this.nama,
   });
 
   Map<String, dynamic> toJson();

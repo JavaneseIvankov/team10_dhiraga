@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:team10_dhiraga/features/domain/entities/beasiswa_entity.dart';
+import 'package:team10_dhiraga/features/data/constants/beasiswa_constants.dart';
 
 class BeasiswaModel extends BeasiswaEntity {
   late List<String> tags;
 
   BeasiswaModel({
     required super.id,
+    required super.photoURL,
     required super.mulai,
     required super.berakhir,
     required super.penyelenggara,
@@ -18,6 +20,7 @@ class BeasiswaModel extends BeasiswaEntity {
     required super.minimalIPK,
     required super.semester,
     required super.jumlahBookmark,
+    required super.nama,
   }) : super() {
     tags = _createTags(jenjang, pembiayaan, minimalIPK, semester);
   }
@@ -26,6 +29,7 @@ class BeasiswaModel extends BeasiswaEntity {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'photoURL': photoURL,
       'mulai': mulai,
       'berakhir': berakhir,
       'penyelenggara': penyelenggara,
@@ -38,6 +42,7 @@ class BeasiswaModel extends BeasiswaEntity {
       'minimalIPK': minimalIPK,
       'semester': semester,
       'jumlahBookmark': jumlahBookmark,
+      'nama': nama,
       'tags': tags,
     };
   }
@@ -45,6 +50,7 @@ class BeasiswaModel extends BeasiswaEntity {
   factory BeasiswaModel.fromJson(Map<String, dynamic> json) {
     return BeasiswaModel(
       id: json['id'],
+      photoURL: json['photoURL'],
       mulai: json['mulai'],
       berakhir: json['berakhir'],
       penyelenggara: json['penyelenggara'],
@@ -57,12 +63,14 @@ class BeasiswaModel extends BeasiswaEntity {
       minimalIPK: json['minimalIPK'],
       semester: List<int>.from(json['semester']),
       jumlahBookmark: json['jumlahBookmark'],
+      nama: json['nama'],
     );
   }
 
   factory BeasiswaModel.empty() {
     return BeasiswaModel(
       id: '',
+      photoURL: '',
       mulai: Timestamp.now(),
       berakhir: Timestamp.now(),
       penyelenggara: '',
@@ -75,6 +83,7 @@ class BeasiswaModel extends BeasiswaEntity {
       minimalIPK: 0.0,
       semester: [],
       jumlahBookmark: 0,
+      nama: '',
     );
   }
 
@@ -89,11 +98,13 @@ class BeasiswaModel extends BeasiswaEntity {
         lampiran.isNotEmpty &&
         pembiayaan.isNotEmpty &&
         minimalIPK >= 0 &&
-        semester.isNotEmpty;
+        semester.isNotEmpty &&
+        nama.isNotEmpty;
   }
 
   BeasiswaModel copyWith({
     String? id,
+    String? photoURL,
     Timestamp? mulai,
     Timestamp? berakhir,
     String? penyelenggara,
@@ -106,9 +117,11 @@ class BeasiswaModel extends BeasiswaEntity {
     double? minimalIPK,
     List<int>? semester,
     int? jumlahBookmark,
+    String? nama,
   }) {
     return BeasiswaModel(
       id: id ?? this.id,
+      photoURL: photoURL ?? this.photoURL,
       mulai: mulai ?? this.mulai,
       berakhir: berakhir ?? this.berakhir,
       penyelenggara: penyelenggara ?? this.penyelenggara,
@@ -121,6 +134,7 @@ class BeasiswaModel extends BeasiswaEntity {
       minimalIPK: minimalIPK ?? this.minimalIPK,
       semester: semester ?? this.semester,
       jumlahBookmark: jumlahBookmark ?? this.jumlahBookmark,
+      nama: nama ?? this.nama,
     );
   }
 
@@ -132,24 +146,20 @@ class BeasiswaModel extends BeasiswaEntity {
   ) {
     List<String> tags = [];
 
-    // Add jenjang
     tags.addAll(jenjang);
 
-    // Add pembiayaan
     tags.addAll(pembiayaan);
 
-    // Add minimalIPK conditionally
-    if (minimalIPK == 0) {
-      tags.add("Tanpa minimal IPK");
+    if (minimalIPK != 0) {
+      tags.add(BeasiswaTag.denganMinimumIPK);
     }
 
-    // Add semester
     var sGreater6 = false;
     for (var s in semester) {
       if (s < 6) {
         tags.add("Semester $s");
       } else if (!sGreater6) {
-        tags.add("Semester >6");
+        tags.add(BeasiswaTag.semester6);
         sGreater6 = true;
       }
     }
