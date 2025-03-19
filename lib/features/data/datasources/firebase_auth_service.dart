@@ -68,6 +68,15 @@ class FirebaseAuthService {
     await _firebaseAuth.signOut();
   }
 
+  AuthUserModel? get currentUser {
+    final currentUser = _firebaseAuth.currentUser;
+    if (currentUser != null) {
+      return AuthUserModel(id: currentUser.uid, email: currentUser.email ?? '');
+    } else {
+      return null;
+    }
+  }
+
   Stream<AuthUserModel?> onAuthStateChanges() {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
       debugPrint(

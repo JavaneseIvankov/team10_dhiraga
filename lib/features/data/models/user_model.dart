@@ -72,7 +72,7 @@ class UserModel extends UserEntity {
   @override
   bool isInitialized() {
     return id.isNotEmpty &&
-        // username.isNotEmpty &&
+        username.isNotEmpty &&
         // email.isNotEmpty &&
         // profilePictureURL.isNotEmpty &&
         // fullName.isNotEmpty &&

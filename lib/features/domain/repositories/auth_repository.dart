@@ -10,4 +10,5 @@ abstract class AuthRepository {
     String password,
   ); // DO NOT CALL IN PAGE / VIEW LAYER, USE USECASE INSTEAD
   Stream<AuthUserEntity?> onAuthStateChanges();
+  AuthUserEntity get currentUser;
 }

@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:team10_dhiraga/features/presentation/providers/user_provider.dart';
+import 'package:team10_dhiraga/pages/auth_wrapper.dart';
 import 'di/injection_container.dart';
 import 'pages/form_student.dart';
 import 'pages/login_page.dart';
@@ -39,10 +42,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<local.MyAuthProvider>(
           create: (_) => sl<local.MyAuthProvider>(),
         ),
-        StreamProvider<UserEntity?>(
-          create: (context) => sl<UserStream>().userStream,
-          initialData: null,
-        ),
+        ChangeNotifierProvider<UserProvider>(create: (_) => sl<UserProvider>()),
+        // StreamProvider<UserEntity?>(
+        //   create: (context) => sl<UserStream>().userStream,
+        //   initialData: null,
+        // ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -64,19 +68,19 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// TODO: Add spinner state compatibility
-class AuthWrapper extends StatelessWidget {
-  const AuthWrapper({super.key});
+// // TODO: Add spinner state compatibility
+// class AuthWrapper extends StatelessWidget {
+//   const AuthWrapper({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    var user = Provider.of<UserEntity?>(context);
-    debugPrint("AuthWrapper is rebuilding");
-    debugPrint("\n MAIN: USER CHANGE DETECTED ${user.toString()} \n");
-    if (user != null && user.id.isNotEmpty) {
-      if (!user.isInitialized()) return FormStudent();
-      return HomePage();
-    }
-    return LoginPage();
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     var user = Provider.of<UserEntity?>(context);
+//     debugPrint("AuthWrapper is rebuilding");
+//     debugPrint("\n MAIN: USER CHANGE DETECTED ${user.toString()} \n");
+//     if (user != null && user.id.isNotEmpty) {
+//       if (!user.isInitialized()) return FormStudent();
+//       return HomePage();
+//     }
+//     return LoginPage();
+//   }
+// }

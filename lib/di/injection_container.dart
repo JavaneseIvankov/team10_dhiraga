@@ -15,6 +15,7 @@ import 'package:team10_dhiraga/features/domain/usecases/login_user.dart';
 import 'package:team10_dhiraga/features/domain/usecases/register_user.dart';
 import 'package:team10_dhiraga/features/domain/usecases/use_user_stream.dart';
 import 'package:team10_dhiraga/features/presentation/providers/auth_provider.dart';
+import 'package:team10_dhiraga/features/presentation/providers/user_provider.dart';
 
 final sl = GetIt.instance;
 
@@ -46,5 +47,8 @@ void setupDependencyInjection() {
   // Providers
   sl.registerLazySingleton<MyAuthProvider>(
     () => MyAuthProvider(loginUser: sl(), registerUser: sl()),
+  );
+  sl.registerLazySingleton<UserProvider>(
+    () => UserProvider(authRepository: sl(), userRepository: sl()),
   );
 }

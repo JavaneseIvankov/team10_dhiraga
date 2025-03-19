@@ -19,6 +19,15 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  AuthUserEntity get currentUser {
+    final currentUser = firebaseAuthService.currentUser;
+    if (currentUser == null) {
+      return AuthUserEntity(id: "", email: "");
+    }
+    return AuthUserEntity(id: currentUser.id, email: currentUser.email);
+  }
+
+  @override
   Stream<AuthUserEntity?> onAuthStateChanges() {
     return firebaseAuthService.onAuthStateChanges().map((user) {
       if (user != null) {

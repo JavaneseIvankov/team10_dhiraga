@@ -17,8 +17,7 @@ class RegisterUser implements UseCase<AuthUserEntity, RegisterParams> {
       params.email,
       params.password,
     );
-    final user = await _userRepository.createUser(authUser.id, params.role);
-    _userStream.addUser(user);
+    await _userRepository.createUser(authUser.id, params.role);
     return authUser;
   }
 }
