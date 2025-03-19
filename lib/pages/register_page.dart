@@ -47,15 +47,15 @@ class _RegisterPageState extends State<RegisterPage> {
       email: email,
       password: password,
       onSuccess: () {
-        // Navigator.pop(context);
+        Navigator.pop(context);
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => AuthWrapper()),
+          MaterialPageRoute(builder: (context) => FormStudent()),
         );
       },
       onFailed: (e) {
-        // _showSnackbar("Registrasi gagal, coba lagi!");
-        _showSnackbar(e.toString());
+        _showSnackbar("Registrasi gagal, coba lagi!");
+        // _showSnackbar(e.toString());
       },
     );
   }

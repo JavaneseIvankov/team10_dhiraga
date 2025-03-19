@@ -4,6 +4,8 @@ import 'package:team10_dhiraga/di/injection_container.dart';
 import 'package:team10_dhiraga/features/data/models/student_update_params.dart';
 import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
 import 'package:team10_dhiraga/features/domain/repositories/user_repository.dart';
+import 'package:team10_dhiraga/features/presentation/providers/user_provider.dart';
+import 'package:team10_dhiraga/main.dart';
 import 'package:team10_dhiraga/pages/Navbar_home_page.dart/home_page.dart';
 
 class FormStudent extends StatefulWidget {
@@ -16,20 +18,23 @@ class FormStudent extends StatefulWidget {
 class _FormStudentState extends State<FormStudent> {
   final userRepository = sl<UserRepository>();
 
+  final TextEditingController namaPanggianController = TextEditingController();
   final TextEditingController pendidikanController = TextEditingController();
   final TextEditingController programStudiController = TextEditingController();
   final TextEditingController domisiliController = TextEditingController();
   final TextEditingController alamatLengkapController = TextEditingController();
   final TextEditingController deskripsiController = TextEditingController();
 
-  // TODO: Implement username
-  void _submitForm(String? userId) async {
-    if (userId == null) return;
+  void _submitForm(UserProvider userProvider) async {
+    final user = await userProvider.currentUser;
+    final userId = user?.id;
+
+    if (user == null || userId == null) return;
     userRepository
         .updateStudent(
           userId,
           StudentUpdateParams(
-            username: "test_name",
+            username: namaPanggianController.text,
             pendidikan: pendidikanController.text,
             programStudi: programStudiController.text,
             domisili: domisiliController.text,
@@ -49,6 +54,7 @@ class _FormStudentState extends State<FormStudent> {
 
   @override
   void dispose() {
+    namaPanggianController.dispose();
     pendidikanController.dispose();
     programStudiController.dispose();
     domisiliController.dispose();
@@ -59,7 +65,7 @@ class _FormStudentState extends State<FormStudent> {
 
   @override
   Widget build(BuildContext context) {
-    final currentUser = Provider.of<UserEntity?>(context);
+    final userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Form Student')),
@@ -67,6 +73,10 @@ class _FormStudentState extends State<FormStudent> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            TextField(
+              controller: namaPanggianController,
+              decoration: const InputDecoration(labelText: 'Nama Panggilan'),
+            ),
             TextField(
               controller: pendidikanController,
               decoration: const InputDecoration(labelText: 'Pendidikan'),
@@ -90,7 +100,7 @@ class _FormStudentState extends State<FormStudent> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => _submitForm(currentUser?.id ?? ""),
+              onPressed: () => _submitForm(userProvider),
               child: const Text('Submit'),
             ),
           ],

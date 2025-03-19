@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:team10_dhiraga/features/data/models/student_model.dart';
 import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
+import 'package:team10_dhiraga/features/domain/repositories/user_repository.dart';
+import 'package:team10_dhiraga/features/presentation/providers/user_provider.dart';
 import 'package:team10_dhiraga/pages/Navbar_profile_page.dart/edit_profile_page.dart';
 import 'search_page.dart';
 import '../Navbar_event_page.dart/event_page.dart';
@@ -21,7 +24,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   User? user;
   String username = "";
   String userRole = "student";
@@ -32,30 +34,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _getUserData();
-  }
-
-  void _getUserData() async {
-    user = _auth.currentUser;
-    if (user == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
-        );
-      });
-    } else {
-      DocumentSnapshot userData =
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(user!.uid)
-              .get();
-
-      setState(() {
-        username = userData["username"] ?? "Pengguna";
-        userRole = userData["role"] ?? "student";
-      });
-    }
   }
 
   void _onItemTapped(int index) {
@@ -103,19 +81,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // TODO: arun perlu bikin semacam user.bookmarks nnti,
-  // nnti dlu itu perlu integrasi firestore utk nyimpen events
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserEntity?>(context);
-    final username = user?.username ?? "test_username";
-    final userRole = user?.role ?? "student";
+    final userProvider = Provider.of<UserProvider>(context);
 
     final List<Widget> pages = [
       HomeContent(
-        username: username,
         toggleBookmark: _toggleBookmark,
-        bookmarkedItems: bookmarkedItems,
         searchQuery: searchQuery,
         onSearchChanged: (query) {
           setState(() {
@@ -128,48 +100,56 @@ class _HomePageState extends State<HomePage> {
       EditProfilePage(userType: userRole),
     ];
 
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(icon: Icon(Icons.bookmark), onPressed: _showBookmarks),
-        ],
-      ),
-      body: pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Event'),
-          BottomNavigationBarItem(icon: Icon(Icons.school), label: 'Mentoring'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
+    return FutureProvider<UserEntity?>(
+      create: (_) => userProvider.currentUser,
+      initialData: null,
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            IconButton(icon: Icon(Icons.bookmark), onPressed: _showBookmarks),
+          ],
+        ),
+        body: pages[_selectedIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: Colors.blue,
+          unselectedItemColor: Colors.grey,
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Event'),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.school),
+              label: 'Mentoring',
+            ),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          ],
+        ),
       ),
     );
   }
 }
 
 class HomeContent extends StatelessWidget {
-  final String username;
   final Function(String) toggleBookmark;
-  final List<String> bookmarkedItems;
   final String searchQuery;
   final Function(String) onSearchChanged;
 
   const HomeContent({
     super.key,
-    required this.username,
     required this.toggleBookmark,
-    required this.bookmarkedItems,
     required this.searchQuery,
     required this.onSearchChanged,
   });
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserEntity?>(context);
+    final username = user?.username ?? "Pengguna";
+    List<String> bookmarkedItems = [];
+    if (user is StudentModel) bookmarkedItems = user.bookmark;
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
