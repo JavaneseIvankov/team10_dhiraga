@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:team10_dhiraga/core/theme/app_color.dart';
 import 'package:team10_dhiraga/core/theme/app_theme.dart';
 import 'package:team10_dhiraga/widgets/gradient_border.dart';
-import 'package:team10_dhiraga/widgets/gradient_wraper.dart';
+import 'package:team10_dhiraga/widgets/gradient_wrapper.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
