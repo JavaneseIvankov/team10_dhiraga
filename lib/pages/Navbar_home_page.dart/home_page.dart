@@ -21,11 +21,26 @@ class HomePage extends StatefulWidget {
   final Function(Map<String, String>) addNotification;
 
   const HomePage({
-    super.key,
+    Key? key, // Gunakan Key? key untuk konsistensi
     required this.savedNotifications,
     required this.addNotification,
-  });
+  }) : super(key: key);
 
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  // State logic here
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text("Home Page Content"),
+      ),
+    );
+  }
+}
   @override
   _HomePageState createState() => _HomePageState();
 }
