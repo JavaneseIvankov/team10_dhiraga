@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:team10_dhiraga/features/data/models/student_model.dart';
 import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
-import 'package:team10_dhiraga/features/domain/repositories/user_repository.dart';
 import 'package:team10_dhiraga/features/presentation/providers/user_provider.dart';
 import 'package:team10_dhiraga/pages/Navbar_profile_page.dart/edit_profile_page.dart';
 import 'package:team10_dhiraga/widgets/beasiswa_card.dart';
@@ -12,22 +10,11 @@ import 'package:team10_dhiraga/widgets/custom_bottom_navbar.dart';
 import 'package:team10_dhiraga/widgets/large_text.dart';
 import 'package:team10_dhiraga/widgets/mentor_card.dart';
 import 'package:team10_dhiraga/widgets/mesh_gradient_background.dart';
-import 'search_page.dart';
 import '../Navbar_event_page.dart/event_page.dart';
 import '../Navbar_mentoring_page.dart/mentoring_page.dart';
-<<<<<<< HEAD
-import 'package:team10_dhiraga/pages/navbar_home_page.dart/mentor_page.dart';
-import '../pages/profile_page.dart';
-import 'package:team10_dhiraga/pages/login_page.dart';
-import 'notification_page.dart';
-=======
-import '../login_page.dart';
-import 'bookmark_page.dart';
->>>>>>> dev
 import 'beasiswa_page.dart';
 import 'mentor_page.dart';
 import 'template_page.dart' as tpl;
-import 'package:team10_dhiraga/pages/navbar_home_page.dart/link_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -113,28 +100,6 @@ class _HomePageState extends State<HomePage> {
       EditProfilePage(userType: userRole),
     ];
 
-<<<<<<< HEAD
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home'),
-        actions: [
-          IconButton(icon: Icon(Icons.bookmark), onPressed: _showBookmarks),
-        ],
-      ),
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Event'),
-          BottomNavigationBarItem(icon: Icon(Icons.school), label: 'Mentoring'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-=======
     return FutureProvider<UserEntity?>(
       create: (_) => userProvider.currentUser,
       initialData: null,
@@ -149,7 +114,6 @@ class _HomePageState extends State<HomePage> {
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
         ),
->>>>>>> dev
       ),
     );
   }
