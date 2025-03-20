@@ -47,7 +47,13 @@ class _EventDetailPageState extends State<EventDetailPage> {
               ),
               SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  Navigator.pop(context); // Tutup dialog
+                  Navigator.pop(
+                    context,
+                    widget.event,
+                  ); // Kembali dengan data event
+                },
                 child: Text("Kembali"),
               ),
             ],

@@ -17,7 +17,14 @@ import 'mentor_page.dart';
 import 'template_page.dart' as tpl;
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final List<Map<String, String>> savedNotifications;
+  final Function(Map<String, String>) addNotification;
+
+  const HomePage({
+    super.key,
+    required this.savedNotifications,
+    required this.addNotification,
+  });
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -34,6 +41,40 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+  }
+
+  void _showNotifications() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Notifikasi"),
+          content:
+              widget.savedNotifications.isEmpty
+                  ? Text("Tidak ada notifikasi baru.")
+                  : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children:
+                        widget.savedNotifications
+                            .map(
+                              (notif) => ListTile(
+                                title: Text(notif['title'] ?? "Tanpa Judul"),
+                                subtitle: Text(notif['message'] ?? ""),
+                              ),
+                            )
+                            .toList(),
+                  ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Tutup"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _onItemTapped(int index) {
@@ -94,6 +135,7 @@ class _HomePageState extends State<HomePage> {
             searchQuery = query;
           });
         },
+        showNotifications: _showNotifications, // Pass the method here
       ),
       EventPage(),
       MentoringPage(),
@@ -123,12 +165,14 @@ class HomeContent extends StatelessWidget {
   final Function(String) toggleBookmark;
   final String searchQuery;
   final Function(String) onSearchChanged;
+  final Function showNotifications; // Add this parameter
 
   const HomeContent({
     super.key,
     required this.toggleBookmark,
     required this.searchQuery,
     required this.onSearchChanged,
+    required this.showNotifications, // Initialize the parameter
   });
 
   @override
@@ -144,14 +188,27 @@ class HomeContent extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LargeText(
-              text:
-                  "Selamat datang $username, ayo temukan peluang terbaik untukmu!",
-              textStyle: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue.shade900,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: LargeText(
+                    text:
+                        "Selamat datang $username, ayo temukan peluang terbaik untukmu!",
+                    textStyle: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue.shade900,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.notifications, color: Colors.blue.shade900),
+                  onPressed: () {
+                    showNotifications(); // Use the passed function here
+                  },
+                ),
+              ],
             ),
             SizedBox(height: 8),
             TextField(
