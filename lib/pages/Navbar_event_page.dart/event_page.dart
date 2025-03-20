@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-
 import 'event_detail_page.dart';
-import 'notification_page.dart'; // Halaman notifikasi event
+import 'notification_page.dart';
+import 'package:team10_dhiraga/widgets/beasiswa_card.dart';
+import 'package:team10_dhiraga/widgets/mesh_gradient_background.dart';
 
 class EventPage extends StatelessWidget {
-  const EventPage({super.key});
+  EventPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,17 +36,8 @@ class EventPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color.fromRGBO(218, 216, 219, 1),
-              Color.fromARGB(255, 203, 176, 207),
-            ],
-          ),
-        ),
+      body: GradientBackground(
+        // Menggunakan widget GradientBackground
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -88,8 +80,9 @@ class EventPage extends StatelessWidget {
         crossAxisCount: 2,
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
-        childAspectRatio: 1.5,
+        childAspectRatio: 1,
       ),
+
       itemCount: events.length,
       itemBuilder: (context, index) {
         return _buildEventCard(events[index], context);
@@ -98,96 +91,47 @@ class EventPage extends StatelessWidget {
   }
 
   Widget _buildEventCard(Map<String, String> event, BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => EventDetailPage(event: event),
-          ),
-        );
-      },
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        elevation: 4,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12.0),
-            image: const DecorationImage(
-              image: AssetImage('assets/event_placeholder.jpg'),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12.0),
-              color: Colors.black.withOpacity(0.5),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  event['title']!,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  event['date']!,
-                  style: const TextStyle(fontSize: 12, color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
+    return SizedBox(
+      width: 200,
+      height: 200,
+      child: BeasiswaCard(
+        title: event['title']!,
+        dateRange: event['date']!,
+        imageUrl: 'https://via.placeholder.com/150',
+        bookmarkIcon: Icons.bookmark_border,
       ),
     );
   }
+
+  List<Map<String, String>> beasiswaList = [
+    {"title": "Beasiswa Djarum Plus", "date": "25 Mar 2025 - 4 Mei 2025"},
+    {
+      "title": "Beasiswa Bank Indonesia 2025",
+      "date": "4 Jan 2025 - 7 Feb 2025",
+    },
+    {
+      "title": "Beasiswa Ajinomoto 2026 S2 di Jepang",
+      "date": "4 Feb 2025 - 4 Mar 2025",
+    },
+  ];
+
+  List<Map<String, String>> seminarList = [
+    {"title": "Strategi Jitu Lolos Beasiswa Djarum", "date": "10 Mei 2025"},
+    {"title": "Webinar Socialisasi Pengenalan FT UB", "date": "15 Maret 2025"},
+    {
+      "title":
+          "Webinar Pembekalan Karir \"Ingin Career Switch? Inilah Strategi Suksesnya\"",
+      "date": "TBD",
+    },
+    {"title": "Webinar Karir - FIB UB", "date": "6 Maret 2025"},
+    {"title": "Webinar Pelatihan Series - DPKA UB", "date": "6 Maret 2025"},
+    {
+      "title": "Webinar Series 1 Webinar Prodi Kimia UIN Malang",
+      "date": "20 Maret 2025",
+    },
+    {
+      "title": "Kuliah Tamu Capstone Project – Filkom UB",
+      "date": "14 Maret 2025",
+    },
+  ];
 }
-
-List<Map<String, String>> beasiswaList = [
-  {
-    "title": "Beasiswa Penelitian Bank Indonesia",
-    "date": "1 Feb 2025 - 31 Okt 2025",
-  },
-  {
-    "title": "Beasiswa Bintang Glow and Lovely",
-    "date": "3 Feb 2025 - 8 Mei 2025",
-  },
-  {"title": "Beasiswa ASTRA 2025", "date": "13 Feb 2025 - 30 Apr 2025"},
-  {"title": "Beasiswa Karya Salemba Empat", "date": "24 Feb 2025 - 4 Apr 2025"},
-  {"title": "Beasiswa Djarum Plus 2025", "date": "27 Mar 2025 - 30 Mei 2025"},
-];
-
-List<Map<String, String>> seminarList = [
-  {
-    "title": "Strategi Jitu Lolos Beasiswa Djarum",
-    "date": "1 Mei 2025 - 7 Mei 2025",
-  },
-  {
-    "title": "Webinar Pelatihan Series - DPKA UB",
-    "date": "1 Mar 2025 - 5 Mar 2025",
-  },
-  {
-    "title": "Webinar Sosialisasi Pengenalan FT UB",
-    "date": "1 Mar 2025 - 14 Mar 2025",
-  },
-  {
-    "title": "Webinar Prodi Kimia UIN Malang",
-    "date": "10 Mar 2025 - 18 Mar 2025",
-  },
-  {"title": "Webinar Karir - FIB UB", "date": "2 Mar 2025 - 5 Mar 2025"},
-  {
-    "title": "Kuliah Tamu Capstone Project - Filkom UB",
-    "date": "1 Mar 2025 - 13 Mar 2025",
-  },
-];
