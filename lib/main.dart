@@ -23,16 +23,28 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FirebaseInitializer.initialize();
   setupDependencyInjection();
-  // await DangerousTestingCommand();
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  List<Map<String, String>> _savedNotifications = [];
 
   Future<bool> _hasSeenLandingPage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool('hasSeenLanding') ?? false;
+  }
+
+  void _addNotification(Map<String, String> event) {
+    setState(() {
+      _savedNotifications.add(event);
+    });
   }
 
   @override
@@ -43,10 +55,6 @@ class MyApp extends StatelessWidget {
           create: (_) => sl<local.MyAuthProvider>(),
         ),
         ChangeNotifierProvider<UserProvider>(create: (_) => sl<UserProvider>()),
-        // StreamProvider<UserEntity?>(
-        //   create: (context) => sl<UserStream>().userStream,
-        //   initialData: null,
-        // ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -60,27 +68,13 @@ class MyApp extends StatelessWidget {
             if (snapshot.data == false) {
               return LandingPage();
             }
-            return AuthWrapper();
+            return AuthWrapper(
+              savedNotifications: _savedNotifications,
+              addNotification: _addNotification,
+            );
           },
         ),
       ),
     );
   }
 }
-
-// // TODO: Add spinner state compatibility
-// class AuthWrapper extends StatelessWidget {
-//   const AuthWrapper({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     var user = Provider.of<UserEntity?>(context);
-//     debugPrint("AuthWrapper is rebuilding");
-//     debugPrint("\n MAIN: USER CHANGE DETECTED ${user.toString()} \n");
-//     if (user != null && user.id.isNotEmpty) {
-//       if (!user.isInitialized()) return FormStudent();
-//       return HomePage();
-//     }
-//     return LoginPage();
-//   }
-// }
