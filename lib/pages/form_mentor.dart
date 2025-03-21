@@ -45,7 +45,7 @@ class _FormMentorState extends State<FormMentor> {
     super.initState();
     _tipeMentor = {
       MentorTag.beasiswa: _mentorBeasiswa,
-      MentorTag.akadamik: _mentorAkademik,
+      MentorTag.akademik: _mentorAkademik,
       MentorTag.offline: _mentorOffline,
       MentorTag.online: _mentorOnline,
     };

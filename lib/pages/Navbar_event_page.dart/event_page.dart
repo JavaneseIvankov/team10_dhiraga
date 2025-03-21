@@ -29,14 +29,11 @@ class EventPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => NotificationPage()),
-                MaterialPageRoute(builder: (context) => NotificationPage()),
               );
             },
           ),
         ],
       ),
-      body: GradientBackground(
-        // Menggunakan widget GradientBackground
       body: GradientBackground(
         // Menggunakan widget GradientBackground
         child: SingleChildScrollView(
@@ -81,7 +78,6 @@ class EventPage extends StatelessWidget {
         crossAxisCount: 2,
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
-        childAspectRatio: 1,
         childAspectRatio: 1,
       ),
 
