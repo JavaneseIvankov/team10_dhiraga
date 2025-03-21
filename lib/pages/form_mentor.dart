@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team10_dhiraga/di/injection_container.dart';
+import 'package:team10_dhiraga/features/data/constants/mentor_constants.dart';
 import 'package:team10_dhiraga/features/data/models/mentor_update_params.dart';
-import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
 import 'package:team10_dhiraga/features/domain/repositories/user_repository.dart';
 import 'package:team10_dhiraga/features/presentation/providers/user_provider.dart';
-import 'package:team10_dhiraga/main.dart';
 import 'package:team10_dhiraga/pages/Navbar_home_page.dart/home_page.dart';
 
 class FormMentor extends StatefulWidget {
@@ -17,6 +16,10 @@ class FormMentor extends StatefulWidget {
 
 class _FormMentorState extends State<FormMentor> {
   final userRepository = sl<UserRepository>();
+  late final Map<String, bool> _tipeMentor;
+  late final Map<String, bool> _skills;
+  late final Map<String, bool> _languages;
+  late final Map<String, bool> _subjects;
 
   final TextEditingController namaPanggilanController = TextEditingController();
   final TextEditingController pendidikanController = TextEditingController();
@@ -31,27 +34,62 @@ class _FormMentorState extends State<FormMentor> {
 
   bool _mentorBeasiswa = false;
   bool _mentorAkademik = false;
-  Map<String, bool> _skills = {
-    'Product manager': false,
-    'Back end': false,
-    'Front end': false,
-    'UI/UX': false,
-  };
-  Map<String, bool> _languages = {
-    'Inggris': false,
-    'Jerman': false,
-    'Korea': false,
-    'Jepang': false,
-  };
-  Map<String, bool> _subjects = {
-    'Biologi': false,
-    'Fisika': false,
-    'Kimia': false,
-    'Matematika': false,
-    'Sejarah': false,
-  };
   bool _mentorOffline = false;
   bool _mentorOnline = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _tipeMentor = {
+      MentorTag.beasiswa: _mentorBeasiswa,
+      MentorTag.akadamik: _mentorAkademik,
+      MentorTag.offline: _mentorOffline,
+      MentorTag.online: _mentorOnline,
+    };
+    _skills = {
+      MentorTag.productManager: false,
+      MentorTag.backEnd: false,
+      MentorTag.frontEnd: false,
+      MentorTag.uiUx: false,
+    };
+    _languages = {
+      MentorTag.inggris: false,
+      MentorTag.jerman: false,
+      MentorTag.korea: false,
+      MentorTag.jepang: false,
+    };
+    _subjects = {
+      MentorTag.biologi: false,
+      MentorTag.fisika: false,
+      MentorTag.kimia: false,
+      MentorTag.matematika: false,
+      MentorTag.sejarah: false,
+    };
+  }
+
+  Map<String, bool> _getKeahlian() {
+    final Map<String, bool> keahlian = {};
+    keahlian.addAll(_tipeMentor);
+    keahlian.addAll(_skills);
+    keahlian.addAll(_languages);
+    keahlian.addAll(_subjects);
+    return keahlian;
+  }
+
+  List<String> _getRiwayatBeasiswa() {
+    final List<String> riwayat = [];
+    final riwayat1 = riwayatBeasiswa1Controller.text;
+    final riwayat2 = riwayatBeasiswa2Controller.text;
+    if (riwayat1.isNotEmpty) riwayat.add(riwayat1);
+    if (riwayat2.isNotEmpty) riwayat.add(riwayat2);
+    return riwayat;
+  }
+
+  Map<String, bool> _getMediaMentoring() {
+    final online = _mentorOnline;
+    final offline = _mentorOffline;
+    return {MentorTag.online: online, MentorTag.offline: offline};
+  }
 
   void _submitForm(UserProvider userProvider) async {
     final user = await userProvider.currentUser;
@@ -69,22 +107,24 @@ class _FormMentorState extends State<FormMentor> {
             domisili: domisiliController.text,
             alamatLengkap: alamatLengkapController.text,
             deskripsi: deskripsiController.text,
-            riwayatBeasiswa1: riwayatBeasiswa1Controller.text,
-            riwayatBeasiswa2: riwayatBeasiswa2Controller.text,
-            mentorBeasiswa: _mentorBeasiswa,
-            mentorAkademik: _mentorAkademik,
-            skills: _skills,
-            languages: _languages,
-            subjects: _subjects,
-            mentorOffline: _mentorOffline,
-            mentorOnline: _mentorOnline,
+            riwayatBeasiswa: _getRiwayatBeasiswa(),
+            tipeMentor: _tipeMentor,
+            keahlian: _getKeahlian(),
+            mediaMentoring: _getMediaMentoring(),
           ),
         )
         .then((_) {
           if (mounted) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => HomePage()),
+              // TODO: apa ini?
+              MaterialPageRoute(
+                builder:
+                    (context) => HomePage(
+                      savedNotifications: [],
+                      addNotification: (list) => {},
+                    ),
+              ),
             );
           }
         });
@@ -100,6 +140,7 @@ class _FormMentorState extends State<FormMentor> {
     deskripsiController.dispose();
     riwayatBeasiswa1Controller.dispose();
     riwayatBeasiswa2Controller.dispose();
+
     super.dispose();
   }
 

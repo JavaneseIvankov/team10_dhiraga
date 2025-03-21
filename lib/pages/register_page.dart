@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:team10_dhiraga/core/theme/app_color.dart';
 import 'package:team10_dhiraga/features/presentation/providers/auth_provider.dart';
 import 'package:team10_dhiraga/main.dart';
+import 'package:team10_dhiraga/pages/form_mentor.dart';
 import 'package:team10_dhiraga/pages/form_student.dart';
 import 'package:team10_dhiraga/widgets/mesh_gradient_background.dart';
 import 'package:team10_dhiraga/widgets/large_text.dart';
@@ -50,7 +51,12 @@ class _RegisterPageState extends State<RegisterPage> {
         Navigator.pop(context);
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => FormStudent()),
+          MaterialPageRoute(
+            builder: (context) {
+              if (role == "student") return FormStudent();
+              return FormMentor();
+            },
+          ),
         );
       },
       onFailed: (e) {

@@ -1,4 +1,7 @@
 class MentorTag {
+  static const String beasiswa = 'Beasiswa';
+  static const String akadamik = 'Akadamik';
+
   static const String offline = 'Offline';
   static const String online = 'Online';
 

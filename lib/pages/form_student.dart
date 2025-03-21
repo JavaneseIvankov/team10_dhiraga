@@ -46,7 +46,13 @@ class _FormStudentState extends State<FormStudent> {
           if (mounted) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => HomePage()),
+              MaterialPageRoute(
+                builder:
+                    (context) => HomePage(
+                      savedNotifications: [],
+                      addNotification: (list) => [],
+                    ),
+              ),
             );
           }
         });

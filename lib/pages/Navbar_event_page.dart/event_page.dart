@@ -28,9 +28,7 @@ class EventPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const NotificationPage(),
-                ),
+                MaterialPageRoute(builder: (context) => NotificationPage()),
               );
             },
           ),
