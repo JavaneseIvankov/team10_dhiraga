@@ -31,8 +31,8 @@ class _BeasiswaCardState extends State<BeasiswaCard> {
     return GradientBorder(
       borderRadius: 14,
       child: Container(
-        width: 200,
-        constraints: BoxConstraints(minHeight: 200, maxHeight: 200),
+        width: 170,
+        constraints: BoxConstraints(minHeight: 200, maxHeight: 220),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -41,7 +41,6 @@ class _BeasiswaCardState extends State<BeasiswaCard> {
           ],
         ),
         child: Column(
-          // mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Stack(
@@ -85,36 +84,40 @@ class _BeasiswaCardState extends State<BeasiswaCard> {
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    widget.title,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 4),
-                  // Spacer(), // i want this to takes up all spaces possible in the column, but ended up making the whole column dissapear
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-                    decoration: BoxDecoration(
-                      color: widget.dateBackgroundColor,
-                      borderRadius: BorderRadius.circular(8),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      widget.title,
+                      overflow: TextOverflow.fade,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    child: Center(
-                      child: Text(
-                        widget.dateRange,
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.black,
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+                      decoration: BoxDecoration(
+                        color: widget.dateBackgroundColor,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(
+                        child: Text(
+                          widget.dateRange,
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.black,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

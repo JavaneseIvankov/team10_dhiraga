@@ -27,13 +27,14 @@ class MentorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imgSize = 100.0;
+    final imgSize = 70.0;
     final borderRadius = 12.0;
 
     return GradientBorder(
       borderRadius: borderRadius + 2,
       child: Container(
-        width: 160,
+        width: 170,
+        height: 230,
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Colors.white,

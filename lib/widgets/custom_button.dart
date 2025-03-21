@@ -63,6 +63,7 @@ class CustomButton extends StatelessWidget {
     Widget textWidget = Text(
       text,
       overflow: TextOverflow.visible,
+      textAlign: TextAlign.center,
       style: textStyle.copyWith(fontWeight: fontWeight ?? FontWeight.w700),
     );
 
@@ -84,7 +85,7 @@ class CustomButton extends StatelessWidget {
         ),
         onPressed: onPressed,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
           child: textWidget,
         ),
       ),
