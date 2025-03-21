@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:team10_dhiraga/core/theme/app_color.dart';
 import 'package:team10_dhiraga/widgets/custom_search_icon.dart';
-import 'package:team10_dhiraga/widgets/custom_textfield.dart';
 import 'package:team10_dhiraga/widgets/gradient_border.dart';
 
 class CustomSearchBar extends StatelessWidget {

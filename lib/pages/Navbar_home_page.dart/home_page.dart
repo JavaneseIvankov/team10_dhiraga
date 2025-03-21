@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:team10_dhiraga/core/theme/app_color.dart';
 import 'package:team10_dhiraga/features/data/models/student_model.dart';
 import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
-import 'package:team10_dhiraga/features/domain/repositories/user_repository.dart';
 import 'package:team10_dhiraga/features/presentation/providers/user_provider.dart';
 import 'package:team10_dhiraga/pages/Navbar_profile_page.dart/edit_profile_page.dart';
 import 'package:team10_dhiraga/widgets/beasiswa_card.dart';
@@ -18,17 +16,26 @@ import 'package:team10_dhiraga/widgets/search_bar.dart';
 import 'search_page.dart';
 import '../Navbar_event_page.dart/event_page.dart';
 import '../Navbar_mentoring_page.dart/mentoring_page.dart';
-import '../login_page.dart';
-import 'bookmark_page.dart';
 import 'beasiswa_page.dart';
 import 'mentor_page.dart';
 import 'template_page.dart' as tpl;
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final List<Map<String, String>> savedNotifications;
+  final Function(Map<String, String>) addNotification;
+
+  const HomePage({
+    Key? key, // Gunakan Key? key untuk konsistensi
+    this.savedNotifications = const [],
+    this.addNotification = _defaultAddNotification,
+  }) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
+}
+
+void _defaultAddNotification(Map<String, String> notification) {
+  // TODO: hapus  ini, ini sementara
 }
 
 class _HomePageState extends State<HomePage> {
@@ -42,6 +49,40 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+  }
+
+  void _showNotifications() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Notifikasi"),
+          content:
+              widget.savedNotifications.isEmpty
+                  ? Text("Tidak ada notifikasi baru.")
+                  : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children:
+                        widget.savedNotifications
+                            .map(
+                              (notif) => ListTile(
+                                title: Text(notif['title'] ?? "Tanpa Judul"),
+                                subtitle: Text(notif['message'] ?? ""),
+                              ),
+                            )
+                            .toList(),
+                  ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Tutup"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _onItemTapped(int index) {
@@ -102,6 +143,7 @@ class _HomePageState extends State<HomePage> {
             searchQuery = query;
           });
         },
+        showNotifications: _showNotifications, // Pass the method here
       ),
       EventPage(),
       MentoringPage(),
@@ -131,12 +173,14 @@ class HomeContent extends StatelessWidget {
   final Function(String) toggleBookmark;
   final String searchQuery;
   final Function(String) onSearchChanged;
+  final Function showNotifications; // Add this parameter
 
   const HomeContent({
     super.key,
     required this.toggleBookmark,
     required this.searchQuery,
     required this.onSearchChanged,
+    required this.showNotifications, // Initialize the parameter
   });
 
   @override
@@ -152,14 +196,27 @@ class HomeContent extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LargeText(
-              text:
-                  "Selamat datang $username, ayo temukan peluang terbaik untukmu!",
-              textStyle: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue.shade900,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: LargeText(
+                    text:
+                        "Selamat datang $username, ayo temukan peluang terbaik untukmu!",
+                    textStyle: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue.shade900,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.notifications, color: Colors.blue.shade900),
+                  onPressed: () {
+                    showNotifications(); // Use the passed function here
+                  },
+                ),
+              ],
             ),
             SizedBox(height: 8),
             CustomSearchBar(
