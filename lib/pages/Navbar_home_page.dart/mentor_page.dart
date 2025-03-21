@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:team10_dhiraga/widgets/mesh_gradient_background.dart';
 
 class MentorPage extends StatefulWidget {
   @override
@@ -24,63 +25,65 @@ class _MentorPageState extends State<MentorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Profil Mentor")),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 20),
-            CircleAvatar(
-              radius: 50,
-              backgroundImage: AssetImage('assets/mentor.jpg'),
-            ),
-            SizedBox(height: 10),
-            Text(
-              "Harry Potter",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            Text("4.8 ⭐", style: TextStyle(color: Colors.grey)),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildTabButton("Tentang", isAboutSelected, () {
-                  setState(() {
-                    isAboutSelected = true;
-                    isScheduleSelected = false;
-                    isReviewSelected = false;
-                    showOverview = false;
-                    showPayment = false;
-                  });
-                }),
-                SizedBox(width: 10),
-                _buildTabButton("Jadwal & Harga", isScheduleSelected, () {
-                  setState(() {
-                    isAboutSelected = false;
-                    isScheduleSelected = true;
-                    isReviewSelected = false;
-                    showOverview = false;
-                    showPayment = false;
-                  });
-                }),
-                SizedBox(width: 10),
-                _buildTabButton("Ulasan", isReviewSelected, () {
-                  setState(() {
-                    isAboutSelected = false;
-                    isScheduleSelected = false;
-                    isReviewSelected = true;
-                    showOverview = false;
-                    showPayment = false;
-                  });
-                }),
-              ],
-            ),
-            SizedBox(height: 20),
-            if (isAboutSelected) _buildAboutSection(),
-            if (isScheduleSelected && !showOverview && !showPayment)
-              _buildScheduleSection(),
-            if (isReviewSelected) _buildReviewSection(),
-            if (showOverview && !showPayment) _buildOverviewSection(),
-            if (showPayment) _buildPaymentSection(),
-          ],
+      body: GradientBackground(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 20),
+              CircleAvatar(
+                radius: 50,
+                backgroundImage: AssetImage('assets/mentor.jpg'),
+              ),
+              SizedBox(height: 10),
+              Text(
+                "Harry Potter",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+              Text("4.8 ⭐", style: TextStyle(color: Colors.grey)),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildTabButton("Tentang", isAboutSelected, () {
+                    setState(() {
+                      isAboutSelected = true;
+                      isScheduleSelected = false;
+                      isReviewSelected = false;
+                      showOverview = false;
+                      showPayment = false;
+                    });
+                  }),
+                  SizedBox(width: 10),
+                  _buildTabButton("Jadwal & Harga", isScheduleSelected, () {
+                    setState(() {
+                      isAboutSelected = false;
+                      isScheduleSelected = true;
+                      isReviewSelected = false;
+                      showOverview = false;
+                      showPayment = false;
+                    });
+                  }),
+                  SizedBox(width: 10),
+                  _buildTabButton("Ulasan", isReviewSelected, () {
+                    setState(() {
+                      isAboutSelected = false;
+                      isScheduleSelected = false;
+                      isReviewSelected = true;
+                      showOverview = false;
+                      showPayment = false;
+                    });
+                  }),
+                ],
+              ),
+              SizedBox(height: 20),
+              if (isAboutSelected) _buildAboutSection(),
+              if (isScheduleSelected && !showOverview && !showPayment)
+                _buildScheduleSection(),
+              if (isReviewSelected) _buildReviewSection(),
+              if (showOverview && !showPayment) _buildOverviewSection(),
+              if (showPayment) _buildPaymentSection(),
+            ],
+          ),
         ),
       ),
     );
