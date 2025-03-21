@@ -9,10 +9,12 @@ import 'package:team10_dhiraga/features/data/repositories/user_repository_impl.d
 import 'package:team10_dhiraga/features/domain/repositories/auth_repository.dart';
 import 'package:team10_dhiraga/features/domain/repositories/beasiswa_repository.dart';
 import 'package:team10_dhiraga/features/domain/repositories/user_repository.dart';
+import 'package:team10_dhiraga/features/domain/usecases/add_to_bookmark.dart';
 import 'package:team10_dhiraga/features/domain/usecases/get_beasiswa.dart';
 import 'package:team10_dhiraga/features/domain/usecases/get_mentors.dart';
 import 'package:team10_dhiraga/features/domain/usecases/login_user.dart';
 import 'package:team10_dhiraga/features/domain/usecases/register_user.dart';
+import 'package:team10_dhiraga/features/domain/usecases/remove_from_bookmark.dart';
 import 'package:team10_dhiraga/features/domain/usecases/use_user_stream.dart';
 import 'package:team10_dhiraga/features/presentation/providers/auth_provider.dart';
 import 'package:team10_dhiraga/features/presentation/providers/user_provider.dart';
@@ -43,6 +45,10 @@ void setupDependencyInjection() {
   sl.registerLazySingleton<RegisterUser>(() => RegisterUser(sl(), sl(), sl()));
   sl.registerLazySingleton<GetBeasiswas>(() => GetBeasiswas(sl()));
   sl.registerLazySingleton<GetMentors>(() => GetMentors(sl()));
+  sl.registerLazySingleton<AddToBookmark>(() => AddToBookmark(sl(), sl()));
+  sl.registerLazySingleton<RemoveFromBookmark>(
+    () => RemoveFromBookmark(sl(), sl()),
+  );
 
   // Providers
   sl.registerLazySingleton<MyAuthProvider>(

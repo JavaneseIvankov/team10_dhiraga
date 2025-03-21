@@ -39,6 +39,7 @@ class MentorModel extends UserModel {
     required this.hargaMentoring,
   }) : super(role: 'mentor') {
     tags = _createTags(
+      tipeMentor: tipeMentor,
       mediaMentoring: mediaMentoring,
       keahlian: keahlian,
       ketersediaanHari: ketersediaanHari,
@@ -194,6 +195,7 @@ class MentorModel extends UserModel {
   }
 
   List<String> _createTags({
+    required List<String> tipeMentor,
     required List<String> mediaMentoring,
     required List<String> keahlian,
     required List<String> ketersediaanHari,
@@ -202,6 +204,7 @@ class MentorModel extends UserModel {
     required double rating,
   }) {
     var result = [
+      ...tipeMentor,
       ...mediaMentoring,
       ...keahlian,
       ...ketersediaanHari,

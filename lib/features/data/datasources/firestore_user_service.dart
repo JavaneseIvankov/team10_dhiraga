@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:team10_dhiraga/features/data/models/user_model.dart';
 
 // A class for basic CRUD firestore-operation (role-agnostic)
@@ -33,6 +34,34 @@ class FirestoreUserService {
       }
     } catch (e) {
       throw Exception('Error getting user: $e');
+    }
+  }
+
+  Future<void> removeItemFromArray(
+    String field,
+    String docId,
+    String itemToRemove,
+  ) async {
+    try {
+      await _usersCollection.doc(docId).update({
+        field: FieldValue.arrayRemove([itemToRemove]),
+      });
+    } catch (e) {
+      debugPrint("Error removing item: $e");
+    }
+  }
+
+  Future<void> addItemToArray(
+    String field,
+    String docId,
+    String itemToAdd,
+  ) async {
+    try {
+      await _usersCollection.doc(docId).update({
+        field: FieldValue.arrayUnion([itemToAdd]),
+      });
+    } catch (e) {
+      debugPrint("Error adding item: $e");
     }
   }
 

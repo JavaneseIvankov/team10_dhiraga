@@ -1,4 +1,7 @@
 class MentorTag {
+  static const String beasiswa = 'Beasiswa';
+  static const String akademik = 'Akademik';
+
   static const String offline = 'Offline';
   static const String online = 'Online';
 
@@ -26,4 +29,22 @@ class MentorTag {
   static const String kimia = 'Kimia';
   static const String matematika = 'Matematika';
   static const String sejarah = 'Sejarah';
+
+  static const Set<String> displayableTags = {
+    beasiswa,
+    akademik,
+    productManager,
+    backEnd,
+    frontEnd,
+    uiUx,
+    inggris,
+    jerman,
+    korea,
+    jepang,
+    biologi,
+    fisika,
+    kimia,
+    matematika,
+    sejarah,
+  };
 }

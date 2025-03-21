@@ -17,9 +17,10 @@ class MentorService {
       _firestore.collection(_collectionPath);
 
   Future<List<MentorModel>> getMentorsByMultiTags({
-    required List<List<String>> multiTags,
+    required List<List<String>?> multiTags,
     int? limit,
   }) async {
+    if (multiTags.isEmpty) return await getAllMentors(limit);
     try {
       List<Future<QuerySnapshot>> futures =
           multiTags.map((tags) {
@@ -32,9 +33,29 @@ class MentorService {
 
       List<QuerySnapshot> results = await Future.wait(futures);
 
-      return filterMentorAndCombineResults(results, multiTags);
+      return filterMentorAndCombineResults(
+        results,
+        multiTags as List<List<String>>,
+      );
     } catch (e) {
       throw Exception('Error getting mentors by multi-tags: $e');
+    }
+  }
+
+  Future<List<MentorModel>> getAllMentors(int? limit) async {
+    try {
+      final querySnapshot =
+          await _usersCollection
+              .where('role', isEqualTo: 'mentor')
+              .limit(limit ?? 20)
+              .get();
+      return querySnapshot.docs
+          .map(
+            (doc) => MentorModel.fromJson(doc.data() as Map<String, dynamic>),
+          )
+          .toList();
+    } catch (e) {
+      throw Exception('Error getting all mentors: $e');
     }
   }
 

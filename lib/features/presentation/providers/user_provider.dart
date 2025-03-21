@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:team10_dhiraga/features/data/models/student_model.dart';
+import 'package:team10_dhiraga/features/data/models/user_model.dart';
 import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
 import 'package:team10_dhiraga/features/domain/repositories/auth_repository.dart';
 import 'package:team10_dhiraga/features/domain/repositories/user_repository.dart';
@@ -34,6 +36,14 @@ class UserProvider with ChangeNotifier {
     final authUser = _authRepository.currentUser;
     if (authUser.id.isNotEmpty) {
       return await _userRepository.getUserById(authUser.id);
+    }
+    return null;
+  }
+
+  Future<Set<String>?> get currentUserBookmark async {
+    final user = await currentUser;
+    if (user is StudentModel) {
+      return Set<String>.from(user.bookmark);
     }
     return null;
   }

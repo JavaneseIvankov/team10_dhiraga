@@ -1,5 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:team10_dhiraga/core/usecases/usecases.dart';
+import 'package:team10_dhiraga/features/data/models/mentor_model.dart';
 import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
 import 'package:team10_dhiraga/features/domain/repositories/user_repository.dart';
 import 'package:team10_dhiraga/features/data/constants/mentor_constants.dart';
@@ -10,7 +11,7 @@ class GetMentors implements UseCase<List<UserEntity>, GetMentorParams> {
   GetMentors(this._userRepository);
 
   @override
-  Future<List<UserEntity>> call(GetMentorParams params) async {
+  Future<List<MentorModel>> call(GetMentorParams params) async {
     return _userRepository.getMentorWithQuery(
       query: params.toList(),
       limit: 20,

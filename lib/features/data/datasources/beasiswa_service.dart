@@ -55,16 +55,17 @@ class BeasiswaService {
   // }
 
   Future<List<BeasiswaModel>> getBeasiswaByMultitags({
-    required List<List<String>> multiTags,
+    required List<List<String>?> multiTags,
     List<List<String>>? sortQuery,
     int? limit,
   }) async {
     try {
+      if (multiTags.isEmpty) return await getAllBeasiswa(limit);
       List<Future<QuerySnapshot>> futures =
           multiTags.map((tags) {
             var query = _beasiswaCollection.where(
               'tags',
-              arrayContainsAny: tags,
+              arrayContainsAny: tags!.isEmpty ? [""] : tags,
             );
             if (limit != null) query = query.limit(limit);
             if (sortQuery != null) {
@@ -77,15 +78,15 @@ class BeasiswaService {
 
       List<QuerySnapshot> results = await Future.wait(futures);
 
-      return filterBeasiswaResults(results, multiTags);
+      return filterBeasiswaResults(results, multiTags as List<List<String>>);
     } catch (e) {
       throw Exception('Error getting beasiswa by multi-tags: $e');
     }
   }
 
-  Future<List<BeasiswaModel>> getAllBeasiswa() async {
+  Future<List<BeasiswaModel>> getAllBeasiswa(int? limit) async {
     try {
-      final querySnapshot = await _beasiswaCollection.get();
+      final querySnapshot = await _beasiswaCollection.limit(limit ?? 20).get();
       return querySnapshot.docs
           .map(
             (doc) => BeasiswaModel.fromJson(doc.data() as Map<String, dynamic>),
