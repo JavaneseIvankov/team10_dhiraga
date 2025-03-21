@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'mentor_chat_page.dart'; // Import halaman chat
+import 'mentor_chat_page.dart';
+import 'package:team10_dhiraga/widgets/mesh_gradient_background.dart';
 
 class MentoringPage extends StatelessWidget {
   const MentoringPage({super.key});
@@ -18,45 +19,47 @@ class MentoringPage extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Mentoring Aktif",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            _buildMentoringItem(context, "Socrates Carpenter", "20/03/2025"),
-            _buildMentoringItem(context, "Harry Potter", "24/03/2025"),
-            SizedBox(height: 20),
-            Text(
-              "Riwayat Mentoring",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            _buildMentoringItem(context, "Harry Potter", "10/03/2025"),
-            _buildMentoringItem(context, "Cut Rizz", "27/01/2025"),
-            _buildMentoringItem(context, "Fara Zuhra", "04/11/2024"),
-            SizedBox(height: 20),
-            Text(
-              "Socrates Carpenter",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            _buildMessageItem(
-              "Hari ini",
-              "Selamat pagi kak, izin konfirmasi, apakah mentoring hari ini jadi dilaksanakan jam 10:30?",
-              "1 Beam Bikas",
-            ),
-            _buildMessageItem(
-              "Hari ini",
-              "Selamat pagi, iya jadi ya, sooo",
-              "8000",
-            ),
-            _buildMessageItem("Talk", "Terima kasih kak, sooo", ""),
-          ],
+      body: GradientBackground(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Mentoring Aktif",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              _buildMentoringItem(context, "Eman Supriadi", "20/03/2025"),
+              _buildMentoringItem(context, "Harry Potter", "24/03/2025"),
+              SizedBox(height: 20),
+              Text(
+                "Riwayat Mentoring",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              _buildMentoringItem(context, "Harry Potter", "10/03/2025"),
+              _buildMentoringItem(context, "Cut Rizz", "27/01/2025"),
+              _buildMentoringItem(context, "Fara Zuhra", "04/11/2024"),
+              SizedBox(height: 20),
+              Text(
+                "Eman Supriadi",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              _buildMessageItem(
+                "Hari ini",
+                "Selamat pagi kak, izin konfirmasi, apakah mentoring hari ini jadi dilaksanakan jam 10:30?",
+                "1 Beam Bikas",
+              ),
+              _buildMessageItem(
+                "Hari ini",
+                "Selamat pagi, iya jadi ya, sooo",
+                "8000",
+              ),
+              _buildMessageItem("Talk", "Terima kasih kak, sooo", ""),
+            ],
+          ),
         ),
       ),
     );
