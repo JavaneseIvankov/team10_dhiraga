@@ -6,6 +6,7 @@ import 'package:team10_dhiraga/features/data/models/mentor_update_params.dart';
 import 'package:team10_dhiraga/features/domain/repositories/user_repository.dart';
 import 'package:team10_dhiraga/features/presentation/providers/user_provider.dart';
 import 'package:team10_dhiraga/pages/Navbar_home_page.dart/home_page.dart';
+import 'package:team10_dhiraga/pages/login_page.dart'; // Import halaman login
 
 class FormMentor extends StatefulWidget {
   const FormMentor({super.key});
@@ -36,6 +37,8 @@ class _FormMentorState extends State<FormMentor> {
   bool _mentorAkademik = false;
   bool _mentorOffline = false;
   bool _mentorOnline = false;
+
+  int _currentPage = 0;
 
   @override
   void initState() {
@@ -115,17 +118,9 @@ class _FormMentorState extends State<FormMentor> {
         )
         .then((_) {
           if (mounted) {
-            Navigator.pushReplacement(
-              context,
-              // TODO: apa ini?
-              MaterialPageRoute(
-                builder:
-                    (context) => HomePage(
-                      savedNotifications: [],
-                      addNotification: (list) => {},
-                    ),
-              ),
-            );
+            setState(() {
+              _currentPage = 2; // Pindah ke halaman ketiga setelah submit
+            });
           }
         });
   }
@@ -144,6 +139,233 @@ class _FormMentorState extends State<FormMentor> {
     super.dispose();
   }
 
+  Widget _buildPage1() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Text(
+            'Lengkapi Profilmu',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 20),
+          CircleAvatar(
+            radius: 50,
+            backgroundColor: Colors.grey[300],
+            child: Icon(Icons.add_a_photo, size: 40),
+          ),
+          SizedBox(height: 20),
+          TextField(
+            controller: namaPanggilanController,
+            decoration: InputDecoration(
+              labelText: 'Nama Panggilan',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(height: 20),
+          TextField(
+            controller: pendidikanController,
+            decoration: InputDecoration(
+              labelText: 'Pendidikan',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(height: 20),
+          TextField(
+            controller: programStudiController,
+            decoration: InputDecoration(
+              labelText: 'Program Studi',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(height: 20),
+          TextField(
+            controller: domisiliController,
+            decoration: InputDecoration(
+              labelText: 'Domisili',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(height: 20),
+          TextField(
+            controller: alamatLengkapController,
+            decoration: InputDecoration(
+              labelText: 'Alamat Lengkap',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(height: 20),
+          TextField(
+            controller: deskripsiController,
+            decoration: InputDecoration(
+              labelText: 'Deskripsi',
+              border: OutlineInputBorder(),
+              hintMaxLines: 5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPage2() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Text(
+            'Mendaftar Sebagai?',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          CheckboxListTile(
+            title: Text('Mentor Beasiswa'),
+            value: _mentorBeasiswa,
+            onChanged: (value) {
+              setState(() {
+                _mentorBeasiswa =
+                    value ?? false; // Nilai default false jika null
+              });
+            },
+          ),
+          CheckboxListTile(
+            title: Text('Mentor Akademik'),
+            value: _mentorAkademik,
+            onChanged: (value) {
+              setState(() {
+                _mentorAkademik =
+                    value ?? false; // Nilai default false jika null
+              });
+            },
+          ),
+          SizedBox(height: 20),
+          Text(
+            'Keahlian',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          Wrap(
+            spacing: 8.0,
+            children:
+                _skills.keys.map((skill) {
+                  return FilterChip(
+                    label: Text(skill),
+                    selected:
+                        _skills[skill] ?? false, // Pastikan nilai tidak null
+                    onSelected: (value) {
+                      setState(() {
+                        _skills[skill] = value; // Tidak perlu penanganan khusus
+                      });
+                    },
+                  );
+                }).toList(),
+          ),
+          SizedBox(height: 20),
+          Text(
+            'Bahasa',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          Wrap(
+            spacing: 8.0,
+            children:
+                _languages.keys.map((language) {
+                  return FilterChip(
+                    label: Text(language),
+                    selected:
+                        _languages[language] ??
+                        false, // Pastikan nilai tidak null
+                    onSelected: (value) {
+                      setState(() {
+                        _languages[language] =
+                            value; // Tidak perlu penanganan khusus
+                      });
+                    },
+                  );
+                }).toList(),
+          ),
+          SizedBox(height: 20),
+          Text(
+            'Matpel',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          Wrap(
+            spacing: 8.0,
+            children:
+                _subjects.keys.map((subject) {
+                  return FilterChip(
+                    label: Text(subject),
+                    selected:
+                        _subjects[subject] ??
+                        false, // Pastikan nilai tidak null
+                    onSelected: (value) {
+                      setState(() {
+                        _subjects[subject] =
+                            value; // Tidak perlu penanganan khusus
+                      });
+                    },
+                  );
+                }).toList(),
+          ),
+          SizedBox(height: 20),
+          Text(
+            'Upload CV, Portofolio, Sertifikat (maks 10 file)',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          IconButton(
+            icon: Icon(Icons.upload),
+            onPressed: () {
+              // Handle file upload
+            },
+          ),
+          SizedBox(height: 20),
+          Text(
+            'Bersedia Mentoring Offline / Online?',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          CheckboxListTile(
+            title: Text('Mentor Offline'),
+            value: _mentorOffline,
+            onChanged: (value) {
+              setState(() {
+                _mentorOffline =
+                    value ?? false; // Nilai default false jika null
+              });
+            },
+          ),
+          CheckboxListTile(
+            title: Text('Mentor Online'),
+            value: _mentorOnline,
+            onChanged: (value) {
+              setState(() {
+                _mentorOnline = value ?? false; // Nilai default false jika null
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPage3() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Akun Berhasil Dibuat!',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
+            },
+            child: Text('Login'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
@@ -152,160 +374,46 @@ class _FormMentorState extends State<FormMentor> {
       appBar: AppBar(title: const Text('Form Mentor')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView(
+        child: Column(
           children: [
-            TextField(
-              controller: namaPanggilanController,
-              decoration: const InputDecoration(labelText: 'Nama Panggilan'),
+            Expanded(
+              child:
+                  _currentPage == 0
+                      ? _buildPage1()
+                      : _currentPage == 1
+                      ? _buildPage2()
+                      : _buildPage3(),
             ),
-            TextField(
-              controller: pendidikanController,
-              decoration: const InputDecoration(labelText: 'Pendidikan'),
-            ),
-            TextField(
-              controller: programStudiController,
-              decoration: const InputDecoration(labelText: 'Program Studi'),
-            ),
-            TextField(
-              controller: domisiliController,
-              decoration: const InputDecoration(labelText: 'Domisili'),
-            ),
-            TextField(
-              controller: alamatLengkapController,
-              decoration: const InputDecoration(labelText: 'Alamat Lengkap'),
-            ),
-            TextField(
-              controller: deskripsiController,
-              decoration: const InputDecoration(labelText: 'Deskripsi'),
-              maxLines: 5,
-            ),
-            const SizedBox(height: 20),
-            Text(
-              'Riwayat Beasiswa',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            TextField(
-              controller: riwayatBeasiswa1Controller,
-              decoration: const InputDecoration(
-                labelText: 'Riwayat Beasiswa 1',
+            if (_currentPage < 2)
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (_currentPage > 0)
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            _currentPage--;
+                          });
+                        },
+                        child: Text('Kembali'),
+                      ),
+                    SizedBox(width: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_currentPage == 1) {
+                          _submitForm(userProvider);
+                        } else {
+                          setState(() {
+                            _currentPage++;
+                          });
+                        }
+                      },
+                      child: Text(_currentPage == 1 ? 'Submit' : 'Selanjutnya'),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            TextField(
-              controller: riwayatBeasiswa2Controller,
-              decoration: const InputDecoration(
-                labelText: 'Riwayat Beasiswa 2',
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              'Mendaftar Sebagai?',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            CheckboxListTile(
-              title: Text('Mentor Beasiswa'),
-              value: _mentorBeasiswa,
-              onChanged: (value) {
-                setState(() {
-                  _mentorBeasiswa = value!;
-                });
-              },
-            ),
-            CheckboxListTile(
-              title: Text('Mentor Akademik'),
-              value: _mentorAkademik,
-              onChanged: (value) {
-                setState(() {
-                  _mentorAkademik = value!;
-                });
-              },
-            ),
-            const SizedBox(height: 20),
-            Text(
-              'Keahlian',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            ..._skills.keys.map((skill) {
-              return CheckboxListTile(
-                title: Text(skill),
-                value: _skills[skill],
-                onChanged: (value) {
-                  setState(() {
-                    _skills[skill] = value!;
-                  });
-                },
-              );
-            }).toList(),
-            const SizedBox(height: 20),
-            Text(
-              'Bahasa',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            ..._languages.keys.map((language) {
-              return CheckboxListTile(
-                title: Text(language),
-                value: _languages[language],
-                onChanged: (value) {
-                  setState(() {
-                    _languages[language] = value!;
-                  });
-                },
-              );
-            }).toList(),
-            const SizedBox(height: 20),
-            Text(
-              'Matpel',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            ..._subjects.keys.map((subject) {
-              return CheckboxListTile(
-                title: Text(subject),
-                value: _subjects[subject],
-                onChanged: (value) {
-                  setState(() {
-                    _subjects[subject] = value!;
-                  });
-                },
-              );
-            }).toList(),
-            const SizedBox(height: 20),
-            Text(
-              'Upload CV, Portofolio, Sertifikat (maks 10 file)',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Handle file upload
-              },
-              child: Text('Upload File'),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              'Bersedia Mentoring Offline / Online?',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            CheckboxListTile(
-              title: Text('Mentor Offline'),
-              value: _mentorOffline,
-              onChanged: (value) {
-                setState(() {
-                  _mentorOffline = value!;
-                });
-              },
-            ),
-            CheckboxListTile(
-              title: Text('Mentor Online'),
-              value: _mentorOnline,
-              onChanged: (value) {
-                setState(() {
-                  _mentorOnline = value!;
-                });
-              },
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _submitForm(userProvider),
-              child: const Text('Submit'),
-            ),
           ],
         ),
       ),
