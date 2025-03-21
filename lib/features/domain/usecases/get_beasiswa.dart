@@ -10,7 +10,8 @@ class GetBeasiswas implements UseCase<List<BeasiswaEntity>, GetBeasiswaParams> {
   GetBeasiswas(this._beasiswaRepository);
 
   @override
-  Future<List<BeasiswaEntity>> call(GetBeasiswaParams params) async {
+  Future<List<BeasiswaEntity>> call(GetBeasiswaParams? params) async {
+    params ??= GetBeasiswaParams();
     return _beasiswaRepository.getBeasiswaWithQuery(
       query: params.toList(),
       sortQuery: _createSortQuery(params.deadlineTerdekat, params.palingDicari),

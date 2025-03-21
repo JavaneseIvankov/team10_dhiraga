@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:team10_dhiraga/core/theme/app_color.dart';
+import 'package:team10_dhiraga/di/injection_container.dart';
+import 'package:team10_dhiraga/features/data/models/mentor_model.dart';
 import 'package:team10_dhiraga/features/data/models/student_model.dart';
+import 'package:team10_dhiraga/features/domain/entities/beasiswa_entity.dart';
 import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
+import 'package:team10_dhiraga/features/domain/usecases/get_beasiswa.dart';
+import 'package:team10_dhiraga/features/domain/usecases/get_mentors.dart';
 import 'package:team10_dhiraga/features/presentation/providers/user_provider.dart';
 import 'package:team10_dhiraga/pages/Navbar_profile_page.dart/edit_profile_page.dart';
 import 'package:team10_dhiraga/widgets/beasiswa_card.dart';
@@ -174,8 +179,10 @@ class HomeContent extends StatelessWidget {
   final String searchQuery;
   final Function(String) onSearchChanged;
   final Function showNotifications; // Add this parameter
+  final getBeasiswas = sl<GetBeasiswas>();
+  final getMentors = sl<GetMentors>();
 
-  const HomeContent({
+  HomeContent({
     super.key,
     required this.toggleBookmark,
     required this.searchQuery,
@@ -327,17 +334,7 @@ class HomeContent extends StatelessWidget {
             children:
                 filteredItems.map((item) {
                   if (isMentor) {
-                    return Container(
-                      margin: EdgeInsets.only(right: 10),
-                      child: MentorCard(
-                        imageUrl:
-                            "https://images5.fanpop.com/image/photos/25400000/Harry-Potter-Wallpaper-harry-james-potter-25493299-1024-768.jpg",
-                        name: "Harry Pottah dsafdafcv xcvcxvfsd",
-                        description: "Hogwart's super rookie",
-                        tags: ["Tag1", "Tag2"],
-                        rating: 4.8,
-                      ),
-                    );
+                    return _buildMentorResults();
                   } else if (isTemplate) {
                     return _buildItemCard(
                       context,
@@ -349,25 +346,61 @@ class HomeContent extends StatelessWidget {
                       item,
                     );
                   } else {
-                    return Container(
-                      margin: EdgeInsets.only(right: 10),
-                      // child: BeasiswaCard(
-                      //   title: item,
-                      //   dateRange: "4 Feb 2025 - 4 Mar 2025",
-                      //   imageUrl:
-                      //       "https://mmc.tirto.id/image/share/tw/2023/08/18/pertamina-foundation--3_ratio-16x9.jpg",
-                      //   bookmarkIcon:
-                      //       bookmarkedItems.contains(item)
-                      //           ? Icons.bookmark
-                      //           : Icons.bookmark_border,
-                      // ),
-                    );
+                    return _buildBeasiswaResults();
                   }
                 }).toList(),
           ),
         ),
         SizedBox(height: 16),
       ],
+    );
+  }
+
+  Widget _buildBeasiswaResults() {
+    return FutureBuilder<List<BeasiswaEntity>>(
+      future: getBeasiswas(GetBeasiswaParams()),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          debugPrint("${snapshot.error}");
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('Tidak ada beasiswa yang ditemukan!'));
+        } else {
+          return Row(
+            spacing: 10,
+            children:
+                snapshot.data!.map((beasiswa) {
+                  return BeasiswaCard(beasiswa: beasiswa);
+                }).toList(),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _buildMentorResults() {
+    return FutureBuilder<List<MentorModel>>(
+      future: getMentors(GetMentorParams()),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          debugPrint("${snapshot.error}");
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('Tidak ada mentor yang ditemukan!'));
+        } else {
+          return Row(
+            spacing: 10,
+            children:
+                snapshot.data!.take(2).map((mentor) {
+                  return MentorCard(mentor: mentor);
+                }).toList(),
+          );
+        }
+      },
     );
   }
 

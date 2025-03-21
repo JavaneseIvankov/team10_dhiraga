@@ -30,6 +30,7 @@ class AuthWrapper extends StatelessWidget {
       if (user != null) {
         if (user.isInitialized()) return HomePage();
         if (user.role == "student") return FormStudent();
+        debugPrint("ELSE TIGGERED");
         return FormMentor();
       }
     });
