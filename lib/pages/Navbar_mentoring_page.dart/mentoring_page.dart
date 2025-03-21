@@ -30,7 +30,7 @@ class MentoringPage extends StatelessWidget {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
-              _buildMentoringItem(context, "Eman Supriadi", "20/03/2025"),
+              _buildMentoringItem(context, "Socrates Carpenter", "20/03/2025"),
               _buildMentoringItem(context, "Harry Potter", "24/03/2025"),
               SizedBox(height: 20),
               Text(
