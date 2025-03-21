@@ -1,4 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:team10_dhiraga/core/theme/app_color.dart';
+import 'package:team10_dhiraga/di/injection_container.dart';
+import 'package:team10_dhiraga/features/data/models/beasiswa_model.dart';
+import 'package:team10_dhiraga/features/data/models/mentor_model.dart';
+import 'package:team10_dhiraga/features/domain/entities/beasiswa_entity.dart';
+import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
+import 'package:team10_dhiraga/features/domain/usecases/get_beasiswa.dart';
+import 'package:team10_dhiraga/features/domain/usecases/get_mentors.dart';
+import 'package:team10_dhiraga/pages/Navbar_home_page.dart/beasiswa_filter_dialog.dart';
+import 'package:team10_dhiraga/pages/Navbar_home_page.dart/mentor_filter_dialog.dart';
+import 'package:team10_dhiraga/widgets/beasiswa_card.dart';
+import 'package:team10_dhiraga/widgets/circular_icon_button.dart';
+import 'package:team10_dhiraga/widgets/mentor_card.dart';
+import 'package:team10_dhiraga/widgets/mesh_gradient_background.dart';
+import 'package:team10_dhiraga/widgets/search_bar.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -8,6 +23,41 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   String selectedCategory = 'All';
   TextEditingController searchController = TextEditingController();
+  GetBeasiswaParams getBeasiswaParams = GetBeasiswaParams();
+  GetMentorParams getMentorParams = GetMentorParams();
+  final getBeasiswas = sl<GetBeasiswas>();
+  final getMentors = sl<GetMentors>();
+
+  var beasiswas = <BeasiswaModel>[];
+  var mentors = <MentorModel>[];
+
+  _onSearchBeasiswas(query) {
+    getBeasiswas(getBeasiswaParams);
+  }
+
+  _onSearchMentors(query) {
+    getMentors(getMentorParams);
+  }
+
+  _showBeasiswaFilter() {
+    BeasiswaFilterDialog.show(
+      context,
+      (params) => setState(() {
+        getBeasiswaParams = params;
+      }),
+      getBeasiswaParams,
+    );
+  }
+
+  _showMentorFilter() {
+    MentorFilterDialog.show(
+      context,
+      (params) => setState(() {
+        getMentorParams = params;
+      }),
+      getMentorParams,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,57 +69,77 @@ class _SearchPageState extends State<SearchPage> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildSearchBar(),
-            SizedBox(height: 16),
-            _buildCategoryFilters(),
-            SizedBox(height: 16),
-            Expanded(child: _buildSearchResults()),
-          ],
+      body: GradientBackground(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildSearchBar(),
+              SizedBox(height: 16),
+              _buildCategoryFilters(),
+              SizedBox(height: 16),
+              Expanded(child: _buildSearchResults()),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildSearchBar() {
-    return TextField(
-      controller: searchController,
-      decoration: InputDecoration(
-        prefixIcon: Padding(
-          padding: EdgeInsets.all(12.0),
-          child: Image.asset('assets/Search.png', width: 24, height: 24),
+    return Row(
+      children: [
+        Expanded(
+          child: CustomSearchBar(
+            controller: searchController,
+            autofocus: true,
+            placeholder: "Search",
+          ),
         ),
-        suffixIcon: Padding(
-          padding: EdgeInsets.all(12.0),
-          child: Image.asset('assets/filter.png', width: 24, height: 24),
+        SizedBox(width: 10),
+        CircularIconButton(
+          icon: Icons.filter_alt,
+          size: 48,
+          onPressed: () {
+            if (selectedCategory == 'Beasiswa') {
+              _showBeasiswaFilter();
+            } else if (selectedCategory == 'Mentor') {
+              _showMentorFilter();
+            }
+          },
+          isActive: true,
         ),
-        hintText: 'Beasiswa Unggulan',
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-      ),
+      ],
     );
   }
 
   Widget _buildCategoryFilters() {
     List<String> categories = ['All', 'Beasiswa', 'Mentor', 'Template'];
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children:
-          categories.map((category) {
-            return ChoiceChip(
-              label: Text(category),
-              selected: selectedCategory == category,
-              onSelected: (bool selected) {
-                setState(() {
-                  selectedCategory = category;
-                });
-              },
-              selectedColor: Colors.yellow,
-            );
-          }).toList(),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children:
+            categories.map((category) {
+              return ChoiceChip(
+                label: Text(category),
+                selected: selectedCategory == category,
+                onSelected: (bool selected) {
+                  setState(() {
+                    selectedCategory = category;
+                  });
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0),
+                  side: BorderSide(color: Colors.transparent),
+                ),
+                backgroundColor: (AppColors.background),
+                selectedColor: AppColors.alternative2,
+                showCheckmark: false,
+              );
+            }).toList(),
+      ),
     );
   }
 
@@ -85,24 +155,54 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _buildBeasiswaResults() {
-    return Card(
-      child: ListTile(
-        leading: Image.asset('assets/beasiswa.png'),
-        title: Text('Beasiswa Unggulan Kemendikbudristek'),
-        subtitle: Text('4 Feb 2025 - 4 Mar 2025'),
-        trailing: Icon(Icons.bookmark_border),
-      ),
+    return FutureBuilder<List<BeasiswaEntity>>(
+      future: getBeasiswas(getBeasiswaParams),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          debugPrint("${snapshot.error}");
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('Tidak ada beasiswa yang ditemukan!'));
+        } else {
+          return Wrap(
+            alignment: WrapAlignment.start,
+            spacing: 15,
+            runSpacing: 15,
+            children:
+                snapshot.data!.map((beasiswa) {
+                  return BeasiswaCard(beasiswa: beasiswa);
+                }).toList(),
+          );
+        }
+      },
     );
   }
 
   Widget _buildMentorResults() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _buildMentorCard('Harry Potter', 'Beasiswa 2022', 'Kimia'),
-        _buildMentorCard('Edmund Pevs', 'Beasiswa 2023', 'Fisika'),
-        _buildMentorCard('Lucy Pevs', 'Beasiswa 2024', 'Biologi'),
-      ],
+    return FutureBuilder<List<MentorModel>>(
+      future: getMentors(getMentorParams),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          debugPrint("${snapshot.error}");
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('Tidak ada mentor yang ditemukan!'));
+        } else {
+          return Wrap(
+            alignment: WrapAlignment.start,
+            spacing: 15,
+            runSpacing: 15,
+            children:
+                snapshot.data!.map((mentor) {
+                  return MentorCard(mentor: mentor);
+                }).toList(),
+          );
+        }
+      },
     );
   }
 

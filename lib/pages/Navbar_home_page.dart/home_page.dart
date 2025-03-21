@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:team10_dhiraga/core/theme/app_color.dart';
 import 'package:team10_dhiraga/features/data/models/student_model.dart';
 import 'package:team10_dhiraga/features/domain/entities/user_entity.dart';
 import 'package:team10_dhiraga/features/domain/repositories/user_repository.dart';
@@ -9,9 +10,11 @@ import 'package:team10_dhiraga/features/presentation/providers/user_provider.dar
 import 'package:team10_dhiraga/pages/Navbar_profile_page.dart/edit_profile_page.dart';
 import 'package:team10_dhiraga/widgets/beasiswa_card.dart';
 import 'package:team10_dhiraga/widgets/custom_bottom_navbar.dart';
+import 'package:team10_dhiraga/widgets/custom_search_icon.dart';
 import 'package:team10_dhiraga/widgets/large_text.dart';
 import 'package:team10_dhiraga/widgets/mentor_card.dart';
 import 'package:team10_dhiraga/widgets/mesh_gradient_background.dart';
+import 'package:team10_dhiraga/widgets/search_bar.dart';
 import 'search_page.dart';
 import '../Navbar_event_page.dart/event_page.dart';
 import '../Navbar_mentoring_page.dart/mentoring_page.dart';
@@ -159,15 +162,16 @@ class HomeContent extends StatelessWidget {
               ),
             ),
             SizedBox(height: 8),
-            TextField(
-              decoration: InputDecoration(
-                hintText: "Temukan mentor, beasiswa, atau template",
-                prefixIcon: Icon(Icons.search, color: Colors.blue.shade900),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
+            CustomSearchBar(
+              placeholder: "Temukan mentor, beasiswa, atau template",
+              labelStyle: TextStyle(color: AppColors.black),
               onChanged: onSearchChanged,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SearchPage()),
+                );
+              },
             ),
             SizedBox(height: 20),
             _buildSection(
@@ -290,16 +294,16 @@ class HomeContent extends StatelessWidget {
                   } else {
                     return Container(
                       margin: EdgeInsets.only(right: 10),
-                      child: BeasiswaCard(
-                        title: item,
-                        dateRange: "4 Feb 2025 - 4 Mar 2025",
-                        imageUrl:
-                            "https://mmc.tirto.id/image/share/tw/2023/08/18/pertamina-foundation--3_ratio-16x9.jpg",
-                        bookmarkIcon:
-                            bookmarkedItems.contains(item)
-                                ? Icons.bookmark
-                                : Icons.bookmark_border,
-                      ),
+                      // child: BeasiswaCard(
+                      //   title: item,
+                      //   dateRange: "4 Feb 2025 - 4 Mar 2025",
+                      //   imageUrl:
+                      //       "https://mmc.tirto.id/image/share/tw/2023/08/18/pertamina-foundation--3_ratio-16x9.jpg",
+                      //   bookmarkIcon:
+                      //       bookmarkedItems.contains(item)
+                      //           ? Icons.bookmark
+                      //           : Icons.bookmark_border,
+                      // ),
                     );
                   }
                 }).toList(),
