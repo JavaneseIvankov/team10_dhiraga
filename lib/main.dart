@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
+import 'package:team10_dhiraga/core/services/supabase_initializer.dart';
 import 'package:team10_dhiraga/features/presentation/providers/user_provider.dart';
 import 'package:team10_dhiraga/pages/auth_wrapper.dart';
 import 'di/injection_container.dart';
@@ -15,7 +17,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FirebaseInitializer.initialize();
+  await SupabaseInitializer.initialize();
   setupDependencyInjection();
+  initializeDateFormatting('id');
+  // await DangerousTestingCommand();
   runApp(MyApp());
 }
 

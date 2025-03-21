@@ -29,11 +29,14 @@ class EventPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => NotificationPage()),
+                MaterialPageRoute(builder: (context) => NotificationPage()),
               );
             },
           ),
         ],
       ),
+      body: GradientBackground(
+        // Menggunakan widget GradientBackground
       body: GradientBackground(
         // Menggunakan widget GradientBackground
         child: SingleChildScrollView(
@@ -79,6 +82,7 @@ class EventPage extends StatelessWidget {
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
         childAspectRatio: 1,
+        childAspectRatio: 1,
       ),
 
       itemCount: events.length,
@@ -92,12 +96,12 @@ class EventPage extends StatelessWidget {
     return SizedBox(
       width: 200,
       height: 200,
-      child: BeasiswaCard(
-        title: event['title']!,
-        dateRange: event['date']!,
-        imageUrl: 'https://via.placeholder.com/150',
-        bookmarkIcon: Icons.bookmark_border,
-      ),
+      // child: BeasiswaCard(
+      //   title: event['title']!,
+      //   dateRange: event['date']!,
+      //   imageUrl: 'https://via.placeholder.com/150',
+      //   bookmarkIcon: Icons.bookmark_border,
+      // ),
     );
   }
 

@@ -37,6 +37,14 @@ class UserProvider with ChangeNotifier {
     return null;
   }
 
+  Future<Set<String>?> get currentUserBookmark async {
+    final user = await currentUser;
+    if (user is StudentModel) {
+      return Set<String>.from(user.bookmark);
+    }
+    return null;
+  }
+
   Future<UserEntity?> getUserById(String id) async {
     return await _userRepository.getUserById(id);
   }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:team10_dhiraga/core/usecases/usecases.dart';
 import 'package:team10_dhiraga/features/data/constants/beasiswa_constants.dart';
 import 'package:team10_dhiraga/features/domain/entities/beasiswa_entity.dart';
@@ -97,6 +98,10 @@ class GetBeasiswaParams {
     if (semester5) ketentuan.add(BeasiswaTag.semester5);
     if (lebihSemester6) ketentuan.add(BeasiswaTag.semester6);
 
-    return [jenjang, benefit, ketentuan];
+    List<List<String>> result = [];
+    if (jenjang.isNotEmpty) result.add(jenjang);
+    if (benefit.isNotEmpty) result.add(benefit);
+    if (ketentuan.isNotEmpty) result.add(ketentuan);
+    return result;
   }
 }
